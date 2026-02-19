@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -54,7 +54,7 @@
 #include "shared_vars_state.h"
 #include "timers.h"
 #include "test_link_params.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 
 u8 s_RadioRawPacket[MAX_PACKET_TOTAL_SIZE];
 u32 s_TimeLastLogAlarmNoInterfacesCanSend = 0;
@@ -452,8 +452,8 @@ int _compute_packet_uplink_datarate_radioflags_tx_power(int iVehicleRadioLink, i
    }
 
    if ( (pPH->packet_type == PACKET_TYPE_NEGOCIATE_RADIO_LINKS) ||
-        (pPH->packet_type == PACKET_TYPE_RUBY_PAIRING_REQUEST) ||
-        (pPH->packet_type == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION) ||
+        (pPH->packet_type == PACKET_TYPE_Anhydrate_PAIRING_REQUEST) ||
+        (pPH->packet_type == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION) ||
         test_link_is_in_progress() )
       bUseLowest = true;
 
@@ -704,7 +704,7 @@ int send_packet_to_radio_interfaces(u8* pPacketData, int nPacketLength, int iSen
    u32 uDestVehicleId = pPH->vehicle_id_dest;
    u32 uStreamId = (pPH->stream_packet_idx) >> PACKET_FLAGS_MASK_SHIFT_STREAM_INDEX;
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK )
    {
       u8 uLocalRadioLinkId = 0;
       memcpy( &uLocalRadioLinkId, pPacketData + sizeof(t_packet_header)+sizeof(u8), sizeof(u8));
@@ -728,8 +728,8 @@ int send_packet_to_radio_interfaces(u8* pPacketData, int nPacketLength, int iSen
       }
    }
      
-   if ( uPacketType != PACKET_TYPE_RUBY_PING_CLOCK )
-   if ( uPacketType != PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( uPacketType != PACKET_TYPE_Anhydrate_PING_CLOCK )
+   if ( uPacketType != PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
       s_StreamsTxPacketIndex[uStreamId]++;
 
    pPH->stream_packet_idx = (((u32)uStreamId)<<PACKET_FLAGS_MASK_SHIFT_STREAM_INDEX) | (s_StreamsTxPacketIndex[uStreamId] & PACKET_FLAGS_MASK_STREAM_PACKET_IDX);

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -369,7 +369,7 @@ void MenuVehicleRadioLink::addMenuItemsDataRates()
    if ( bAddMCSRates )
       m_pItemsSelect[8]->setSelectedIndex(1);
 
-   m_pItemsSelect[3] = new MenuItemSelect(L("Radio Data Rate"), "Sets the physical radio data rate to use on this radio link for video data. If adaptive radio links is enabled, this will get lowered automatically by Ruby as needed.");
+   m_pItemsSelect[3] = new MenuItemSelect(L("Radio Data Rate"), "Sets the physical radio data rate to use on this radio link for video data. If adaptive radio links is enabled, this will get lowered automatically by Anhydrate as needed.");
    m_pItemsSelect[3]->addSelection(L("Auto"));
    int iSelectedIndex = 0;
    
@@ -956,7 +956,7 @@ void MenuVehicleRadioLink::sendRadioLinkConfigParams(type_radio_links_parameters
    t_packet_header PH;
    int iHeaderSize = 5;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY;
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header) + iHeaderSize + sizeof(type_radio_links_parameters);
 
@@ -1021,7 +1021,7 @@ void MenuVehicleRadioLink::sendNewRadioLinkFrequency(int iVehicleLinkIndex, u32 
    t_packet_header PH;
    int iHeaderSize = 5;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY;
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header) + iHeaderSize + sizeof(type_radio_links_parameters);
 
@@ -1248,3 +1248,4 @@ void MenuVehicleRadioLink::onChangeRadioConfigFinished(bool bSucceeded)
 {
    addMenuItems();
 }
+

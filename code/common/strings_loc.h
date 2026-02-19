@@ -15,3 +15,4 @@ const char* L(const char* szString);
 #ifdef __cplusplus
 }  
 #endif
+

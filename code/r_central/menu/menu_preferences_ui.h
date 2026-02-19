@@ -40,3 +40,4 @@ class MenuPreferencesUI: public Menu
       int m_IndexMSPOSDDeltaY;
       int m_IndexLanguage;
 };
+

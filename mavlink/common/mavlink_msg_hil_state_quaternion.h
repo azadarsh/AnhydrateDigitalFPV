@@ -578,3 +578,4 @@ static inline void mavlink_msg_hil_state_quaternion_decode(const mavlink_message
     memcpy(hil_state_quaternion, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

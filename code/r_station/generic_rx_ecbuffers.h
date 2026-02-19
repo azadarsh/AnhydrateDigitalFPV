@@ -57,3 +57,4 @@ class GenericRxECBuffers
       u8* m_p_ec_decode_ec_packets[MAX_TOTAL_PACKETS_IN_BLOCK];
       unsigned int m_missing_packets_count_for_ec;
 };
+

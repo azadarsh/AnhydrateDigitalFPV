@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -931,8 +931,8 @@ bool Model::loadVersion10(FILE* fd)
    if ( 3 != fscanf(fd, "%d %d %u", &hwCapabilities.iMaxTxVideoBlocksBuffer, &hwCapabilities.iMaxTxVideoBlockPackets, &hwCapabilities.uHWFlags) )
       resetHWCapabilities();
 
-   if ( 1 != fscanf(fd, "%u", &hwCapabilities.uRubyBaseVersion) )
-      hwCapabilities.uRubyBaseVersion = 0;
+   if ( 1 != fscanf(fd, "%u", &hwCapabilities.uAnhydrateBaseVersion) )
+      hwCapabilities.uAnhydrateBaseVersion = 0;
    for( unsigned int i=0; i<1; i++ )
       if ( bOk && (1 != fscanf(fd, "%d", &tmp1)) )
          { bOk = false; }
@@ -1482,7 +1482,7 @@ bool Model::loadVersion11(FILE* fd)
    if ( 3 != fscanf(fd, "%d %d %u", &hwCapabilities.iMaxTxVideoBlocksBuffer, &hwCapabilities.iMaxTxVideoBlockPackets, &hwCapabilities.uHWFlags) )
       { log_softerror_and_alarm("11-56"); return false; }
 
-   if ( 3 != fscanf(fd, "%u %u %u", &hwCapabilities.uRubyBaseVersion, &hwCapabilities.uDummyHW1, &hwCapabilities.uDummyHW2) )
+   if ( 3 != fscanf(fd, "%u %u %u", &hwCapabilities.uAnhydrateBaseVersion, &hwCapabilities.uDummyHW1, &hwCapabilities.uDummyHW2) )
       { log_softerror_and_alarm("11-57"); return false; }
 
    //----------------------------------------
@@ -2012,7 +2012,7 @@ bool Model::saveVersion11(FILE* fd, bool isOnController)
       strcat(szModel, szSetting);
    }
 
-   sprintf(szSetting, "%d %d %u %u %u %u\n", hwCapabilities.iMaxTxVideoBlocksBuffer, hwCapabilities.iMaxTxVideoBlockPackets, hwCapabilities.uHWFlags, hwCapabilities.uRubyBaseVersion, hwCapabilities.uDummyHW1, hwCapabilities.uDummyHW2);
+   sprintf(szSetting, "%d %d %u %u %u %u\n", hwCapabilities.iMaxTxVideoBlocksBuffer, hwCapabilities.iMaxTxVideoBlockPackets, hwCapabilities.uHWFlags, hwCapabilities.uAnhydrateBaseVersion, hwCapabilities.uDummyHW1, hwCapabilities.uDummyHW2);
    strcat(szModel, szSetting);
 
    //----------------------------------------
@@ -2397,7 +2397,7 @@ void Model::generateUID()
       log_softerror_and_alarm("Failed to get hardware serial number for generating unique vehicle id.");
 
    struct timespec t;
-   clock_gettime(RUBY_HW_CLOCK_ID, &t);
+   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);
    uVehicleId += t.tv_nsec;
 
    char szOutput[4096];
@@ -3797,8 +3797,8 @@ void Model::resetToDefaults(bool generateId)
    {
       int iMajor = 0;
       int iMinor = 0;
-      get_Ruby_BaseVersion(&iMajor, &iMinor);
-      hwCapabilities.uRubyBaseVersion = (((u32)iMajor)<<8) | (((u32)iMinor) & 0xFF);
+      get_Anhydrate_BaseVersion(&iMajor, &iMinor);
+      hwCapabilities.uAnhydrateBaseVersion = (((u32)iMajor)<<8) | (((u32)iMinor) & 0xFF);
    }
    
    uControllerId = 0;
@@ -3806,7 +3806,7 @@ void Model::resetToDefaults(bool generateId)
    sw_version = (SYSTEM_SW_VERSION_MAJOR * 256 + SYSTEM_SW_VERSION_MINOR) | (SYSTEM_SW_BUILD_NUMBER<<16);
    log_line("SW Version: %d.%d (b-%d)", get_sw_version_major(this), get_sw_version_minor(this), get_sw_version_build(this));
    
-   vehicle_type = ((MODEL_FIRMWARE_TYPE_RUBY << 5) & MODEL_FIRMWARE_MASK);
+   vehicle_type = ((MODEL_FIRMWARE_TYPE_Anhydrate << 5) & MODEL_FIRMWARE_MASK);
    if ( (! hardware_hasCamera()) && isRunningOnRadxaHardware() )
       vehicle_type |= (MODEL_TYPE_RELAY & MODEL_TYPE_MASK);
    else
@@ -3889,7 +3889,7 @@ void Model::resetAllSettingsKeepPairing(bool bResetFreq)
    u32 vid = uVehicleId;
    u32 ctrlId = uControllerId;
    u32 uBoardType = hwCapabilities.uBoardType;
-   u32 uSoftwareVer = hwCapabilities.uRubyBaseVersion;
+   u32 uSoftwareVer = hwCapabilities.uAnhydrateBaseVersion;
    u8  temp_vehicle_type = vehicle_type;
    int cameraType = camera_params[iCurrentCamera].iCameraType;
    int forcedCameraType = camera_params[iCurrentCamera].iForcedCameraType;
@@ -3926,7 +3926,7 @@ void Model::resetAllSettingsKeepPairing(bool bResetFreq)
    uVehicleId = vid;
    uControllerId = ctrlId;
    hwCapabilities.uBoardType = uBoardType;
-   hwCapabilities.uRubyBaseVersion = uSoftwareVer;
+   hwCapabilities.uAnhydrateBaseVersion = uSoftwareVer;
    vehicle_type = temp_vehicle_type;
    camera_params[iCurrentCamera].iCameraType = cameraType;
    camera_params[iCurrentCamera].iForcedCameraType = forcedCameraType;
@@ -5973,7 +5973,7 @@ u32 Model::getVideoFlags(char* szVideoFlags, int iVideoProfile, u32 uOverwriteVi
    return uBitrate;
 }
 
-void Model::populateVehicleTelemetryData_v6(t_packet_header_ruby_telemetry_extended_v6* pPHRTE)
+void Model::populateVehicleTelemetryData_v6(t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE)
 {
    if ( NULL == pPHRTE )
       return;
@@ -6001,27 +6001,27 @@ void Model::populateVehicleTelemetryData_v6(t_packet_header_ruby_telemetry_exten
       }
    }
    if ( telemetry_params.flags & TELEMETRY_FLAGS_SPECTATOR_ENABLE )
-      pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY;
+      pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY;
    else
-      pPHRTE->uRubyFlags &= ~FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY;
+      pPHRTE->uAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY;
 
    for( int i=0; i<MAX_RADIO_INTERFACES; i++ )
       pPHRTE->iTxPowers[i] = 0;
 }
 
-void Model::populateFromVehicleTelemetryData_v3(t_packet_header_ruby_telemetry_extended_v3* pPHRTE)
+void Model::populateFromVehicleTelemetryData_v3(t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE)
 {
    uVehicleId = pPHRTE->uVehicleId;
    strncpy(vehicle_name, (char*)pPHRTE->vehicle_name, MAX_VEHICLE_NAME_LENGTH-1);
    vehicle_name[MAX_VEHICLE_NAME_LENGTH-1] = 0;
    vehicle_type = pPHRTE->vehicle_type;
 
-   if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
+   if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
       telemetry_params.flags |= TELEMETRY_FLAGS_SPECTATOR_ENABLE;
    else
       telemetry_params.flags &= ~TELEMETRY_FLAGS_SPECTATOR_ENABLE;
 
-   u32 ver = pPHRTE->rubyVersion;
+   u32 ver = pPHRTE->AnhydrateVersion;
    log_line("populateFromVehicleTelemetryData (version 3): firmware type: %s, sw version from telemetry stream: %d.%d", str_format_firmware_type(getVehicleFirmwareType()), ver>>4, ver & 0x0F);
    log_line("populateFromVehicleTelemetryData (version 3): radio links: %d", pPHRTE->radio_links_count);
    for( int i=0; i<pPHRTE->radio_links_count; i++ )
@@ -6124,19 +6124,19 @@ void Model::populateFromVehicleTelemetryData_v3(t_packet_header_ruby_telemetry_e
 }
 
 
-void Model::populateFromVehicleTelemetryData_v4(t_packet_header_ruby_telemetry_extended_v4* pPHRTE)
+void Model::populateFromVehicleTelemetryData_v4(t_packet_header_Anhydrate_telemetry_extended_v4* pPHRTE)
 {
    uVehicleId = pPHRTE->uVehicleId;
    strncpy(vehicle_name, (char*)pPHRTE->vehicle_name, MAX_VEHICLE_NAME_LENGTH-1);
    vehicle_name[MAX_VEHICLE_NAME_LENGTH-1] = 0;
    vehicle_type = pPHRTE->vehicle_type;
 
-   if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
+   if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
       telemetry_params.flags |= TELEMETRY_FLAGS_SPECTATOR_ENABLE;
    else
       telemetry_params.flags &= ~TELEMETRY_FLAGS_SPECTATOR_ENABLE;
 
-   u32 ver = pPHRTE->rubyVersion;
+   u32 ver = pPHRTE->AnhydrateVersion;
    log_line("populateFromVehicleTelemetryData (version 4): firmware type: %s, sw version from telemetry stream: %d.%d", str_format_firmware_type(getVehicleFirmwareType()), ver>>4, ver & 0x0F);
    log_line("populateFromVehicleTelemetryData (version 4): radio links: %d", pPHRTE->radio_links_count);
    for( int i=0; i<pPHRTE->radio_links_count; i++ )
@@ -6238,19 +6238,19 @@ void Model::populateFromVehicleTelemetryData_v4(t_packet_header_ruby_telemetry_e
    logVehicleRadioInfo();
 }
 
-void Model::populateFromVehicleTelemetryData_v5(t_packet_header_ruby_telemetry_extended_v5* pPHRTE)
+void Model::populateFromVehicleTelemetryData_v5(t_packet_header_Anhydrate_telemetry_extended_v5* pPHRTE)
 {
    uVehicleId = pPHRTE->uVehicleId;
    strncpy(vehicle_name, (char*)pPHRTE->vehicle_name, MAX_VEHICLE_NAME_LENGTH-1);
    vehicle_name[MAX_VEHICLE_NAME_LENGTH-1] = 0;
    vehicle_type = pPHRTE->vehicle_type;
 
-   if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
+   if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
       telemetry_params.flags |= TELEMETRY_FLAGS_SPECTATOR_ENABLE;
    else
       telemetry_params.flags &= ~TELEMETRY_FLAGS_SPECTATOR_ENABLE;
 
-   u32 ver = pPHRTE->rubyVersion;
+   u32 ver = pPHRTE->AnhydrateVersion;
    log_line("populateFromVehicleTelemetryData (version 5): firmware type: %s, sw version from telemetry stream: %d.%d", str_format_firmware_type(getVehicleFirmwareType()), ver>>4, ver & 0x0F);
    log_line("populateFromVehicleTelemetryData (version 5): radio links: %d", pPHRTE->radio_links_count);
    for( int i=0; i<pPHRTE->radio_links_count; i++ )
@@ -6352,19 +6352,19 @@ void Model::populateFromVehicleTelemetryData_v5(t_packet_header_ruby_telemetry_e
    logVehicleRadioInfo();
 }
 
-void Model::populateFromVehicleTelemetryData_v6(t_packet_header_ruby_telemetry_extended_v6* pPHRTE)
+void Model::populateFromVehicleTelemetryData_v6(t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE)
 {
    uVehicleId = pPHRTE->uVehicleId;
    strncpy(vehicle_name, (char*)pPHRTE->vehicle_name, MAX_VEHICLE_NAME_LENGTH-1);
    vehicle_name[MAX_VEHICLE_NAME_LENGTH-1] = 0;
    vehicle_type = pPHRTE->vehicle_type;
 
-   if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
+   if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY )
       telemetry_params.flags |= TELEMETRY_FLAGS_SPECTATOR_ENABLE;
    else
       telemetry_params.flags &= ~TELEMETRY_FLAGS_SPECTATOR_ENABLE;
 
-   u32 ver = pPHRTE->rubyVersion;
+   u32 ver = pPHRTE->AnhydrateVersion;
    log_line("populateFromVehicleTelemetryData (version 6): firmware type: %s, sw version from telemetry stream: %d.%d", str_format_firmware_type(getVehicleFirmwareType()), ver>>4, ver & 0x0F);
    log_line("populateFromVehicleTelemetryData (version 6): radio links: %d", pPHRTE->radio_links_count);
    for( int i=0; i<pPHRTE->radio_links_count; i++ )
@@ -6569,7 +6569,7 @@ void Model::constructLongName()
 {
    vehicle_long_name[0] = 0;
    
-   if ( getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+   if ( getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
    {
       switch ( vehicle_type & MODEL_TYPE_MASK )
       {
@@ -6856,3 +6856,4 @@ int is_sw_version_latest(Model* pModel)
       return 0;
    return 1;
 }
+

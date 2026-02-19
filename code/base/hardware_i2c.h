@@ -26,7 +26,7 @@
 #define I2C_DEVICE_TYPE_INA219 5
 #define I2C_DEVICE_TYPE_PICO_RC_IN 6
 #define I2C_DEVICE_TYPE_PICO_EXTENDER 7
-#define I2C_DEVICE_TYPE_RUBY_ADDON 10
+#define I2C_DEVICE_TYPE_Anhydrate_ADDON 10
 #define I2C_DEVICE_TYPE_OLED_SCREEN 11
 
 #define I2C_DEVICE_NAME_UNKNOWN "Unknown"
@@ -36,7 +36,7 @@
 #define I2C_DEVICE_NAME_INA219 "Current Sensor INA219"
 #define I2C_DEVICE_NAME_RC_IN "RC Input"
 #define I2C_DEVICE_NAME_PICO_EXTENDER "Pico Extender"
-#define I2C_DEVICE_NAME_RUBY_ADDON "AddOn"
+#define I2C_DEVICE_NAME_Anhydrate_ADDON "AddOn"
 #define I2C_DEVICE_NAME_OLED_SCREEN "OLED Screen"
 
 // RC In device // To deprecate, use i2c_protocols definitions
@@ -115,3 +115,4 @@ int hardware_i2c_has_oled_screen();
 #ifdef __cplusplus
 }  
 #endif
+

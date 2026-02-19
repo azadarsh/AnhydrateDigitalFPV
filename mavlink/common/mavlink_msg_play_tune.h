@@ -279,3 +279,4 @@ static inline void mavlink_msg_play_tune_decode(const mavlink_message_t* msg, ma
     memcpy(play_tune, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

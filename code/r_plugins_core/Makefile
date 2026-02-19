@@ -20,3 +20,4 @@ plugin_core_example: core_plugins_utils.o plugin_core_example.o
 
 clean:
 	rm -f plugin_core_example.so.* *.o
+

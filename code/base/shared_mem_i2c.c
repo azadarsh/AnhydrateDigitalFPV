@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -96,4 +96,5 @@ void shared_mem_i2c_rotary_encoder_buttons_events_close(t_shared_mem_i2c_rotary_
    if ( NULL != pAddress )
       munmap(pAddress, sizeof(t_shared_mem_i2c_rotary_encoder_buttons_events));
 }
+
 

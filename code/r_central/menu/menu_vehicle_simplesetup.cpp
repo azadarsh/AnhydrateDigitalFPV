@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -307,7 +307,7 @@ void MenuVehicleSimpleSetup::addRegularItems()
          pItem->setEnabled(false);
       addMenuItem(pItem);
    }
-   m_pItemsSelect[1] = new MenuItemSelect(L("Telemetry Port"), L("The Ruby vehicle port at which the flight controller telemetry connects to."));
+   m_pItemsSelect[1] = new MenuItemSelect(L("Telemetry Port"), L("The Anhydrate vehicle port at which the flight controller telemetry connects to."));
    m_pItemsSelect[1]->addSelection(L("None"));
    for( int i=0; i<g_pCurrentModel->hardwareInterfacesInfo.serial_port_count; i++ )
       m_pItemsSelect[1]->addSelection(g_pCurrentModel->hardwareInterfacesInfo.serial_port_names[i]);
@@ -699,10 +699,10 @@ bool MenuVehicleSimpleSetup::periodicLoop()
    if ( g_TimeNow > m_uTimeStartCurrentTelemetrySearch + 500 )
    {
       bool bHasFCTelemetry = vehicle_runtime_has_received_fc_telemetry(g_pCurrentModel->uVehicleId);
-      u32 uTimeLastRubyTelemetry = vehicle_runtime_get_time_last_received_ruby_telemetry(g_pCurrentModel->uVehicleId);
-      log_line("MenuVehicleSimpleSetup: Has FC telemetry? %s, last Ruby telemetry time: %u ms ago",
-         bHasFCTelemetry?"yes":"no", g_TimeNow - uTimeLastRubyTelemetry);
-      if ( bHasFCTelemetry && (uTimeLastRubyTelemetry > m_uTimeStartCurrentTelemetrySearch + 500) )
+      u32 uTimeLastAnhydrateTelemetry = vehicle_runtime_get_time_last_received_Anhydrate_telemetry(g_pCurrentModel->uVehicleId);
+      log_line("MenuVehicleSimpleSetup: Has FC telemetry? %s, last Anhydrate telemetry time: %u ms ago",
+         bHasFCTelemetry?"yes":"no", g_TimeNow - uTimeLastAnhydrateTelemetry);
+      if ( bHasFCTelemetry && (uTimeLastAnhydrateTelemetry > m_uTimeStartCurrentTelemetrySearch + 500) )
       {
          log_line("MenuVehicleSimpleSetup: Received vehicle FC telemetry.");
          m_bSearchingTelemetry = false;
@@ -978,7 +978,7 @@ void MenuVehicleSimpleSetup::sendNewRadioLinkFrequency(int iVehicleLinkIndex, u3
 
    t_packet_header PH;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY;
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header) + PACKET_TYPE_TEST_RADIO_LINK_HEADER_SIZE + sizeof(type_radio_links_parameters);
 

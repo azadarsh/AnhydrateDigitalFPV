@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -54,7 +54,7 @@ MenuAbout::MenuAbout(void)
    char szFile[MAX_FILE_PATH_SIZE];
 
    szBuff[0] = 0;
-   strcpy(szBuff, "Ruby base version: N/A");
+   strcpy(szBuff, "Anhydrate base version: N/A");
 
    FILE* fd = try_open_base_version_file(NULL);
 
@@ -63,7 +63,7 @@ MenuAbout::MenuAbout(void)
       szOutput[0] = 0;
       if ( 1 == fscanf(fd, "%s", szOutput) )
       {
-         strcpy(szBuff, L("Ruby base version: "));
+         strcpy(szBuff, L("Anhydrate base version: "));
          strcat(szBuff, szOutput);
       }
       fclose(fd);
@@ -127,8 +127,8 @@ MenuAbout::MenuAbout(void)
    addTopLine(" ");
    addTopLine("---");
    addTopLine(" ");
-   addTopLine(L("Ruby system developed by: Petru Soroaga"));
-   addTopLine(L("Main contributors: Liuli Xia, Ning"));
+   addTopLine(L("Anhydrate system developed by: Petru Soroaga"));
+   addTopLine(L("Main contributors: Jessica Severin, Liuli Xia, Ning"));
    addTopLine("");
    
    if ( (NULL != g_pCurrentModel) && g_pCurrentModel->isRunningOnOpenIPCHardware() )
@@ -140,7 +140,7 @@ MenuAbout::MenuAbout(void)
    }
 
    addTopLine(L("For info on the licence terms, check the license.txt file."));
-   addTopLine("For more info, questions and suggestions find us on www.rubyfpv.com");
+   addTopLine("For more info, questions and suggestions find us on www.AnhydrateDigitalFPV.com");
    addTopLine("---");
    addTopLine(" ");
    m_IndexOK = addMenuItem(new MenuItem(L("Ok"), L("Close the menu.")));
@@ -162,7 +162,7 @@ void MenuAbout::Render()
    float height_text = g_pRenderEngine->textHeight(g_idFontMenu);
    float iconHeight = 2.0*height_text;
    float iconWidth = iconHeight/g_pRenderEngine->getAspectRatio();
-   g_pRenderEngine->drawIcon(m_RenderXPos + m_RenderWidth - m_sfMenuPaddingX - iconWidth - 0.02, m_RenderYPos - iconHeight + 9.4*height_text, iconWidth, iconHeight, g_idIconRuby);
+   g_pRenderEngine->drawIcon(m_RenderXPos + m_RenderWidth - m_sfMenuPaddingX - iconWidth - 0.02, m_RenderYPos - iconHeight + 9.4*height_text, iconWidth, iconHeight, g_idIconAnhydrate);
    if ( (NULL != g_pCurrentModel) && g_pCurrentModel->isRunningOnOpenIPCHardware() )
       g_pRenderEngine->drawIcon(m_RenderXPos + m_RenderWidth - m_sfMenuPaddingX - iconWidth - 0.02, yEnd - iconHeight - 7*g_pRenderEngine->textHeight(g_idFontMenu), iconWidth, iconHeight, g_idIconOpenIPC);
 
@@ -188,3 +188,4 @@ void MenuAbout::onSelectItem()
 
    menu_stack_pop(0);
 }
+

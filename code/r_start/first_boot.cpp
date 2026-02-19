@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -60,20 +60,20 @@ void do_first_boot_pre_initialization(bool bIgnoreDrivers)
    log_line("------------------------------");
 
    #if defined (HW_PLATFORM_RASPBERRY)
-   printf("\nRuby: Doing first time ever initialization on Raspberry. Please wait...\n");
+   printf("\nAnhydrate: Doing first time ever initialization on Raspberry. Please wait...\n");
    fflush(stdout);
 
    hw_execute_bash_command("sync", NULL);
    if ( ! bIgnoreDrivers )
       hardware_install_drivers(1);
    
-   printf("\nRuby: Done doing first time ever initialization on Raspberry.\n");
+   printf("\nAnhydrate: Done doing first time ever initialization on Raspberry.\n");
    fflush(stdout);
    #endif
 
    #if defined (HW_PLATFORM_RADXA)
 
-   printf("\nRuby: Doing first time ever initialization on Radxa. Please wait...\n");
+   printf("\nAnhydrate: Doing first time ever initialization on Radxa. Please wait...\n");
    fflush(stdout);
 
    hw_execute_bash_command("systemctl disable glances", NULL);
@@ -83,11 +83,11 @@ void do_first_boot_pre_initialization(bool bIgnoreDrivers)
    if ( ! hardware_is_running_on_runcam_vrx() )
       hw_execute_bash_command_raw("echo 'performance' | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor", NULL);
 
-   hw_execute_bash_command_silent("mkdir -p /tmp/ruby/", NULL);
-   log_init_local_only("RubyStartFirst");
+   hw_execute_bash_command_silent("mkdir -p /tmp/Anhydrate/", NULL);
+   log_init_local_only("AnhydrateStartFirst");
    //log_enable_stdout();
-   log_add_file("/tmp/ruby/log_first_radxa.log");
-   hw_execute_bash_command("echo \"\nRuby: Doing first time ever initialization on Radxa...\n\" > /tmp/ruby/log_first_radxa.log", NULL);
+   log_add_file("/tmp/Anhydrate/log_first_radxa.log");
+   hw_execute_bash_command("echo \"\nAnhydrate: Doing first time ever initialization on Radxa...\n\" > /tmp/Anhydrate/log_first_radxa.log", NULL);
 
    char szComm[256];
    sprintf(szComm, "mkdir -p %s", FOLDER_CONFIG);
@@ -106,9 +106,9 @@ void do_first_boot_pre_initialization(bool bIgnoreDrivers)
       save_Preferences();
    }
 
-   printf("\nRuby: Done doing first time ever initialization on Radxa.\n");
+   printf("\nAnhydrate: Done doing first time ever initialization on Radxa.\n");
    fflush(stdout);
-   hw_execute_bash_command("echo \"\nRuby: Done doing first time ever initialization on Radxa.\n\" > /tmp/ruby/log_first_radxa.log", NULL);
+   hw_execute_bash_command("echo \"\nAnhydrate: Done doing first time ever initialization on Radxa.\n\" > /tmp/Anhydrate/log_first_radxa.log", NULL);
 
    #endif
 
@@ -131,13 +131,13 @@ void do_first_boot_initialization_raspberry(bool bIsVehicle, u32 uBoardType)
    log_line("Doing first time boot setup for Raspberry platform...");
    if ( bIsVehicle )
    {
-      hw_execute_bash_command("sudo sed -i 's/ruby/r-vehicle/g' /etc/hosts", NULL);
-      hw_execute_bash_command("sudo sed -i 's/ruby/r-vehicle/g' /etc/hostname", NULL);
+      hw_execute_bash_command("sudo sed -i 's/Anhydrate/r-vehicle/g' /etc/hosts", NULL);
+      hw_execute_bash_command("sudo sed -i 's/Anhydrate/r-vehicle/g' /etc/hostname", NULL);
    }
    else
    {
-      hw_execute_bash_command("sudo sed -i 's/ruby/r-controller/g' /etc/hosts", NULL);
-      hw_execute_bash_command("sudo sed -i 's/ruby/r-controller/g' /etc/hostname", NULL);
+      hw_execute_bash_command("sudo sed -i 's/Anhydrate/r-controller/g' /etc/hosts", NULL);
+      hw_execute_bash_command("sudo sed -i 's/Anhydrate/r-controller/g' /etc/hostname", NULL);
    }
 
    hardware_sleep_ms(200);
@@ -198,7 +198,7 @@ void do_first_boot_initialization(bool bIsVehicle, u32 uBoardType)
    #if defined (HW_PLATFORM_RADXA) || defined (HW_PLATFORM_RASPBERRY)
    snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "mkdir -p %sbin_org", FOLDER_BINARIES);
    hw_execute_bash_command(szComm, NULL);
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %sruby_* %sbin_org/", FOLDER_BINARIES, FOLDER_BINARIES);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %sAnhydrate_* %sbin_org/", FOLDER_BINARIES, FOLDER_BINARIES);
    hw_execute_bash_command(szComm, NULL);
    #endif
 

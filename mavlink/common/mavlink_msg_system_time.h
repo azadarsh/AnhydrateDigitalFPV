@@ -236,3 +236,4 @@ static inline void mavlink_msg_system_time_decode(const mavlink_message_t* msg, 
     memcpy(system_time, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

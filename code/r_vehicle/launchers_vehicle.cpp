@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -61,7 +61,7 @@ void vehicle_launch_tx_telemetry(Model* pModel)
    if ( pModel->processesPriorities.uProcessesFlags & PROCESSES_FLAGS_ENABLE_PRIORITIES_ADJUSTMENTS )
    if ( pModel->processesPriorities.iThreadPriorityTelemetry > 100 )
       sprintf(szPrefix, "nice -n %d", pModel->processesPriorities.iThreadPriorityTelemetry - 120);
-   hw_execute_ruby_process(szPrefix, "ruby_tx_telemetry", NULL, NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_tx_telemetry", NULL, NULL);
 }
 
 void vehicle_stop_tx_telemetry()
@@ -100,7 +100,7 @@ void vehicle_launch_rx_rc(Model* pModel)
       }
       #endif
    }
-   hw_execute_ruby_process(szPrefix, "ruby_start", "-rc", NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_start", "-rc", NULL);
 }
 
 void vehicle_stop_rx_rc()
@@ -128,7 +128,7 @@ void vehicle_launch_rx_commands(Model* pModel)
    if ( pModel->processesPriorities.uProcessesFlags & PROCESSES_FLAGS_ENABLE_PRIORITIES_ADJUSTMENTS )
    if ( pModel->processesPriorities.iThreadPriorityOthers > 100 )
       sprintf(szPrefix, "nice -n %d", pModel->processesPriorities.iThreadPriorityOthers - 120);
-   hw_execute_ruby_process(szPrefix, "ruby_start", "-rx_commands", NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_start", "-rx_commands", NULL);
 }
 
 void vehicle_stop_rx_commands()
@@ -171,7 +171,7 @@ void vehicle_launch_tx_router(Model* pModel)
       #endif
    }
    
-   hw_execute_ruby_process(szPrefix, "ruby_rt_vehicle", NULL, NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_rt_vehicle", NULL, NULL);
 }
 
 void vehicle_stop_tx_router()
@@ -229,9 +229,9 @@ static void * _thread_audio_capture(void *argument)
    }
 
    sprintf(szCommCapture, "%s arecord --device=hw:1,0 --file-type wav --format S16_LE --rate %s -c 1 -d %d -q >> %s",
-      szPriority, szRate, iIntervalSec, FIFO_RUBY_AUDIO1);
+      szPriority, szRate, iIntervalSec, FIFO_Anhydrate_AUDIO1);
 
-   sprintf(szCommFlag, "echo '0123456789' > %s", FIFO_RUBY_AUDIO1);
+   sprintf(szCommFlag, "echo '0123456789' > %s", FIFO_Anhydrate_AUDIO1);
 
    hw_stop_process("arecord");
 
@@ -311,3 +311,4 @@ void vehicle_stop_audio_capture(Model* pModel)
    hardware_camera_maj_enable_audio(false, 0, 0);
    #endif
 }
+

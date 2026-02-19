@@ -461,3 +461,4 @@ static inline void mavlink_msg_rc_channels_raw_decode(const mavlink_message_t* m
     memcpy(rc_channels_raw, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

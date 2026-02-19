@@ -536,3 +536,4 @@ static inline void mavlink_msg_hil_rc_inputs_raw_decode(const mavlink_message_t*
     memcpy(hil_rc_inputs_raw, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

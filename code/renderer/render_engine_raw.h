@@ -62,3 +62,4 @@ class RenderEngineRaw: public RenderEngine
       u32 m_CurrentIconId;
       int m_iCountIcons;
 };
+

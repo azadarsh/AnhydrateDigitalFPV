@@ -395,32 +395,32 @@ void hw_log_processes(int argc, char *argv[])
       iCoreFilterStart = 0;
       iCoreFilterEnd = hw_procs_get_cpu_count()-1;
    }
-   printf("Ruby processes and threads (%d CPU cores):\n", hw_procs_get_cpu_count());
+   printf("Anhydrate processes and threads (%d CPU cores):\n", hw_procs_get_cpu_count());
    printf("(state -> R=running S=sleep D=wait Z=zombie T=stopped W=paging X=dead P=parked I=idle)\n");
    printf("Name            (state)  PID\t TID\t  CPU C S_CLASS  NICE  RT_PRIO RAW_PRIO\n");
    printf("----------------------------------------------------------------------------------\n");
    
    for( int iCore=iCoreFilterStart; iCore <= iCoreFilterEnd; iCore++ )
    {
-      _enum_process("ruby_logger", iCore);
+      _enum_process("Anhydrate_logger", iCore);
 
       if ( s_bHwDbgShowGround )
       {
          if ( iCore != -1 )
             printf("\n");
-         _enum_process("ruby_controller", iCore);
-         _enum_process("ruby_central", iCore);
-         _enum_process("ruby_rt_station", iCore);
-         _enum_process("ruby_rx_telemetry", iCore);
-         _enum_process("ruby_tx_rc", iCore);
-         _enum_process("ruby_i2c", iCore);
+         _enum_process("Anhydrate_controller", iCore);
+         _enum_process("Anhydrate_central", iCore);
+         _enum_process("Anhydrate_rt_station", iCore);
+         _enum_process("Anhydrate_rx_telemetry", iCore);
+         _enum_process("Anhydrate_tx_rc", iCore);
+         _enum_process("Anhydrate_i2c", iCore);
          #if defined (HW_PLATFORM_RASPBERRY)
-         _enum_process("ruby_player_s", iCore);
-         _enum_process("ruby_player_f", iCore);
-         _enum_process("ruby_player_p", iCore);
+         _enum_process("Anhydrate_player_s", iCore);
+         _enum_process("Anhydrate_player_f", iCore);
+         _enum_process("Anhydrate_player_p", iCore);
          #endif
          #if defined (HW_PLATFORM_RADXA)
-         _enum_process("ruby_player_radxa", iCore);
+         _enum_process("Anhydrate_player_radxa", iCore);
          #endif
       }
       if ( s_bHwDbgShowAir )
@@ -428,14 +428,14 @@ void hw_log_processes(int argc, char *argv[])
          if ( iCore != -1 )
             printf("\n");
          #if defined (HW_PLATFORM_RASPBERRY)
-         _enum_process("ruby_alive", iCore);
+         _enum_process("Anhydrate_alive", iCore);
          #endif
-         _enum_process("ruby_start", iCore);
-         _enum_process("ruby_rt_vehicle", iCore);
-         _enum_process("ruby_tx_telemetry", iCore);
+         _enum_process("Anhydrate_start", iCore);
+         _enum_process("Anhydrate_rt_vehicle", iCore);
+         _enum_process("Anhydrate_tx_telemetry", iCore);
          #if defined (HW_PLATFORM_RASPBERRY)
-         _enum_process("ruby_capture_raspi", iCore);
-         _enum_process("ruby_capture_veye", iCore);
+         _enum_process("Anhydrate_capture_raspi", iCore);
+         _enum_process("Anhydrate_capture_veye", iCore);
          #endif
          #if defined (HW_PLATFORM_OPENIPC_CAMERA)
          _enum_process("majestic", iCore);
@@ -1326,19 +1326,19 @@ int hw_execute_bash_command_raw_silent(const char* command, char* outBuffer)
    return _hw_execute_bash_command(command, outBuffer, 1, 3000);
 }
 
-void hw_execute_ruby_process(const char* szPrefixes, const char* szProcess, const char* szParams, char* szOutput)
+void hw_execute_Anhydrate_process(const char* szPrefixes, const char* szProcess, const char* szParams, char* szOutput)
 {
-   hw_execute_ruby_process_wait(szPrefixes, szProcess, szParams, szOutput, 0);
+   hw_execute_Anhydrate_process_wait(szPrefixes, szProcess, szParams, szOutput, 0);
 }
 
-void hw_execute_ruby_process_wait(const char* szPrefixes, const char* szProcess, const char* szParams, char* szOutput, int iWait)
+void hw_execute_Anhydrate_process_wait(const char* szPrefixes, const char* szProcess, const char* szParams, char* szOutput, int iWait)
 {
    if ( (NULL == szProcess) || (0 == szProcess[0]) )
       return;
    if ( (NULL != szPrefixes) && (0 != szPrefixes[0]) )
-      log_line("Executing Ruby process: [%s], prefixes: [%s], params: [%s], wait: %s", szProcess, szPrefixes, ((NULL != szParams)?szParams:"None"), (iWait?"yes":"no"));
+      log_line("Executing Anhydrate process: [%s], prefixes: [%s], params: [%s], wait: %s", szProcess, szPrefixes, ((NULL != szParams)?szParams:"None"), (iWait?"yes":"no"));
    else
-      log_line("Executing Ruby process: [%s], no prefixes, params: [%s], wait: %s", szProcess, ((NULL != szParams)?szParams:"None"), (iWait?"yes":"no"));
+      log_line("Executing Anhydrate process: [%s], no prefixes, params: [%s], wait: %s", szProcess, ((NULL != szParams)?szParams:"None"), (iWait?"yes":"no"));
 
    if ( NULL != szOutput )
       szOutput[0] = 0;
@@ -1358,7 +1358,7 @@ void hw_execute_ruby_process_wait(const char* szPrefixes, const char* szProcess,
    }
    if ( access(szFullPath, R_OK) == -1 )
    {
-      log_error_and_alarm("Can't execute Ruby process. Not found here: [%s] or here: [%s]", szProcess, szFullPath );
+      log_error_and_alarm("Can't execute Anhydrate process. Not found here: [%s] or here: [%s]", szProcess, szFullPath );
       return;
    }
 
@@ -1385,7 +1385,7 @@ void hw_execute_ruby_process_wait(const char* szPrefixes, const char* szProcess,
    FILE* fp = popen( szCommand, "r" );
    if ( NULL == fp )
    {
-      log_error_and_alarm("Failed to execute Ruby process: [%s]", szCommand);
+      log_error_and_alarm("Failed to execute Anhydrate process: [%s]", szCommand);
       return;
    }
 
@@ -1431,9 +1431,9 @@ void hw_execute_ruby_process_wait(const char* szPrefixes, const char* szProcess,
    }
    
    if ( -1 == pclose(fp) )
-      log_softerror_and_alarm("Failed to launch and confirm Ruby process: [%s]", szCommand);
+      log_softerror_and_alarm("Failed to launch and confirm Anhydrate process: [%s]", szCommand);
    else
-      log_line("Launched Ruby process: [%s]", szCommand);
+      log_line("Launched Anhydrate process: [%s]", szCommand);
 }
 
 static int s_iCPUCoresCount = -1;

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -116,3 +116,4 @@ const char* commands_get_description(u8 command_type)
    }
    return szCommandDesc;
 }
+

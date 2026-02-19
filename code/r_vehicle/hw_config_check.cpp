@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -829,3 +829,4 @@ bool check_update_hardware_nics_vehicle(Model* pModel)
 
    return true;
 }
+

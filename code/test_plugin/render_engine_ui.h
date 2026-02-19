@@ -19,7 +19,7 @@ class RenderEngineUI
      float getPixelWidth(); // screen drawing functions uses coordonates from 0 to 1. So a pixel width is 1/screen_width_in_pixels
      float getPixelHeight();
 
-     // There are some predefined fonts and colors that you can and should use, to have a consistent user interface along with other plugins and Ruby OSD:
+     // There are some predefined fonts and colors that you can and should use, to have a consistent user interface along with other plugins and Anhydrate OSD:
      // 3 fonts, the actual size is customized by enduser;
      // 4 colors, to be used for regular OSD text, for OSD instruments, for line outline and for warning messages/icons;
 
@@ -72,4 +72,5 @@ class RenderEngineUI
      void drawCircle(float x, float y, float r);
      void drawArc(float x, float y, float r, float a1, float a2);
 };
+
 

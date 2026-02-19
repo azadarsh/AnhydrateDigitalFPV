@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -71,10 +71,10 @@ void MenuSearchConnect::onShow()
    m_iIndexSkip = -1;
 
    int iCountLinks = 0;
-   if ( g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo )
-   for( int i=0; i<g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.radio_links_count; i++ )
+   if ( g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo )
+   for( int i=0; i<g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.radio_links_count; i++ )
    {
-      if ( ! (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRelayLinks & (1<<i)) )
+      if ( ! (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRelayLinks & (1<<i)) )
          iCountLinks++;
    }
 
@@ -107,7 +107,7 @@ void MenuSearchConnect::Render()
 
    g_pRenderEngine->setColors(get_Color_MenuText());
 
-   if ( g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo )
+   if ( g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo )
    {
       g_pRenderEngine->setColors(get_Color_MenuText(), 0.8);
       g_pRenderEngine->setStrokeSize(MENU_OUTLINEWIDTH);
@@ -118,7 +118,7 @@ void MenuSearchConnect::Render()
    g_pRenderEngine->drawMessageLines(xPos, y, szBuff, MENU_TEXTLINE_SPACING, fMaxWidth, g_idFontMenu);
 
    y += height_text *(1.0+MENU_ITEM_SPACING);
-   if ( ! g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo )
+   if ( ! g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo )
    {
       sprintf(szBuff, L("Can't get vehicle info"));
       g_pRenderEngine->drawMessageLines(xPos, y, szBuff, MENU_TEXTLINE_SPACING, fMaxWidth, g_idFontMenu);
@@ -127,11 +127,11 @@ void MenuSearchConnect::Render()
       return;
    }
 
-   sprintf(szBuff,"Type: %s, Name: ", Model::getVehicleType(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.vehicle_type));
-   if ( 0 == g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.vehicle_name[0] )
+   sprintf(szBuff,"Type: %s, Name: ", Model::getVehicleType(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.vehicle_type));
+   if ( 0 == g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.vehicle_name[0] )
       strcat(szBuff, "No Name");
    else
-      strncat(szBuff, (char*)g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.vehicle_name, MAX_VEHICLE_NAME_LENGTH);
+      strncat(szBuff, (char*)g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.vehicle_name, MAX_VEHICLE_NAME_LENGTH);
 
    g_pRenderEngine->drawMessageLines(xPos, y, szBuff, MENU_TEXTLINE_SPACING, fMaxWidth, g_idFontMenu);
    y += height_text *(1.0+MENU_ITEM_SPACING);
@@ -139,17 +139,17 @@ void MenuSearchConnect::Render()
    char szLinks[256];
    szLinks[0] = 0;
    int iCountLinks = 0;
-   if ( g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo )
-   for( int i=0; i<g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.radio_links_count; i++ )
+   if ( g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo )
+   for( int i=0; i<g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.radio_links_count; i++ )
    {
       // Not a relay link (bit N - relay link)
-      if ( ! (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRelayLinks & (1<<i)) )
+      if ( ! (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRelayLinks & (1<<i)) )
       {
          iCountLinks++;
          if ( 0 != szLinks[0] )
             strcat(szLinks, ", ");
          char szTmp[32];
-         sprintf(szTmp, "%s", str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[i]) );
+         sprintf(szTmp, "%s", str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[i]) );
          strcat(szLinks, szTmp);
       }
    }
@@ -162,13 +162,13 @@ void MenuSearchConnect::Render()
       y += height_text * MENU_ITEM_SPACING;    
    }
 
-   if ( ((g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.vehicle_type & MODEL_FIRMWARE_MASK) >> 5) == MODEL_FIRMWARE_TYPE_RUBY )
+   if ( ((g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.vehicle_type & MODEL_FIRMWARE_MASK) >> 5) == MODEL_FIRMWARE_TYPE_Anhydrate )
    {
-      u8 vMaj = g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion;
-      u8 vMin = g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion;
+      u8 vMaj = g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion;
+      u8 vMin = g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion;
       vMaj = vMaj >> 4;
       vMin = vMin & 0x0F;
-      //sprintf(szBuff,"Id: %u, ver: %d.%d", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, vMaj, vMin);
+      //sprintf(szBuff,"Id: %u, ver: %d.%d", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, vMaj, vMin);
       snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Version: %d.%d", vMaj, vMin);
       g_pRenderEngine->drawMessageLines(xPos, y, szBuff, MENU_TEXTLINE_SPACING, fMaxWidth, g_idFontMenu);
       y += height_text *(1.0+MENU_ITEM_SPACING);
@@ -207,3 +207,4 @@ void MenuSearchConnect::onSelectItem()
       return;
    }
 }
+

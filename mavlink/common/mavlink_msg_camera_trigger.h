@@ -236,3 +236,4 @@ static inline void mavlink_msg_camera_trigger_decode(const mavlink_message_t* ms
     memcpy(camera_trigger, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

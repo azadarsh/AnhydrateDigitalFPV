@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1267,4 +1267,5 @@ void RenderEngineRaw::drawArc(float x, float y, float r, float a1, float a2)
    for( int i=0; i<points-1; i++ )
       drawLine(xp[i], yp[i], xp[i+1], yp[i+1]);
 }
+
 

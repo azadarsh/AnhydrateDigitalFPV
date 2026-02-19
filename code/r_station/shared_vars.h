@@ -84,3 +84,4 @@ extern int g_iDebugShowKeyFramesAfterRelaySwitch;
 extern int g_iGetSiKConfigAsyncResult;
 extern int g_iGetSiKConfigAsyncRadioInterfaceIndex;
 extern u8 g_uGetSiKConfigAsyncVehicleLinkIndex;
+

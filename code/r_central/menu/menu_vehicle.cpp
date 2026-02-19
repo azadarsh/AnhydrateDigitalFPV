@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -123,7 +123,7 @@ void MenuVehicle::onShow()
    if ( (NULL != g_pCurrentModel) && g_pCurrentModel->is_spectator )
       m_pMenuItems[m_IndexAudio]->setEnabled(false);
 
-   m_IndexTelemetry = addMenuItem(new MenuItem(L("Telemetry"), L("Change telemetry parameters between flight controller and ruby vehicle.")));
+   m_IndexTelemetry = addMenuItem(new MenuItem(L("Telemetry"), L("Change telemetry parameters between flight controller and Anhydrate vehicle.")));
    if ( NULL != g_pCurrentModel && g_pCurrentModel->is_spectator )
       m_pMenuItems[m_IndexTelemetry]->setEnabled(false);
 
@@ -207,8 +207,8 @@ void MenuVehicle::addTopDescription()
 
    return;
 
-   if ( NULL != g_pCurrentModel && (g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].bGotRubyTelemetryInfo) )
-      m_Flags = g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].headerRubyTelemetryExtended.throttled;
+   if ( NULL != g_pCurrentModel && (g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].bGotAnhydrateTelemetryInfo) )
+      m_Flags = g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].headerAnhydrateTelemetryExtended.throttled;
 
    if ( 0xFFFF == m_Flags || 0 == m_Flags )
       addTopLine(L("No hardware alarms."));
@@ -250,7 +250,7 @@ void MenuVehicle::Render()
 
    /*
    bool bConnected = false;
-   if ( link_has_received_main_vehicle_ruby_telemetry() )
+   if ( link_has_received_main_vehicle_Anhydrate_telemetry() )
       bConnected = true;
    if ( g_bFirstModelPairingDone && (0 == getControllerModelsCount()) && (0 == getControllerModelsSpectatorCount()) )
       bConnected = false;
@@ -525,3 +525,4 @@ void MenuVehicle::onSelectItem()
       return;
    }
 }
+

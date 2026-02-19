@@ -21,3 +21,4 @@ bool video_source_majestic_last_read_is_start_nal();
 bool video_source_majestic_last_read_is_end_nal();
 u32 video_source_majestic_get_last_nal_type();
 bool video_source_majestic_periodic_health_checks();
+

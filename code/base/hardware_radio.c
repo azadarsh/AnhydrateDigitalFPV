@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1327,7 +1327,7 @@ int hardware_load_driver_rtl8733bu()
    return 1;
 }
 
-// Called only once, from ruby_start process
+// Called only once, from Anhydrate_start process
 int hardware_radio_load_radio_modules(int iEchoToConsole)
 {
    int iCountKnownRadios = _hardware_find_usb_radio_interfaces_info();
@@ -1337,7 +1337,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
       log_softerror_and_alarm("[HW-R] No USB radio devices found!");
       if ( iEchoToConsole )
       {
-         printf("Ruby: ERROR: No USB radio cards found!\n\n");
+         printf("Anhydrate: ERROR: No USB radio cards found!\n\n");
          fflush(stdout);
       }
       return 0;
@@ -1348,7 +1348,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
       log_softerror_and_alarm("[HW-R] No known USB radio devices found!");
       if ( iEchoToConsole )
       {
-         printf("Ruby: ERROR: No known USB radio cards found!\n\n");
+         printf("Anhydrate: ERROR: No known USB radio cards found!\n\n");
          fflush(stdout);
       }
       return 0;    
@@ -1366,7 +1366,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
 
    if ( iEchoToConsole )
    {
-      printf("Ruby: Adding radio modules for detected radio cards...\n");
+      printf("Anhydrate: Adding radio modules for detected radio cards...\n");
       fflush(stdout);
    }
 
@@ -1383,7 +1383,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: Adding radio modules for RTL8812AU radio cards...\n");
+         printf("Anhydrate: Adding radio modules for RTL8812AU radio cards...\n");
          fflush(stdout);
       }
       log_line("[HW-R] Found RTL8812AU cards. Loading module...");
@@ -1392,7 +1392,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
          log_softerror_and_alarm("[HW-R] Error on loading driver RTL8812AU");
          if ( iEchoToConsole )
          {
-            printf("Ruby: ERROR on loading driver RTL8812AU\n");
+            printf("Anhydrate: ERROR on loading driver RTL8812AU\n");
             fflush(stdout);
          }
       }
@@ -1407,7 +1407,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: Adding radio modules for RTL8812EU radio cards...\n");
+         printf("Anhydrate: Adding radio modules for RTL8812EU radio cards...\n");
          fflush(stdout);
       }
       log_line("[HW-R] Found RTL8812EU cards. Loading module...");
@@ -1417,7 +1417,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
          log_softerror_and_alarm("[HW-R] Error on loading driver RTL8812EU");
          if ( iEchoToConsole )
          {
-            printf("Ruby: ERROR on loading driver RTL8812EU\n");
+            printf("Anhydrate: ERROR on loading driver RTL8812EU\n");
             fflush(stdout);
          }
       }
@@ -1432,7 +1432,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: Adding radio modules for RTL8733BU radio cards...\n");
+         printf("Anhydrate: Adding radio modules for RTL8733BU radio cards...\n");
          fflush(stdout);
       }
       log_line("[HW-R] Found RTL8733BU cards. Loading module...");
@@ -1442,7 +1442,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
          log_softerror_and_alarm("[HW-R] Error on loading driver RTL8733BU");
          if ( iEchoToConsole )
          {
-            printf("Ruby: ERROR on loading driver RTL8733BU\n");
+            printf("Anhydrate: ERROR on loading driver RTL8733BU\n");
             fflush(stdout);
          }
       }
@@ -1457,7 +1457,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: Adding radio modules for Atheros radio cards...\n");
+         printf("Anhydrate: Adding radio modules for Atheros radio cards...\n");
          fflush(stdout);
       }
       hw_execute_bash_command("modprobe ath9k_hw txpower=10", szOutput);
@@ -1470,7 +1470,7 @@ int hardware_radio_load_radio_modules(int iEchoToConsole)
       iCountLoaded, (iRTL8812AULoaded?"yes":"no"), (iRTL8812EULoaded?"yes":"no"), (iRTL8733BULoaded?"yes":"no"), (iAtherosLoaded?"yes":"no"));
    if ( iEchoToConsole )
    {
-      printf( "Ruby: Added %d modules. Added RTL8812AU? %s. Added RTL8812EU? %s. Added RTL8733BU? %s. Added Atheros? %s\n",
+      printf( "Anhydrate: Added %d modules. Added RTL8812AU? %s. Added RTL8812EU? %s. Added RTL8733BU? %s. Added Atheros? %s\n",
          iCountLoaded, (iRTL8812AULoaded?"yes":"no"), (iRTL8812EULoaded?"yes":"no"), (iRTL8733BULoaded?"yes":"no"), (iAtherosLoaded?"yes":"no"));
       fflush(stdout);
    }
@@ -1552,7 +1552,7 @@ int hardware_install_driver_rtl8812au(int iEchoToConsole)
    log_line("[HW-R] Installing RTL8812AU driver for platform: [%s]", szPlatform);
    if ( iEchoToConsole )
    {
-      printf("Ruby: Installing RTL8812AU driver for platform: %s ...\n", szPlatform);
+      printf("Anhydrate: Installing RTL8812AU driver for platform: %s ...\n", szPlatform);
       fflush(stdout);
    }
 
@@ -1663,7 +1663,7 @@ int hardware_install_driver_rtl8812eu(int iEchoToConsole)
    log_line("[HW-R] Installing RTL8812EU driver for platform: [%s]", szPlatform);
    if ( iEchoToConsole )
    {
-      printf("Ruby: Installing RTL8812EU driver for platform: %s ...\n", szPlatform);
+      printf("Anhydrate: Installing RTL8812EU driver for platform: %s ...\n", szPlatform);
       fflush(stdout);
    }
 
@@ -1707,7 +1707,7 @@ int hardware_install_driver_rtl8733bu(int iEchoToConsole)
    log_line("[HW-R] Installing RTL8733BU driver for platform: [%s]", szPlatform);
    if ( iEchoToConsole )
    {
-      printf("Ruby: Installing RTL8733BU driver for platform: %s ...\n", szPlatform);
+      printf("Anhydrate: Installing RTL8733BU driver for platform: %s ...\n", szPlatform);
       fflush(stdout);
    }
    return 1;
@@ -1723,7 +1723,7 @@ void hardware_install_drivers(int iEchoToConsole)
    log_line("[HW-R] Installing drivers for platform: %s, board: %s ...", szPlatform, str_get_hardware_board_name(hardware_getBoardType()));
    if ( iEchoToConsole )
    {
-      printf("Ruby: Installing drivers for platform: %s ...\n", szPlatform);
+      printf("Anhydrate: Installing drivers for platform: %s ...\n", szPlatform);
       fflush(stdout);
    }
    #if defined (HW_PLATFORM_OPENIPC_CAMERA)
@@ -1746,14 +1746,14 @@ void hardware_install_drivers(int iEchoToConsole)
    hw_execute_bash_command(szComm, NULL);
    if ( iEchoToConsole )
    {
-      printf("Ruby: Updating drivers database. It might take a while. Please wait...\n");
+      printf("Anhydrate: Updating drivers database. It might take a while. Please wait...\n");
       fflush(stdout);
    }
    int iRes = hw_execute_bash_command_timeout("depmod -a", NULL, 60000);
    if ( (-1 == iRes) && iEchoToConsole )
    {
       log_softerror_and_alarm("Updating drivers database after cleanup took too long. Abandoning operation.");
-      printf("Ruby: Updating drives database took too long. Abandoning operation.\n");
+      printf("Anhydrate: Updating drives database took too long. Abandoning operation.\n");
       fflush(stdout);
    }
    #endif
@@ -1762,7 +1762,7 @@ void hardware_install_drivers(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: ERROR: Installing RTL8812AU driver failed.\n");
+         printf("Anhydrate: ERROR: Installing RTL8812AU driver failed.\n");
          fflush(stdout);
       }
    }
@@ -1771,7 +1771,7 @@ void hardware_install_drivers(int iEchoToConsole)
       log_line("[HW-R] Installed RTL8812AU driver");
       if ( iEchoToConsole )
       {
-         printf("Ruby: Installed RTL8812AU driver.\n");
+         printf("Anhydrate: Installed RTL8812AU driver.\n");
          fflush(stdout);
       }
    }
@@ -1780,7 +1780,7 @@ void hardware_install_drivers(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: ERROR: Installing RTL8812EU driver failed.\n");
+         printf("Anhydrate: ERROR: Installing RTL8812EU driver failed.\n");
          fflush(stdout);
       }
    }
@@ -1789,7 +1789,7 @@ void hardware_install_drivers(int iEchoToConsole)
       log_line("[HW-R] Installed RTL8812EU driver");
       if ( iEchoToConsole )
       {
-         printf("Ruby: Installed RTL8812EU driver.\n");
+         printf("Anhydrate: Installed RTL8812EU driver.\n");
          fflush(stdout);
       }
    }
@@ -1798,7 +1798,7 @@ void hardware_install_drivers(int iEchoToConsole)
    {
       if ( iEchoToConsole )
       {
-         printf("Ruby: ERROR: Installing RTL8733BU driver failed.\n");
+         printf("Anhydrate: ERROR: Installing RTL8733BU driver failed.\n");
          fflush(stdout);
       }
    }
@@ -1807,7 +1807,7 @@ void hardware_install_drivers(int iEchoToConsole)
       log_line("[HW-R] Installed RTL8733BU driver");
       if ( iEchoToConsole )
       {
-         printf("Ruby: Installed RTL8733BU driver.\n");
+         printf("Anhydrate: Installed RTL8733BU driver.\n");
          fflush(stdout);
       }
    }
@@ -1822,14 +1822,14 @@ void hardware_install_drivers(int iEchoToConsole)
    hw_execute_bash_command("ip link", NULL);
    if ( iEchoToConsole )
    {
-      printf("Ruby: Updating drivers database. It might take a while. Please wait...\n");
+      printf("Anhydrate: Updating drivers database. It might take a while. Please wait...\n");
       fflush(stdout);
    }
    int iRes2 = hw_execute_bash_command_timeout("depmod -a", NULL, 60000);
    if ( (-1 == iRes2) && iEchoToConsole )
    {
       log_softerror_and_alarm("Updating drivers database after cleanup took too long. Abandoning operation.");
-      printf("Ruby: Updating drives database took too long. Abandoning operation.\n");
+      printf("Anhydrate: Updating drives database took too long. Abandoning operation.\n");
       fflush(stdout);
    }
    hw_execute_bash_command("sync", NULL);
@@ -1839,7 +1839,7 @@ void hardware_install_drivers(int iEchoToConsole)
    log_line("[HW-R] Done installing drivers.");
    if ( iEchoToConsole )
    {
-      printf("Ruby: Done installing drivers.\n");
+      printf("Anhydrate: Done installing drivers.\n");
       fflush(stdout);
    }
 }
@@ -2409,3 +2409,4 @@ radio_hw_info_t* hardware_get_radio_info_from_mac(const char* szMAC)
          return &(sRadioInfo[i]);
    return NULL;
 }
+

@@ -93,3 +93,4 @@ static void mavlink_test_minimal(uint8_t system_id, uint8_t component_id, mavlin
 }
 #endif // __cplusplus
 #endif // MINIMAL_TESTSUITE_H
+

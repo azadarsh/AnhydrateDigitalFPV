@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -182,11 +182,11 @@ void MenuSystemDevLogs::exportVehicleLogs(char* szVehicleFolder)
       {
          if ( strlen(dir->d_name) < 4 )
             continue;
-         ruby_signal_alive();
-         sprintf(szComm, "mkdir -p %s/Ruby/%s/", FOLDER_USB_MOUNT, szVehicleFolder);
+         Anhydrate_signal_alive();
+         sprintf(szComm, "mkdir -p %s/Anhydrate/%s/", FOLDER_USB_MOUNT, szVehicleFolder);
          hw_execute_bash_command(szComm, NULL);
 
-         snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s/%s %s/Ruby/%s/%s", szFolder, dir->d_name, FOLDER_USB_MOUNT, szVehicleFolder, dir->d_name);
+         snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s/%s %s/Anhydrate/%s/%s", szFolder, dir->d_name, FOLDER_USB_MOUNT, szVehicleFolder, dir->d_name);
          hw_execute_bash_command(szComm, NULL);
       }
       closedir(d);
@@ -204,7 +204,7 @@ void MenuSystemDevLogs::exportAllLogs()
          addMessage("USB memory stick detected but could not be mounted. Please try again.");
       return;
    }
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    char szOutput[1024];
    char szComm[1024];
@@ -217,27 +217,27 @@ void MenuSystemDevLogs::exportAllLogs()
       return;
    }
 
-   ruby_signal_alive();
-   ruby_pause_watchdog("export all logs");
+   Anhydrate_signal_alive();
+   Anhydrate_pause_watchdog("export all logs");
 
    Popup* p = new Popup("Exporting. Please wait...",0.3,0.4, 0.5, 15);
    popups_add_topmost(p);
-   ruby_processing_loop(true);
+   Anhydrate_processing_loop(true);
    g_TimeNow = get_current_timestamp_ms();
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
       
    hw_execute_bash_command("mkdir -p tmp/exportcontrollerlogs", NULL);
    hw_execute_bash_command("chmod 777 tmp/exportcontrollerlogs", NULL);
    hw_execute_bash_command("rm -rf tmp/exportcontrollerlogs/* 2>/dev/null", NULL);
-   sprintf(szComm, "zip tmp/exportcontrollerlogs/ruby_controller_logs_controller_id_%u_%d.zip logs/*", g_uControllerId, g_iBootCount);
+   sprintf(szComm, "zip tmp/exportcontrollerlogs/Anhydrate_controller_logs_controller_id_%u_%d.zip logs/*", g_uControllerId, g_iBootCount);
    hw_execute_bash_command(szComm, NULL);
 
-   sprintf(szBuff, "%s/Ruby", FOLDER_USB_MOUNT);
+   sprintf(szBuff, "%s/Anhydrate", FOLDER_USB_MOUNT);
    snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "mkdir -p %s", szBuff );
    hw_execute_bash_command(szComm, NULL);
 
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf tmp/exportcontrollerlogs/ruby_controller_logs_controller_id_%u_%d.zip %s/Ruby/ruby_controller_logs_controller_id_%u_%d.zip", g_uControllerId, g_iBootCount, FOLDER_USB_MOUNT, g_uControllerId, g_iBootCount);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf tmp/exportcontrollerlogs/Anhydrate_controller_logs_controller_id_%u_%d.zip %s/Anhydrate/Anhydrate_controller_logs_controller_id_%u_%d.zip", g_uControllerId, g_iBootCount, FOLDER_USB_MOUNT, g_uControllerId, g_iBootCount);
    hw_execute_bash_command(szComm, NULL);
    hw_execute_bash_command("rm -rf tmp/exportcontrollerlogs 2>/dev/null", NULL);
 
@@ -250,7 +250,7 @@ void MenuSystemDevLogs::exportAllLogs()
       {
          if ( strlen(dir->d_name) < 4 )
             continue;
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
 
          if ( strncmp(dir->d_name, "vehicle-", 8) != 0 )
             continue;
@@ -260,12 +260,12 @@ void MenuSystemDevLogs::exportAllLogs()
    }
 
    hardware_unmount_usb();
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    sync();
-   ruby_signal_alive();
-   ruby_resume_watchdog("finished export all logs");
+   Anhydrate_signal_alive();
+   Anhydrate_resume_watchdog("finished export all logs");
    popups_remove(p);
-   addMessage("Done. All logs have been copied to the USB memory stick on a folder named Ruby. You can now remove the USB memory stick.");
+   addMessage("Done. All logs have been copied to the USB memory stick on a folder named Anhydrate. You can now remove the USB memory stick.");
 }
 
 void MenuSystemDevLogs::onReturnFromChild(int iChildMenuId, int returnValue)
@@ -489,4 +489,5 @@ void MenuSystemDevLogs::onSelectItem()
       return;
    }
 }
+
 

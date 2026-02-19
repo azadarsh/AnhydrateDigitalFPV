@@ -253,3 +253,4 @@ static inline void mavlink_msg_named_value_int_decode(const mavlink_message_t* m
     memcpy(named_value_int, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

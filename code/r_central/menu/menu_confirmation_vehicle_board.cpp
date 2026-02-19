@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -39,7 +39,7 @@
 #include "menu.h"
 #include "menu_confirmation_vehicle_board.h"
 #include "menu_negociate_radio.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 #include "../events.h"
 
 MenuConfirmationVehicleBoard::MenuConfirmationVehicleBoard()

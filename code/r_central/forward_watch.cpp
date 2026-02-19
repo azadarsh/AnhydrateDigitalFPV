@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -38,7 +38,7 @@
 #include "forward_watch.h"
 #include "shared_vars.h"
 #include "warnings.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "timers.h"
 
 bool s_bForwardPairingStarted = false;
@@ -50,7 +50,7 @@ void _forward_on_usb_device_detected()
 {
    log_line("USB device detected");
 
-   ruby_pause_watchdog("on new usb device");
+   Anhydrate_pause_watchdog("on new usb device");
 
    char szSysType[128];
    char szBuff[1024];
@@ -63,7 +63,7 @@ void _forward_on_usb_device_detected()
 
    hw_stop_process("pump");
 
-   sprintf(szBuff, "pump -i usb0 --no-ntp -h Ruby%s_FWD", szSysType);
+   sprintf(szBuff, "pump -i usb0 --no-ntp -h Anhydrate%s_FWD", szSysType);
    //sprintf(szBuff, "dhclient usb0", szSysType);
    hw_execute_bash_command_raw(szBuff, NULL);
 
@@ -100,17 +100,17 @@ void _forward_on_usb_device_detected()
    else
    {
       log_line("DHCP is enabled. Reneable the ETH routing on USB tethering start.");
-      sprintf(szBuff, "nice pump -i eth0 --no-ntp -h Ruby%s &", szSysType);
+      sprintf(szBuff, "nice pump -i eth0 --no-ntp -h Anhydrate%s &", szSysType);
       hw_execute_bash_command(szBuff, NULL);
    }
 
    
-   sprintf(szBuff, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_USB_TETHERING_DEVICE);
+   sprintf(szBuff, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_USB_TETHERING_DEVICE);
    hw_execute_bash_command(szBuff, NULL);
-   sprintf(szBuff, "echo \"%s\" > %s%s", szIP, FOLDER_RUBY_TEMP, FILE_TEMP_USB_TETHERING_DEVICE);
+   sprintf(szBuff, "echo \"%s\" > %s%s", szIP, FOLDER_Anhydrate_TEMP, FILE_TEMP_USB_TETHERING_DEVICE);
    hw_execute_bash_command(szBuff, NULL);
    log_line("Done configuring USB tethering device connection.");
-   ruby_resume_watchdog("on new usb device");
+   Anhydrate_resume_watchdog("on new usb device");
 }
 
 void _forward_on_usb_device_unplugged()
@@ -118,7 +118,7 @@ void _forward_on_usb_device_unplugged()
    char szSysType[128];
    char szBuff[1024];
 
-   ruby_pause_watchdog("on usb device unplugged");
+   Anhydrate_pause_watchdog("on usb device unplugged");
 
    if ( hardware_is_vehicle() )
       strcpy(szSysType, "VEHICLE");
@@ -136,10 +136,10 @@ void _forward_on_usb_device_unplugged()
    else
    {
       log_line("DHCP is enabled. Reneable the ETH routing on USB tethering stop.");
-      sprintf(szBuff, "nice pump -i eth0 --no-ntp -h Ruby%s &", szSysType);
+      sprintf(szBuff, "nice pump -i eth0 --no-ntp -h Anhydrate%s &", szSysType);
       hw_execute_bash_command(szBuff, NULL);
    }
-   ruby_resume_watchdog("on usb device unplugged");
+   Anhydrate_resume_watchdog("on usb device unplugged");
 }
 
 bool forward_streams_on_pairing_start()
@@ -199,11 +199,12 @@ void forward_streams_loop()
             log_line("USB tethering device unplugged.");
             _forward_on_usb_device_unplugged();
             char szBuff[256];
-            sprintf(szBuff, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_USB_TETHERING_DEVICE);
+            sprintf(szBuff, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_USB_TETHERING_DEVICE);
             hw_execute_bash_command(szBuff, NULL);
             s_bForwardHasUSBDevice = false;
          }
       }
    }
 }
+
 

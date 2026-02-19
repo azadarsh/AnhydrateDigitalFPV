@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -45,7 +45,7 @@
 #include "shared_vars.h"
 #include "timers.h"
 #include "local_stats.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "pairing.h"
 #include "notifications.h"
 #include "handle_commands.h"
@@ -197,13 +197,13 @@ void onMainVehicleChanged(bool bRemovePreviousVehicleState)
 void onEventReboot()
 {
    log_line("[Events] Handling event Reboot...");
-   ruby_pause_watchdog("rebooting");
+   Anhydrate_pause_watchdog("rebooting");
    bool bMigratedFirmware = false;
    if ( g_bDidAnUpdate )
    {
       char szFile[MAX_FILE_PATH_SIZE];
       strcpy(szFile, FOLDER_BINARIES);
-      strcat(szFile, "ruby_start");
+      strcat(szFile, "Anhydrate_start");
       if ( access(szFile, R_OK) != -1 )
       {
          strcpy(szFile, FOLDER_BINARIES);
@@ -317,7 +317,7 @@ void onEventBeforePairingStop()
    log_line("[Events] Handling event Before Pairing Stop...");
    log_current_runtime_vehicles_info();
 
-   ruby_stop_recording();
+   Anhydrate_stop_recording();
 
    onEventPairingDiscardAllUIActions();
    osd_remove_stats_flight_end();
@@ -405,11 +405,11 @@ void onEventPairingStartReceivingData(u32 uVehicleId)
       pVRTInfo = &g_SearchVehicleRuntimeInfo;
    else
       pVRTInfo = &(g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex]);
-   log_line("[Events] Got already telemetry for this VID %u ? Ruby telem: %s, FC telemetry: %s",
-      uVehicleId, pVRTInfo->bGotRubyTelemetryInfo? "yes":"no",
+   log_line("[Events] Got already telemetry for this VID %u ? Anhydrate telem: %s, FC telemetry: %s",
+      uVehicleId, pVRTInfo->bGotAnhydrateTelemetryInfo? "yes":"no",
       pVRTInfo->bGotFCTelemetry? "yes":"no");
 
-   log_line("[Events] Ruby telemetry received VID: %u", pVRTInfo->headerRubyTelemetryExtended.uVehicleId);
+   log_line("[Events] Anhydrate telemetry received VID: %u", pVRTInfo->headerAnhydrateTelemetryExtended.uVehicleId);
 
    log_line("[Events] Is pairing initated with this vehicle? %s", pVRTInfo->bNotificationPairingRequestSent?"Yes":"No");
    log_line("[Events] Is pairing done and confirmed with this vehicle? %s", pVRTInfo->bPairedConfirmed?"Yes":"No");
@@ -447,7 +447,7 @@ void onEventArmed(u32 uVehicleId)
    osd_remove_stats_flight_end();
    Preferences* p = get_Preferences();
    if ( NULL != p && p->iStartVideoRecOnArm )
-      ruby_start_recording();
+      Anhydrate_start_recording();
    log_line("[Events] Handled event OnArmed. Done.");
 }
 
@@ -463,7 +463,7 @@ void onEventDisarmed(u32 uVehicleId)
       osd_add_stats_flight_end();
    Preferences* p = get_Preferences();
    if ( NULL != p && p->iStopVideoRecOnDisarm )
-      ruby_stop_recording();
+      Anhydrate_stop_recording();
    log_line("[Events] Handled event OnDisarmed. Done.");
 }
 
@@ -733,7 +733,7 @@ bool _onEventCheckNewlyPairedModelForUIActionsToTake()
       getSystemVersionString(szBuff2, s_pEventsLastRecvModelSettings->sw_version);
       getSystemVersionString(szBuff3, (SYSTEM_SW_VERSION_MAJOR<<8) | SYSTEM_SW_VERSION_MINOR);
       strcpy(szBuff4, s_pEventsLastRecvModelSettings->getVehicleTypeString());
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "%s has Ruby version %s (b-%u) and your controller %s (b-%u). You should update your controller.", szBuff4, szBuff2, get_sw_version_build(s_pEventsLastRecvModelSettings), szBuff3, SYSTEM_SW_BUILD_NUMBER);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "%s has Anhydrate version %s (b-%u) and your controller %s (b-%u). You should update your controller.", szBuff4, szBuff2, get_sw_version_build(s_pEventsLastRecvModelSettings), szBuff3, SYSTEM_SW_BUILD_NUMBER);
       szBuff[0] = toupper(szBuff[0]);
       warnings_add(s_pEventsLastRecvModelSettings->uVehicleId, szBuff, 0, NULL, 10);
       MenuConfirmation* pMC = new MenuConfirmation(L("Update Info"), szBuff, 0, true);
@@ -763,7 +763,7 @@ bool _onEventCheckNewlyPairedModelForUIActionsToTake()
       getSystemVersionString(szBuff2, s_pEventsLastRecvModelSettings->sw_version);
       getSystemVersionString(szBuff3, (SYSTEM_SW_VERSION_MAJOR<<8) | SYSTEM_SW_VERSION_MINOR);
       strcpy(szBuff4, s_pEventsLastRecvModelSettings->getVehicleTypeString());
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), L("%s has Ruby version %s (b-%u) and your controller %s (b-%u). You should update your %s."), szBuff4, szBuff2, get_sw_version_build(s_pEventsLastRecvModelSettings), szBuff3, SYSTEM_SW_BUILD_NUMBER, szBuff4);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), L("%s has Anhydrate version %s (b-%u) and your controller %s (b-%u). You should update your %s."), szBuff4, szBuff2, get_sw_version_build(s_pEventsLastRecvModelSettings), szBuff3, SYSTEM_SW_BUILD_NUMBER, szBuff4);
       szBuff[0] = toupper(szBuff[0]);
       warnings_add(s_pEventsLastRecvModelSettings->uVehicleId, szBuff, 0, NULL, 12);
       bool bArmed = false;
@@ -1078,7 +1078,7 @@ bool onEventReceivedModelSettings(u32 uVehicleId, u8* pBuffer, int length, bool 
    pCurrentlyStoredModel->logVehicleRadioInfo();
 
    char szFile[MAX_FILE_PATH_SIZE];
-   sprintf(szFile, "%s/last_recv_model.mdl", FOLDER_RUBY_TEMP);
+   sprintf(szFile, "%s/last_recv_model.mdl", FOLDER_Anhydrate_TEMP);
 
    FILE* fd = fopen(szFile, "wb");
    if ( NULL != fd )
@@ -1094,7 +1094,7 @@ bool onEventReceivedModelSettings(u32 uVehicleId, u8* pBuffer, int length, bool 
       return false;
    }
 
-   sprintf(szFile, "%s/last_recv_model.bak", FOLDER_RUBY_TEMP);
+   sprintf(szFile, "%s/last_recv_model.bak", FOLDER_Anhydrate_TEMP);
    fd = fopen(szFile, "wb");
    if ( NULL != fd )
    {
@@ -1119,7 +1119,7 @@ bool onEventReceivedModelSettings(u32 uVehicleId, u8* pBuffer, int length, bool 
       warnings_add_error_null_model(1);
       return false;    
    }
-   sprintf(szFile, "%s/last_recv_model.mdl", FOLDER_RUBY_TEMP);
+   sprintf(szFile, "%s/last_recv_model.mdl", FOLDER_Anhydrate_TEMP);
    if ( ! s_pEventsLastRecvModelSettings->loadFromFile(szFile, true) )
    {
       log_softerror_and_alarm("HCommands: Failed to load the received vehicle model file. Invalid file.");
@@ -1143,7 +1143,7 @@ bool onEventReceivedModelSettings(u32 uVehicleId, u8* pBuffer, int length, bool 
    log_line("Currently received temp model osd layout: %d, enabled: %s", s_pEventsLastRecvModelSettings->osd_params.iCurrentOSDScreen, (s_pEventsLastRecvModelSettings->osd_params.osd_flags2[s_pEventsLastRecvModelSettings->osd_params.iCurrentOSDScreen] & OSD_FLAG2_LAYOUT_ENABLED)?"yes":"no");
    log_line("Currently received temp model developer flags: [%s]", str_get_developer_flags(s_pEventsLastRecvModelSettings->uDeveloperFlags));
    log_line("Currently received temp model has %d radio links.", s_pEventsLastRecvModelSettings->radioLinksParams.links_count );
-   log_line("Currently received temp model has Ruby base version: %d.%d", (s_pEventsLastRecvModelSettings->hwCapabilities.uRubyBaseVersion >> 8) & 0xFF, s_pEventsLastRecvModelSettings->hwCapabilities.uRubyBaseVersion & 0xFF);
+   log_line("Currently received temp model has Anhydrate base version: %d.%d", (s_pEventsLastRecvModelSettings->hwCapabilities.uAnhydrateBaseVersion >> 8) & 0xFF, s_pEventsLastRecvModelSettings->hwCapabilities.uAnhydrateBaseVersion & 0xFF);
    log_line("Currently received temp model has %d cameras", s_pEventsLastRecvModelSettings->iCameraCount);
    
    for( int i=0; i<s_pEventsLastRecvModelSettings->radioLinksParams.links_count; i++ )
@@ -1174,7 +1174,7 @@ bool onEventReceivedModelSettings(u32 uVehicleId, u8* pBuffer, int length, bool 
    else
       warnings_add(pCurrentlyStoredModel->uVehicleId, L("Synchronized vehicle settings."), g_idIconCheckOK);
 
-   log_line("The currently stored vehicle has Ruby version %d.%d (b-%d) and the controller %d.%d (b-%d)", get_sw_version_major(pCurrentlyStoredModel), get_sw_version_minor(pCurrentlyStoredModel), get_sw_version_build(pCurrentlyStoredModel), SYSTEM_SW_VERSION_MAJOR, SYSTEM_SW_VERSION_MINOR, SYSTEM_SW_BUILD_NUMBER );
+   log_line("The currently stored vehicle has Anhydrate version %d.%d (b-%d) and the controller %d.%d (b-%d)", get_sw_version_major(pCurrentlyStoredModel), get_sw_version_minor(pCurrentlyStoredModel), get_sw_version_build(pCurrentlyStoredModel), SYSTEM_SW_VERSION_MAJOR, SYSTEM_SW_VERSION_MINOR, SYSTEM_SW_BUILD_NUMBER );
 
    bool bOldIsSpectator = pCurrentlyStoredModel->is_spectator;
    osd_parameters_t oldOSDParams;

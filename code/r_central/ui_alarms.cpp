@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -268,7 +268,7 @@ void alarms_add_from_vehicle(u32 uVehicleId, u32 uAlarms, u32 uFlags1, u32 uFlag
          u32 uDelta2 = (uFlags2 >> 8) & 0xFF;
          u32 uDelta3 = (uFlags2 >> 16) & 0xFF;
          sprintf(szAlarmText, "Video capture process skipped %u packets from H264/H265 encoder.", uSkipped);
-         sprintf(szAlarmText2, "Please contact Ruby developers. Delta times: %u ms, %u ms, %u ms", uDelta1, uDelta2, uDelta3);
+         sprintf(szAlarmText2, "Please contact Anhydrate developers. Delta times: %u ms, %u ms, %u ms", uDelta1, uDelta2, uDelta3);
          bShowAsWarning = true;
       }
    }
@@ -600,7 +600,7 @@ void alarms_add_from_local(u32 uAlarms, u32 uFlags1, u32 uFlags2)
          u32 uDelta2 = (uFlags2 >> 8) & 0xFF;
          u32 uDelta3 = (uFlags2 >> 16) & 0xFF;
          sprintf(szAlarmText, "Video capture process skipped %u packets from H264/H265 encoder.", uSkipped);
-         sprintf(szAlarmText2, "Please contact Ruby developers. Delta times: %u ms, %u ms, %u ms", uDelta1, uDelta2, uDelta3);
+         sprintf(szAlarmText2, "Please contact Anhydrate developers. Delta times: %u ms, %u ms, %u ms", uDelta1, uDelta2, uDelta3);
          bShowAsWarning = true;
       }
    }
@@ -937,9 +937,9 @@ void alarms_add_from_local(u32 uAlarms, u32 uFlags1, u32 uFlags2)
             }
 
             if ( -1 != iIndexRuntime )
-            if ( g_VehiclesRuntimeInfo[iIndexRuntime].bGotRubyTelemetryInfo )
+            if ( g_VehiclesRuntimeInfo[iIndexRuntime].bGotAnhydrateTelemetryInfo )
             {
-               if ( !( g_VehiclesRuntimeInfo[iIndexRuntime].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_VEHICLE_HAS_CAMERA) )
+               if ( !( g_VehiclesRuntimeInfo[iIndexRuntime].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_VEHICLE_HAS_CAMERA) )
                {
                   bHasCamera = false;
                   log_line("Vehicle has camera flag not set in received telemetry.");
@@ -974,3 +974,4 @@ void alarms_add_from_local(u32 uAlarms, u32 uFlags1, u32 uFlags2)
       }
    }
 }
+

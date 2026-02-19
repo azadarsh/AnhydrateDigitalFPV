@@ -454,3 +454,4 @@ static inline void mavlink_msg_camera_image_captured_decode(const mavlink_messag
     memcpy(camera_image_captured, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -32,3 +32,4 @@ class MenuItemSelect: public MenuItemSelectBase
      char* m_szSelectionsTooltips[MAX_MENU_ITEM_SELECTIONS];
 
 };
+

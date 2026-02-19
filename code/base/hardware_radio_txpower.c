@@ -129,3 +129,4 @@ void hardware_radio_set_txpower_raw_atheros(int iCardIndex, int iTxPower)
    log_line("Radio interface %d Atheros raw tx power changed to: %d", iCardIndex+1, iTxPower);
 }
 
+

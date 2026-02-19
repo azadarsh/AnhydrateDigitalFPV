@@ -286,3 +286,4 @@ static inline void mavlink_msg_gps_global_origin_decode(const mavlink_message_t*
     memcpy(gps_global_origin, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

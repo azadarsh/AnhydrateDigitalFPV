@@ -261,3 +261,4 @@ static inline void mavlink_msg_button_change_decode(const mavlink_message_t* msg
     memcpy(button_change, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

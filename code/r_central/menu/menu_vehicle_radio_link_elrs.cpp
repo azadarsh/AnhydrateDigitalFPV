@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -74,7 +74,7 @@ MenuVehicleRadioLinkELRS::MenuVehicleRadioLinkELRS(int iRadioLink)
    m_bHasValidInterface = true;
    
    addMenuItem(new MenuItemText("Use ELRS configurator to fully configure your ELRS radio module."));
-   addMenuItem(new MenuItemText("Set the Ruby air data rate for this ELRS radio link (using the option below) to match the air datrate you set in your ELRS module."));
+   addMenuItem(new MenuItemText("Set the Anhydrate air data rate for this ELRS radio link (using the option below) to match the air datrate you set in your ELRS module."));
 
    m_pItemsSelect[0] = new MenuItemSelect("Enabled", "Enables or disables this radio link.");
    m_pItemsSelect[0]->addSelection("No");

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1371,3 +1371,4 @@ void osd_show_ahi(float roll, float pitch)
    if ( s_bDebugAHIShowAll || (g_pCurrentModel->osd_params.instruments_flags[osd_get_current_layout_index()] & INSTRUMENTS_FLAG_SHOW_ALTGRAPH) )
       osd_ahi_show_altgraph();
 }
+

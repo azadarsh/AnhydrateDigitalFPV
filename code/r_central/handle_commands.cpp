@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -48,7 +48,7 @@
 #include "pairing.h"
 #include "warnings.h"
 #include "pairing.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "osd.h"
 #include "launchers_controller.h"
 #include "../radio/radiopackets2.h"
@@ -166,12 +166,12 @@ int handle_commands_on_full_model_settings_received(u32 uVehicleId, int iRespons
    }
 
    char szComm[256];
-   sprintf(szComm, "rm -rf %s/model.mdl", FOLDER_RUBY_TEMP);
+   sprintf(szComm, "rm -rf %s/model.mdl", FOLDER_Anhydrate_TEMP);
    hw_execute_bash_command(szComm, NULL);
    char szRecvFile[MAX_FILE_PATH_SIZE];
-   sprintf(szRecvFile, "%s/last_recv_model.tar", FOLDER_RUBY_TEMP);
+   sprintf(szRecvFile, "%s/last_recv_model.tar", FOLDER_Anhydrate_TEMP);
    if ( iResponseParam != 0 )
-      sprintf(szRecvFile, "%s/last_recv_model.tar.gz", FOLDER_RUBY_TEMP);
+      sprintf(szRecvFile, "%s/last_recv_model.tar.gz", FOLDER_Anhydrate_TEMP);
 
    FILE* fd = fopen(szRecvFile, "wb");
    if ( NULL == fd )
@@ -186,21 +186,21 @@ int handle_commands_on_full_model_settings_received(u32 uVehicleId, int iRespons
 
    if ( 0 == iResponseParam )
    {
-      sprintf(szComm, "tar -C %s -zxf %s/last_recv_model.tar 2>&1", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+      sprintf(szComm, "tar -C %s -zxf %s/last_recv_model.tar 2>&1", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
    }
    else
    {
-      sprintf(szComm, "gzip -df %s/last_recv_model.tar.gz 2>&1", FOLDER_RUBY_TEMP);
+      sprintf(szComm, "gzip -df %s/last_recv_model.tar.gz 2>&1", FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
-      sprintf(szComm, "tar -C %s -xf %s/last_recv_model.tar 2>&1", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+      sprintf(szComm, "tar -C %s -xf %s/last_recv_model.tar 2>&1", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);    
    }
 
    char szFile[MAX_FILE_PATH_SIZE];
-   sprintf(szFile, "%s/model.mdl", FOLDER_RUBY_TEMP);
+   sprintf(szFile, "%s/model.mdl", FOLDER_Anhydrate_TEMP);
    if ( 0 == iResponseParam )
-      sprintf(szFile, "%s/tmp/model.mdl", FOLDER_RUBY_TEMP);
+      sprintf(szFile, "%s/tmp/model.mdl", FOLDER_Anhydrate_TEMP);
    
    fd = fopen(szFile, "rb");
    if ( NULL == fd )
@@ -219,12 +219,12 @@ int handle_commands_on_full_model_settings_received(u32 uVehicleId, int iRespons
    if ( ! modelTemp.loadFromFile(szFile, true) )
    {
       log_softerror_and_alarm("Failed to load temporary model file (%s).", szFile);
-      sprintf(szComm, "cp -rf %s/last_recv_model.tar %s/last_error_model.tar", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+      sprintf(szComm, "cp -rf %s/last_recv_model.tar %s/last_error_model.tar", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
       if ( 0 == iResponseParam )
-         sprintf(szComm, "cp -rf %s/tmp/model.mdl %s/last_error_model.mdl", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+         sprintf(szComm, "cp -rf %s/tmp/model.mdl %s/last_error_model.mdl", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
       else
-         sprintf(szComm, "cp -rf %s/model.mdl %s/last_error_model.mdl", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+         sprintf(szComm, "cp -rf %s/model.mdl %s/last_error_model.mdl", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
       return -1;
    }
@@ -306,9 +306,9 @@ int handle_commands_on_full_model_settings_received(u32 uVehicleId, int iRespons
    if ( (NULL != g_pCurrentModel) && (modelTemp.uVehicleId != g_pCurrentModel->uVehicleId) )
       log_line("[Commands] Received model settings for a different vehicle (%u) than the current model (%u)", modelTemp.uVehicleId, g_pCurrentModel->uVehicleId);
 
-   sprintf(szFile, "%s/model.mdl", FOLDER_RUBY_TEMP);
+   sprintf(szFile, "%s/model.mdl", FOLDER_Anhydrate_TEMP);
    if ( 0 == iResponseParam )
-      sprintf(szFile, "%s/tmp/model.mdl", FOLDER_RUBY_TEMP);
+      sprintf(szFile, "%s/tmp/model.mdl", FOLDER_Anhydrate_TEMP);
 
    fd = fopen(szFile, "rb");
    if ( NULL == fd )
@@ -323,9 +323,9 @@ int handle_commands_on_full_model_settings_received(u32 uVehicleId, int iRespons
    
    onEventReceivedModelSettings(modelTemp.uVehicleId, uBuffer, length, false);
    if ( 0 == iResponseParam )
-      sprintf(szComm, "rm -rf %s/tmp/model.mdl", FOLDER_RUBY_TEMP);
+      sprintf(szComm, "rm -rf %s/tmp/model.mdl", FOLDER_Anhydrate_TEMP);
    else
-      sprintf(szComm, "rm -rf %s/model.mdl", FOLDER_RUBY_TEMP);
+      sprintf(szComm, "rm -rf %s/model.mdl", FOLDER_Anhydrate_TEMP);
    hw_execute_bash_command(szComm, NULL);
 
    s_CommandType = 0;
@@ -583,9 +583,9 @@ void _handle_download_file_response()
       if ( pFileInfo->file_id == FILE_ID_VEHICLE_LOGS_ARCHIVE )
       {
          char szComm[256];
-         sprintf(szComm, "rm -rf %s/vehicle_logs.zip", FOLDER_RUBY_TEMP);
+         sprintf(szComm, "rm -rf %s/vehicle_logs.zip", FOLDER_Anhydrate_TEMP);
          hw_execute_bash_command(szComm, NULL);
-         sprintf(szComm, "touch %s/vehicle_logs.zip", FOLDER_RUBY_TEMP);
+         sprintf(szComm, "touch %s/vehicle_logs.zip", FOLDER_Anhydrate_TEMP);
          hw_execute_bash_command(szComm, NULL);
       }
    }
@@ -676,12 +676,12 @@ void _handle_download_file_segment_response()
 
       char szComm[256];
       char szFile[MAX_FILE_PATH_SIZE];
-      sprintf(szComm, "rm -rf %s/vehicle_logs.zip", FOLDER_RUBY_TEMP);
+      sprintf(szComm, "rm -rf %s/vehicle_logs.zip", FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
-      sprintf(szComm, "touch %s/vehicle_logs.zip", FOLDER_RUBY_TEMP);
+      sprintf(szComm, "touch %s/vehicle_logs.zip", FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
 
-      strcpy(szFile, FOLDER_RUBY_TEMP);
+      strcpy(szFile, FOLDER_Anhydrate_TEMP);
       strcat(szFile, "vehicle_logs.zip");
       FILE* fd = fopen(szFile, "wb");
       if ( NULL != fd )
@@ -704,7 +704,7 @@ void _handle_download_file_segment_response()
       for( int i=0; i<(int)strlen(szBuff); i++ )
          if ( szBuff[i] == ' ' )
             szBuff[i] = '-';
-      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "mv -f %s/vehicle_logs.zip %s/%s", FOLDER_RUBY_TEMP, szFolder, szBuff);
+      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "mv -f %s/vehicle_logs.zip %s/%s", FOLDER_Anhydrate_TEMP, szFolder, szBuff);
       hw_execute_bash_command(szComm, NULL);
    }
 
@@ -963,7 +963,7 @@ bool handle_last_command_result()
       case COMMAND_ID_FACTORY_RESET:
         {
            pairing_stop();
-           ruby_set_active_model_id(0);
+           Anhydrate_set_active_model_id(0);
            deleteModel(g_pCurrentModel);
            deletePluginModelSettings(g_pCurrentModel->uVehicleId);
            g_pCurrentModel = NULL;
@@ -1245,9 +1245,9 @@ bool handle_last_command_result()
         
         char szComm[256];
         char szFileUSB[MAX_FILE_PATH_SIZE];
-        sprintf(szFileUSB, "%s/tmp_usb_info.tar", FOLDER_RUBY_TEMP);
+        sprintf(szFileUSB, "%s/tmp_usb_info.tar", FOLDER_Anhydrate_TEMP);
         if ( pPHCR->command_response_param != 0 )
-           sprintf(szFileUSB, "%s/tmp_usb_info.tar.gz", FOLDER_RUBY_TEMP);
+           sprintf(szFileUSB, "%s/tmp_usb_info.tar.gz", FOLDER_Anhydrate_TEMP);
         log_line("Storing received USB info to file: [%s]", szFileUSB);
         char szText[3000];
         FILE* fd = fopen(szFileUSB, "wb");
@@ -1257,18 +1257,18 @@ bool handle_last_command_result()
            fclose(fd);
            if ( pPHCR->command_response_param == 0 )
            {
-              sprintf(szComm, "tar -C %s -zxf %s 2>&1", FOLDER_RUBY_TEMP, szFileUSB);
+              sprintf(szComm, "tar -C %s -zxf %s 2>&1", FOLDER_Anhydrate_TEMP, szFileUSB);
               hw_execute_bash_command(szComm, NULL);
            }
            else
            {
               sprintf(szComm, "gzip -df %s 2>&1", szFileUSB);
               hw_execute_bash_command(szComm, NULL);
-              sprintf(szComm, "tar -C %s -xf %s/tmp_usb_info.tar 2>&1", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+              sprintf(szComm, "tar -C %s -xf %s/tmp_usb_info.tar 2>&1", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
               hw_execute_bash_command(szComm, NULL);
            }
            iDataLength = 0;
-           strcpy(szFileUSB, FOLDER_RUBY_TEMP);
+           strcpy(szFileUSB, FOLDER_Anhydrate_TEMP);
            strcat(szFileUSB, "tmp_usb_info.txt");
            fd = fopen(szFileUSB, "rb");
            if ( NULL != fd )
@@ -1320,9 +1320,9 @@ bool handle_last_command_result()
         log_line("[Commands] Received %d bytes for vehicle USB radio interfaces info2.", iDataLength);
         char szComm[256];
         char szFileUSB[MAX_FILE_PATH_SIZE];
-        sprintf(szFileUSB, "%s/tmp_usb_info2.tar", FOLDER_RUBY_TEMP);
+        sprintf(szFileUSB, "%s/tmp_usb_info2.tar", FOLDER_Anhydrate_TEMP);
         if ( pPHCR->command_response_param != 0 )
-           sprintf(szFileUSB, "%s/tmp_usb_info2.tar.gz", FOLDER_RUBY_TEMP);
+           sprintf(szFileUSB, "%s/tmp_usb_info2.tar.gz", FOLDER_Anhydrate_TEMP);
         log_line("Storing received USB2 info to file: [%s]", szFileUSB);
 
         char szText[3000];
@@ -1334,19 +1334,19 @@ bool handle_last_command_result()
 
            if ( pPHCR->command_response_param == 0 )
            {
-              sprintf(szComm, "tar -C %s -zxf %s 2>&1", FOLDER_RUBY_TEMP, szFileUSB);
+              sprintf(szComm, "tar -C %s -zxf %s 2>&1", FOLDER_Anhydrate_TEMP, szFileUSB);
               hw_execute_bash_command(szComm, NULL);
            }
            else
            {
               sprintf(szComm, "gzip -df %s 2>&1", szFileUSB);
               hw_execute_bash_command(szComm, NULL);
-              sprintf(szComm, "tar -C %s -xf %s/tmp_usb_info2.tar 2>&1", FOLDER_RUBY_TEMP, FOLDER_RUBY_TEMP);
+              sprintf(szComm, "tar -C %s -xf %s/tmp_usb_info2.tar 2>&1", FOLDER_Anhydrate_TEMP, FOLDER_Anhydrate_TEMP);
               hw_execute_bash_command(szComm, NULL);
            }
 
            iDataLength = 0;
-           strcpy(szFileUSB, FOLDER_RUBY_TEMP);
+           strcpy(szFileUSB, FOLDER_Anhydrate_TEMP);
            strcat(szFileUSB, "tmp_usb_info2.txt");
            fd = fopen(szFileUSB, "rb");
            if ( NULL != fd )
@@ -1537,7 +1537,7 @@ bool handle_last_command_result()
             memcpy(&radio_interfaces, &g_pCurrentModel->radioInterfacesParams, sizeof(type_radio_interfaces_parameters) );
  
             char szFile[MAX_FILE_PATH_SIZE];
-            strcpy(szFile, FOLDER_RUBY_TEMP);
+            strcpy(szFile, FOLDER_Anhydrate_TEMP);
             strcat(szFile, "tempVehicleSettings.txt");
             g_pCurrentModel->loadFromFile(szFile); 
 
@@ -1924,7 +1924,7 @@ bool _commands_check_send_get_settings()
    if ( ! s_bHasCommandInProgress )
    if ( ! g_bUpdateInProgress )
    if ( (NULL != g_pCurrentModel) && (g_pCurrentModel->b_mustSyncFromVehicle || g_bIsFirstConnectionToCurrentVehicle ) && (!g_pCurrentModel->is_spectator))
-   if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+   if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
    if ( link_is_vehicle_online_now(g_pCurrentModel->uVehicleId) )
    if ( g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].bPairedConfirmed )
    if ( g_TimeNow > g_RouterIsReadyTimestamp + 500  )
@@ -1955,7 +1955,7 @@ bool _commands_check_send_get_settings()
    }
 
    if ( (NULL != g_pCurrentModel) && (g_pCurrentModel->b_mustSyncFromVehicle || g_bIsFirstConnectionToCurrentVehicle ) && (!g_pCurrentModel->is_spectator))
-   if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+   if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
    if ( ! g_bIsVideoPlaying )
    {
       static u32 s_uLastTimeErrorVehicleSync = 0;
@@ -1967,7 +1967,7 @@ bool _commands_check_send_get_settings()
             s_bHasCommandInProgress?"yes":"no",
             g_bSearching?"yes":"no",
             g_bIsReinit?"yes":"no",
-            link_has_received_main_vehicle_ruby_telemetry()?"yes":"no",
+            link_has_received_main_vehicle_Anhydrate_telemetry()?"yes":"no",
             link_is_vehicle_online_now(g_pCurrentModel->uVehicleId)?"yes":"no",
             s_iCountRetriesToGetModelSettingsCommand,
             (g_TimeNow > g_RouterIsReadyTimestamp + 500)?"yes":"no",
@@ -2324,7 +2324,7 @@ bool handle_commands_send_to_vehicle(u8 commandType, u32 param, u8* pBuffer, int
       return false;
    }
  
-   if ( ! link_has_received_main_vehicle_ruby_telemetry() )
+   if ( ! link_has_received_main_vehicle_Anhydrate_telemetry() )
       return false;
 
    s_CommandTargetVehicleId = g_pCurrentModel->uVehicleId;
@@ -2559,7 +2559,7 @@ bool handle_commands_send_single_oneway_command_to_vehicle(u32 uVehicleId, u8 re
    return true;
 }
 
-bool handle_commands_send_ruby_message(t_packet_header* pPH, u8* pBuffer, int length)
+bool handle_commands_send_Anhydrate_message(t_packet_header* pPH, u8* pBuffer, int length)
 {
    if ( NULL == pPH )
       return false;

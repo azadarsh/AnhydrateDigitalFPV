@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "../public/ruby_core_plugin.h"
+#include "../public/Anhydrate_core_plugin.h"
 #include "../public/utils/core_plugins_utils.h"
 
 const char* g_szPluginNameExample = "Example Core Plugin";
@@ -34,14 +34,14 @@ const char* core_plugin_get_guid()
    return g_szUIDExample;
 }
 
-// The plugin should return it's current version. It's used by Ruby to manage updates of the plugins and versioning.
+// The plugin should return it's current version. It's used by Anhydrate to manage updates of the plugins and versioning.
 int core_plugin_get_version()
 {
    return 1;
 }
 
 // This method should be used to actually initialize any data the plugin needs.
-// The actual capabilities allocated by Ruby to the plugin are in the uAllocatedCapabilities parameter.
+// The actual capabilities allocated by Anhydrate to the plugin are in the uAllocatedCapabilities parameter.
 // Plugin should return 0 if the initialization succeeded.
 int core_plugin_init(u32 uRuntimeLocation, u32 uAllocatedCapabilities)
 {

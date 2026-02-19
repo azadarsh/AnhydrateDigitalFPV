@@ -361,3 +361,4 @@ static inline void mavlink_msg_safety_allowed_area_decode(const mavlink_message_
     memcpy(safety_allowed_area, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

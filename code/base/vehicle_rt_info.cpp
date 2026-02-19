@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -36,4 +36,5 @@
 #include "base.h"
 #include "shared_mem.h"
 #include "vehicle_rt_info.h"
+
 

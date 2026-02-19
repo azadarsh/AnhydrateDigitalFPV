@@ -16,3 +16,4 @@ char* hardware_camera_get_oipc_sensor_raw_name(char* pszOutput);
 void hardware_camera_check_set_oipc_sensor();
 void hardware_camera_set_default_oipc_calibration(int iCameraType);
 
+

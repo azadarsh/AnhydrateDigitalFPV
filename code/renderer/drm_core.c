@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -51,7 +51,7 @@ type_drm_runtime_state s_DRMRuntimeState;
 int s_iDRMCoreInitialized = 0;
 int s_iDRMEnableVSync = 1;
 
-static const char *_ruby_drm_core_get_connector_str(uint32_t conn_type)
+static const char *_Anhydrate_drm_core_get_connector_str(uint32_t conn_type)
 {
    switch (conn_type)
    {
@@ -77,7 +77,7 @@ static const char *_ruby_drm_core_get_connector_str(uint32_t conn_type)
    return "N/A";
 }
 
-const char* _ruby_drm_fourcc_to_string(uint32_t fourcc)
+const char* _Anhydrate_drm_fourcc_to_string(uint32_t fourcc)
 {
     char* result = malloc(5);
     result[0] = (char)((fourcc >> 0) & 0xFF);
@@ -88,7 +88,7 @@ const char* _ruby_drm_fourcc_to_string(uint32_t fourcc)
     return result;
 }
 
-int _ruby_drm_get_object_properties(type_drm_object_info* pObject)
+int _Anhydrate_drm_get_object_properties(type_drm_object_info* pObject)
 {
    if ( NULL == pObject )
       return -1;
@@ -124,7 +124,7 @@ int _ruby_drm_get_object_properties(type_drm_object_info* pObject)
    return 0;
 }
 
-void _ruby_drm_free_object_properties(type_drm_object_info* pObject)
+void _Anhydrate_drm_free_object_properties(type_drm_object_info* pObject)
 {
    if ( NULL == pObject )
       return;
@@ -135,7 +135,7 @@ void _ruby_drm_free_object_properties(type_drm_object_info* pObject)
 }
 
 
-int64_t _ruby_drm_get_object_property_value(drmModeObjectPropertiesPtr pProps, const char *szName)
+int64_t _Anhydrate_drm_get_object_property_value(drmModeObjectPropertiesPtr pProps, const char *szName)
 {
    if ( NULL == szName )
       return -1;
@@ -161,7 +161,7 @@ int64_t _ruby_drm_get_object_property_value(drmModeObjectPropertiesPtr pProps, c
    return uValue;
 }
 
-int _ruby_drm_open_device()
+int _Anhydrate_drm_open_device()
 {
    int iRet = -1;
    uint64_t cap;
@@ -208,7 +208,7 @@ int _ruby_drm_open_device()
 }
 
 
-int _ruby_drm_core_enumerate_find_resources()
+int _Anhydrate_drm_core_enumerate_find_resources()
 {
    if ( s_fdDRM < 0 )
       return -1;
@@ -244,7 +244,7 @@ int _ruby_drm_core_enumerate_find_resources()
       }
 
       log_line("[DRMCore] Found connector: %s, %d, %s",
-         _ruby_drm_core_get_connector_str(s_DRMRuntimeState.pConnector->connector_type),
+         _Anhydrate_drm_core_get_connector_str(s_DRMRuntimeState.pConnector->connector_type),
          s_DRMRuntimeState.pConnector->connector_type_id,
          s_DRMRuntimeState.pConnector->connection == DRM_MODE_CONNECTED ? "connected" : "disonnected");
 
@@ -397,14 +397,14 @@ int _ruby_drm_core_enumerate_find_resources()
    return 0;
 }
 
-int _ruby_drm_find_target_plane()
+int _Anhydrate_drm_find_target_plane()
 {
    // -------------------------------------------------------------------
    // Finding planes supported by currently selected connector/display
    // Select the desired plane as the one to use
 
    log_line("[DRMCore] Finding planes supported by current display (target plane index is %d, target plane format is: %s)...",
-      s_DRMRuntimeState.objInfoPlane.iObjIndex, _ruby_drm_fourcc_to_string(s_DRMRuntimeState.uPlaneFormat) );
+      s_DRMRuntimeState.objInfoPlane.iObjIndex, _Anhydrate_drm_fourcc_to_string(s_DRMRuntimeState.uPlaneFormat) );
 
    s_DRMRuntimeState.pPlanesResources = drmModeGetPlaneResources(s_fdDRM);
    if ( !s_DRMRuntimeState.pPlanesResources )
@@ -452,7 +452,7 @@ int _ruby_drm_find_target_plane()
          for (int j=0; j<s_DRMRuntimeState.pPlane->count_formats; j++)
          {
             log_line("[DRMCore] Found plane-%d format %d: %s",
-             i, j, _ruby_drm_fourcc_to_string(s_DRMRuntimeState.pPlane->formats[j]));
+             i, j, _Anhydrate_drm_fourcc_to_string(s_DRMRuntimeState.pPlane->formats[j]));
             if ( s_DRMRuntimeState.pPlane->formats[j] == s_DRMRuntimeState.uPlaneFormat )
             {
                s_DRMRuntimeState.objInfoPlane.uObjId = s_DRMRuntimeState.pPlanesResources->planes[i];
@@ -473,7 +473,7 @@ int _ruby_drm_find_target_plane()
 
    if ( s_DRMRuntimeState.objInfoPlane.uObjId != 0xFFFFFFFF )
       log_line("[DRMCore] Found plane format for format %s: plane id %d, plane index %d",
-         _ruby_drm_fourcc_to_string(s_DRMRuntimeState.uPlaneFormat),
+         _Anhydrate_drm_fourcc_to_string(s_DRMRuntimeState.uPlaneFormat),
          s_DRMRuntimeState.objInfoPlane.uObjId, s_DRMRuntimeState.objInfoPlane.iObjIndex);
    else
    {
@@ -484,7 +484,7 @@ int _ruby_drm_find_target_plane()
    return 0;
 }
 
-int _ruby_drm_create_drm_surface_buffer(type_drm_buffer* pOutputBufferInfo)
+int _Anhydrate_drm_create_drm_surface_buffer(type_drm_buffer* pOutputBufferInfo)
 {
    if ( NULL == pOutputBufferInfo )
       return -1;
@@ -560,7 +560,7 @@ int _ruby_drm_create_drm_surface_buffer(type_drm_buffer* pOutputBufferInfo)
    return 0;
 }
 
-int _ruby_drm_destroy_drm_surface_buffer(type_drm_buffer* pBuffer)
+int _Anhydrate_drm_destroy_drm_surface_buffer(type_drm_buffer* pBuffer)
 {
    if ( NULL == pBuffer )
       return -1;
@@ -580,7 +580,7 @@ int _ruby_drm_destroy_drm_surface_buffer(type_drm_buffer* pBuffer)
 }
 
 
-int _ruby_drm_set_mode()
+int _Anhydrate_drm_set_mode()
 {
    //if ( (0 == s_iDRMTargetPlaneIndex) || (-1 == s_iDRMTargetPlaneIndex) )
    /*
@@ -612,13 +612,13 @@ int _ruby_drm_set_mode()
    return 0;
 }
 
-int ruby_drm_core_is_display_connected()
+int Anhydrate_drm_core_is_display_connected()
 {
    int iMustCloseDevice = 0;
    if ( s_fdDRM < 0 )
    {
       iMustCloseDevice = 1;
-      if ( _ruby_drm_open_device() < 0 )
+      if ( _Anhydrate_drm_open_device() < 0 )
          return -1;
    }
 
@@ -683,11 +683,11 @@ int ruby_drm_core_is_display_connected()
    return 0;
 }
 
-int ruby_drm_core_wait_for_display_connected()
+int Anhydrate_drm_core_wait_for_display_connected()
 {
    log_line("[DRMCore] Waiting for display to be conncted...");
 
-   if ( ruby_drm_core_is_display_connected() )
+   if ( Anhydrate_drm_core_is_display_connected() )
    {
       log_line("[DRMCore] Display is connected.");
       return 1;
@@ -696,16 +696,16 @@ int ruby_drm_core_wait_for_display_connected()
    {
       hardware_sleep_ms(400);
       log_line("[DRMCore] Waiting again for display to be conncted...");
-   } while (ruby_drm_core_is_display_connected() <= 0 );
+   } while (Anhydrate_drm_core_is_display_connected() <= 0 );
    hardware_sleep_ms(100);
    log_line("[DRMCore] Display is connected.");
    return 1;
 }
 
-int ruby_drm_core_init(int iPlaneIndex, uint32_t uFormat, int iWidth, int iHeight, int iRefreshRate)
+int Anhydrate_drm_core_init(int iPlaneIndex, uint32_t uFormat, int iWidth, int iHeight, int iRefreshRate)
 {
    log_line("[DRMCore] Init (on plane index %d, format %s, w/h/r: %dx%d@%d)...",
-      iPlaneIndex, _ruby_drm_fourcc_to_string(uFormat), iWidth, iHeight, iRefreshRate);
+      iPlaneIndex, _Anhydrate_drm_fourcc_to_string(uFormat), iWidth, iHeight, iRefreshRate);
 
    s_DRMDisplayAttributes.iWidth = iWidth;
    s_DRMDisplayAttributes.iHeight = iHeight;
@@ -728,23 +728,23 @@ int ruby_drm_core_init(int iPlaneIndex, uint32_t uFormat, int iWidth, int iHeigh
    s_DRMRuntimeState.iVideoSourceWidth = -1;
    s_DRMRuntimeState.iVideoSourceHeight = -1;
 
-   _ruby_drm_open_device();
+   _Anhydrate_drm_open_device();
    
-   _ruby_drm_core_enumerate_find_resources();
-   _ruby_drm_find_target_plane();
+   _Anhydrate_drm_core_enumerate_find_resources();
+   _Anhydrate_drm_find_target_plane();
 
    log_line("[DRMCore] Init: finding object properties for target plane %d", iPlaneIndex);
 
-   _ruby_drm_get_object_properties(&s_DRMRuntimeState.objInfoConnector);
-   _ruby_drm_get_object_properties(&s_DRMRuntimeState.objInfoCRTc);
-   _ruby_drm_get_object_properties(&s_DRMRuntimeState.objInfoPlane);
+   _Anhydrate_drm_get_object_properties(&s_DRMRuntimeState.objInfoConnector);
+   _Anhydrate_drm_get_object_properties(&s_DRMRuntimeState.objInfoCRTc);
+   _Anhydrate_drm_get_object_properties(&s_DRMRuntimeState.objInfoPlane);
 
    s_DRMRuntimeState.pAtomicRequest = drmModeAtomicAlloc();
    
-   //int64_t iZPos = _ruby_drm_get_object_property_value(s_DRMRuntimeState.objInfoPlane.pProperties, "zpos");
+   //int64_t iZPos = _Anhydrate_drm_get_object_property_value(s_DRMRuntimeState.objInfoPlane.pProperties, "zpos");
 
-   _ruby_drm_create_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[0]);
-   _ruby_drm_create_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[1]);
+   _Anhydrate_drm_create_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[0]);
+   _Anhydrate_drm_create_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[1]);
 
    log_line("[DRMCore] Init: created drm surfaces target plane %d", iPlaneIndex);
 
@@ -752,11 +752,11 @@ int ruby_drm_core_init(int iPlaneIndex, uint32_t uFormat, int iWidth, int iHeigh
    s_iDRMCoreInitialized = 1;
 
    log_line("[DRMCore] Init complete (on plane index %d, format %s, w/h/r: %dx%d@%d)",
-      iPlaneIndex, _ruby_drm_fourcc_to_string(uFormat), iWidth, iHeight, iRefreshRate);
+      iPlaneIndex, _Anhydrate_drm_fourcc_to_string(uFormat), iWidth, iHeight, iRefreshRate);
    return 0;
 }
 
-int ruby_drm_core_uninit()
+int Anhydrate_drm_core_uninit()
 {
    log_line("[DRMCore] Uninit");
 
@@ -767,7 +767,7 @@ int ruby_drm_core_uninit()
       log_softerror_and_alarm("[DRMCore] Failed to restore old mode.");
    }
 
-  // int64_t iZPos = _ruby_drm_get_object_property_value(s_DRMRuntimeState.objInfoPlane.pProperties, "zpos");
+  // int64_t iZPos = _Anhydrate_drm_get_object_property_value(s_DRMRuntimeState.objInfoPlane.pProperties, "zpos");
  /*
  ret = modeset_atomic_prepare_commit(fd, output_list, output_list->video_request, &output_list->video_plane, buf->fb, buf->width, buf->height, zpos);
  if (ret < 0) {
@@ -780,9 +780,9 @@ int ruby_drm_core_uninit()
 */
 //////////
 
-   _ruby_drm_free_object_properties(&s_DRMRuntimeState.objInfoPlane);
-   _ruby_drm_free_object_properties(&s_DRMRuntimeState.objInfoCRTc);
-   _ruby_drm_free_object_properties(&s_DRMRuntimeState.objInfoConnector);
+   _Anhydrate_drm_free_object_properties(&s_DRMRuntimeState.objInfoPlane);
+   _Anhydrate_drm_free_object_properties(&s_DRMRuntimeState.objInfoCRTc);
+   _Anhydrate_drm_free_object_properties(&s_DRMRuntimeState.objInfoConnector);
    
    if ( NULL != s_DRMRuntimeState.pPlanesResources )
       drmModeFreePlaneResources(s_DRMRuntimeState.pPlanesResources);
@@ -804,8 +804,8 @@ int ruby_drm_core_uninit()
       drmModeFreeResources(s_DRMRuntimeState.pAllDRMResources);
    s_DRMRuntimeState.pAllDRMResources = NULL;
 
-   _ruby_drm_destroy_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[0]);
-   _ruby_drm_destroy_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[1]);
+   _Anhydrate_drm_destroy_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[0]);
+   _Anhydrate_drm_destroy_drm_surface_buffer(&s_DRMRuntimeState.drawBuffers[1]);
 
    if ( s_fdDRM >= 0 )
       close(s_fdDRM);
@@ -814,42 +814,42 @@ int ruby_drm_core_uninit()
    return 0;
 }
 
-int ruby_drm_core_get_fd()
+int Anhydrate_drm_core_get_fd()
 {
    return s_fdDRM;
 }
 
-type_drm_display_attributes* ruby_drm_get_main_display_info()
+type_drm_display_attributes* Anhydrate_drm_get_main_display_info()
 {
    return &s_DRMDisplayAttributes;
 }
 
-type_drm_buffer* ruby_drm_core_get_main_draw_buffer()
+type_drm_buffer* Anhydrate_drm_core_get_main_draw_buffer()
 {
    return &(s_DRMRuntimeState.drawBuffers[s_DRMRuntimeState.iActiveOnScreenDrawBuffer]);
 }
 
-type_drm_buffer* ruby_drm_core_get_back_draw_buffer()
+type_drm_buffer* Anhydrate_drm_core_get_back_draw_buffer()
 {
    return &(s_DRMRuntimeState.drawBuffers[1-s_DRMRuntimeState.iActiveOnScreenDrawBuffer]);
 }
 
-uint32_t ruby_drm_core_get_main_draw_buffer_id()
+uint32_t Anhydrate_drm_core_get_main_draw_buffer_id()
 {
    return s_DRMRuntimeState.drawBuffers[s_DRMRuntimeState.iActiveOnScreenDrawBuffer].uBufferId;
 }
-uint32_t ruby_drm_core_get_back_draw_buffer_id()
+uint32_t Anhydrate_drm_core_get_back_draw_buffer_id()
 {
    return s_DRMRuntimeState.drawBuffers[1-s_DRMRuntimeState.iActiveOnScreenDrawBuffer].uBufferId;
 }
 
-int ruby_drm_swap_mainback_buffers()
+int Anhydrate_drm_swap_mainback_buffers()
 {
    s_DRMRuntimeState.iActiveOnScreenDrawBuffer = 1 - s_DRMRuntimeState.iActiveOnScreenDrawBuffer;
    
    drmModeAtomicSetCursor(s_DRMRuntimeState.pAtomicRequest, 0);
 
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "FB_ID", s_DRMRuntimeState.drawBuffers[s_DRMRuntimeState.iActiveOnScreenDrawBuffer].uBufferId );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "FB_ID", s_DRMRuntimeState.drawBuffers[s_DRMRuntimeState.iActiveOnScreenDrawBuffer].uBufferId );
 
    int iRet = drmModeAtomicCommit(s_fdDRM, s_DRMRuntimeState.pAtomicRequest, DRM_MODE_ATOMIC_ALLOW_MODESET, NULL);
    return iRet;
@@ -881,7 +881,7 @@ int ruby_drm_swap_mainback_buffers()
 }
 
 
-int ruby_drm_core_set_plane_properties_and_buffer(uint32_t uBufferId)
+int Anhydrate_drm_core_set_plane_properties_and_buffer(uint32_t uBufferId)
 {
    uint64_t uSrcWidth = s_DRMDisplayAttributes.iWidth;
    uint64_t uSrcHeight = s_DRMDisplayAttributes.iHeight;
@@ -954,23 +954,23 @@ int ruby_drm_core_set_plane_properties_and_buffer(uint32_t uBufferId)
    log_line("[DRMCore] Setting current plane (id: %u, plane index %d) buffer id to %u, zindex %d",
       s_DRMRuntimeState.objInfoPlane.uObjId, s_DRMRuntimeState.objInfoPlane.iObjIndex, uBufferId, (int)zPos);
 
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoConnector, "CRTC_ID", s_DRMRuntimeState.objInfoCRTc.uObjId );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoCRTc, "MODE_ID", s_DRMRuntimeState.uModeIdBlob );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoCRTc, "ACTIVE", 1 );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "FB_ID", uBufferId );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoConnector, "CRTC_ID", s_DRMRuntimeState.objInfoCRTc.uObjId );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoCRTc, "MODE_ID", s_DRMRuntimeState.uModeIdBlob );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoCRTc, "ACTIVE", 1 );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "FB_ID", uBufferId );
 
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_ID", s_DRMRuntimeState.objInfoCRTc.uObjId );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_X", uCrtX );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_Y", uCrtY );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_W", uCrtW );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_H", uCrtH );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_ID", s_DRMRuntimeState.objInfoCRTc.uObjId );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_X", uCrtX );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_Y", uCrtY );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_W", uCrtW );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "CRTC_H", uCrtH );
    
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_X", 0 );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_Y", 0 );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_W", uSrcWidth<<16 );
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_H", uSrcHeight<<16 );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_X", 0 );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_Y", 0 );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_W", uSrcWidth<<16 );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "SRC_H", uSrcHeight<<16 );
 
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "zpos", zPos );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "zpos", zPos );
 
    int iRet = drmModeAtomicCommit(s_fdDRM, s_DRMRuntimeState.pAtomicRequest, DRM_MODE_ATOMIC_ALLOW_MODESET, NULL);
 
@@ -979,22 +979,22 @@ int ruby_drm_core_set_plane_properties_and_buffer(uint32_t uBufferId)
    return iRet;
 }
 
-int ruby_drm_core_set_plane_buffer(uint32_t uBufferId)
+int Anhydrate_drm_core_set_plane_buffer(uint32_t uBufferId)
 {
    drmModeAtomicSetCursor(s_DRMRuntimeState.pAtomicRequest, 0);
 
-   ruby_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "FB_ID", uBufferId );
+   Anhydrate_drm_set_object_property(&s_DRMRuntimeState.objInfoPlane, "FB_ID", uBufferId );
    int iRet = drmModeAtomicCommit(s_fdDRM, s_DRMRuntimeState.pAtomicRequest, s_iDRMEnableVSync?DRM_MODE_ATOMIC_ALLOW_MODESET:DRM_MODE_ATOMIC_NONBLOCK, NULL);
    return iRet;
 }
 
 
-type_drm_object_info* ruby_drm_get_plane_info()
+type_drm_object_info* Anhydrate_drm_get_plane_info()
 {
   return &s_DRMRuntimeState.objInfoPlane;
 }
 
-int ruby_drm_set_object_property(type_drm_object_info* pObject, const char *szName, uint64_t uValue)
+int Anhydrate_drm_set_object_property(type_drm_object_info* pObject, const char *szName, uint64_t uValue)
 {
    if ( (NULL == pObject) || (NULL == szName) )
       return -1;
@@ -1023,13 +1023,13 @@ int ruby_drm_set_object_property(type_drm_object_info* pObject, const char *szNa
    return drmModeAtomicAddProperty(s_DRMRuntimeState.pAtomicRequest, pObject->uObjId, uPropId, uValue);
 }
 
-void ruby_drm_set_video_source_size(int iWidth, int iHeight)
+void Anhydrate_drm_set_video_source_size(int iWidth, int iHeight)
 {
    s_DRMRuntimeState.iVideoSourceWidth = iWidth;
    s_DRMRuntimeState.iVideoSourceHeight = iHeight;
 }
 
-void ruby_drm_enable_vsync(int iEnableVSync)
+void Anhydrate_drm_enable_vsync(int iEnableVSync)
 {
    s_iDRMEnableVSync = iEnableVSync;
 }

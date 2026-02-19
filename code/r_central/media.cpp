@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -38,7 +38,7 @@
 #include "media.h"
 #include "../renderer/render_engine.h"
 #include "popup.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "shared_vars.h"
 #include "timers.h"
 
@@ -111,7 +111,7 @@ void _media_remove_invalid_files()
          strcat(szFile, "png");
          snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s", FOLDER_MEDIA, szFile);
          hw_execute_bash_command(szComm, NULL);
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
       }
       closedir(d);
    }
@@ -124,7 +124,7 @@ void _media_remove_invalid_files()
 bool media_init_and_scan()
 {
    log_line("Media Storage: Init media storage...");
-   ruby_pause_watchdog("scanning media");
+   Anhydrate_pause_watchdog("scanning media");
 
    s_iMediaBootCount = 0;
    s_szMediaCurrentScreenshotFileName[0] = 0;
@@ -144,7 +144,7 @@ bool media_init_and_scan()
 
    media_scan_files();
 
-   ruby_resume_watchdog("scanning media");
+   Anhydrate_resume_watchdog("scanning media");
    log_line("Media Storage: Init media storage completed.");
 
    return true;
@@ -173,7 +173,7 @@ void media_scan_files()
    if ( 0 < strlen(szOutBuff) )
       s_iVideoCountOnDisk = strtol(szOutBuff, NULL, 10);
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    log_line("Media storage: Found %d screenshots on storage.", s_iScreenshotsCountOnDisk );
    log_line("Media storage: Found %d videos on storage.", s_iVideoCountOnDisk );
@@ -237,7 +237,7 @@ void _media_take_screenshot()
    char szComm[256];
    sprintf(szComm, "./raspi2png -p %s", s_szMediaScreenShotFilename);
    hw_execute_bash_command_nonblock(szComm, NULL);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    log_line("Media Storage: Took a screenshot to file: %s", s_szMediaScreenShotFilename);
    s_iScreenshotsCountOnDisk++;
@@ -281,7 +281,7 @@ bool media_take_screenshot(bool bIncludeOSD)
    return false;
    #endif
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    if ( 0 != pthread_create(&s_pThreadMediaTakeScreenShot, NULL, &_thread_media_take_screenshot, NULL) )
       _media_take_screenshot();
@@ -289,3 +289,4 @@ bool media_take_screenshot(bool bIncludeOSD)
       pthread_detach(s_pThreadMediaTakeScreenShot);
    return true;
 }
+

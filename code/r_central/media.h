@@ -10,3 +10,4 @@ char* media_get_video_filename();
 
 bool media_take_screenshot(bool bIncludeOSD);
 
+

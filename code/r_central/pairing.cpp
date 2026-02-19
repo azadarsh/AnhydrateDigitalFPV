@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -38,7 +38,7 @@
 //#include "../base/radio_utils.h"
 #include "../base/hardware.h"
 #include "../base/commands.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/radio_stats.h"
 #include "../common/string_utils.h"
 #include <semaphore.h>
@@ -50,7 +50,7 @@
 #include "popup.h"
 #include "colors.h"
 #include "osd_common.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "local_stats.h"
 #include "launchers_controller.h"
 #include "handle_commands.h"
@@ -97,12 +97,12 @@ bool _pairing_start()
    {
       if ( access("/usr/bin/gst-launch-1.0", R_OK) == -1 )
       {
-         //warnings_add("You are missing base components required to pair with OpenIPC cameras. Please do a full install of the Ruby firmware on the controller. Version 8.0 or newer.");
+         //warnings_add("You are missing base components required to pair with OpenIPC cameras. Please do a full install of the Anhydrate firmware on the controller. Version 8.0 or newer.");
          Menu* pm = new Menu(MENU_ID_SIMPLE_MESSAGE,"Missing components",NULL);
          pm->m_xPos = 0.32; pm->m_yPos = 0.4;
          pm->m_Width = 0.36;
          pm->addTopLine("You are missing base components required to pair with OpenIPC cameras.");
-         pm->addTopLine("Please do a full install of the Ruby firmware on the controller. Version 8.0 or newer.");
+         pm->addTopLine("Please do a full install of the Anhydrate firmware on the controller. Version 8.0 or newer.");
          add_menu_to_stack(pm); 
       }
    }
@@ -200,7 +200,7 @@ bool pairing_start_search_sik_mode(int iFreqKhz, int iAirDataRate, int iECC, int
 
    g_bSearching = true;
    g_iSearchFrequency = iFreqKhz;
-   g_iSearchFirmwareType = MODEL_FIRMWARE_TYPE_RUBY;
+   g_iSearchFirmwareType = MODEL_FIRMWARE_TYPE_Anhydrate;
    g_iSearchSiKAirDataRate = iAirDataRate;
    g_iSearchSiKECC = iECC;
    g_iSearchSiKLBT = iLBT;
@@ -228,30 +228,30 @@ bool pairing_stop()
 
    handle_commands_stop_on_pairing();
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    controller_stop_tx_rc();
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    controller_stop_router();
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    controller_stop_rx_telemetry();
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    controller_wait_for_stop_all();
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    onEventPairingStopped();
 
    stop_pipes_to_router();
    handle_commands_stop_on_pairing();
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    s_isRXStarted = false;
    s_isVideoReceiving = false;
 
-   ruby_clear_all_ipc_channels();
+   Anhydrate_clear_all_ipc_channels();
 
    g_bIsRouterReady = false;
    g_RouterIsReadyTimestamp = 0;
@@ -315,7 +315,7 @@ void _pairing_open_shared_mem()
    if ( NULL == g_pSM_RCIn )
       iAnyFailed++;
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<iRetryCount; i++ )
    {
       if ( NULL != g_pSM_RadioStats )
@@ -327,7 +327,7 @@ void _pairing_open_shared_mem()
    if ( NULL == g_pSM_RadioStats )
       iAnyFailed++;
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<iRetryCount; i++ )
    {
       if ( NULL != g_pSM_VideoFramesStatsOutput )
@@ -340,7 +340,7 @@ void _pairing_open_shared_mem()
       iAnyFailed++;
 
    /*
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<iRetryCount; i++ )
    {
       if ( NULL != g_pSM_VideoInfoStatsRadioIn )
@@ -353,7 +353,7 @@ void _pairing_open_shared_mem()
       iAnyFailed++;
    */
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<iRetryCount; i++ )
    {
       if ( NULL != g_pSM_VideoDecodeStats )
@@ -365,7 +365,7 @@ void _pairing_open_shared_mem()
    if ( NULL == g_pSM_VideoDecodeStats )
       iAnyFailed++;
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<iRetryCount; i++ )
    {
       if ( NULL != g_pSM_RadioRxQueueInfo )
@@ -377,7 +377,7 @@ void _pairing_open_shared_mem()
    if ( NULL == g_pSM_RadioRxQueueInfo )
       iAnyFailed++;
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    if ( (NULL != g_pCurrentModel) && (!g_bSearching) )
    {
@@ -393,7 +393,7 @@ void _pairing_open_shared_mem()
          iAnyFailed++;
    }
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<iRetryCount; i++ )
    {
       if ( NULL != g_pSM_RouterVehiclesRuntimeInfo )
@@ -477,3 +477,4 @@ void pairing_loop()
    if ( g_bSearching )
       return;
 }
+

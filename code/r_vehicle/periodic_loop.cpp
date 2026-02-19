@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -40,7 +40,7 @@
 #include "../base/hardware_i2c.h"
 #endif
 #include "../base/hardware_files.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/radio_stats.h"
 
 #include "../radio/radiopackets2.h"
@@ -49,7 +49,7 @@
 #include <ctype.h>
 #include "shared_vars.h"
 #include "timers.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 #include "test_link_params.h"
 #include "packets_utils.h"
 #include "processor_relay.h"
@@ -64,7 +64,7 @@ extern u32 s_uTemporaryVideoBitrateBeforeNegociateRadio;
 
 u32 s_LoopCounter = 0;
 u32 s_debugFramesCount = 0;
-u32 s_uTimeLastCheckForRelayedVehicleRubyTelemetryAlarm = 0;
+u32 s_uTimeLastCheckForRelayedVehicleAnhydrateTelemetryAlarm = 0;
 u32 s_MinVideoBlocksGapMilisec = 1;
 long s_lLastLiveLogFileOffset = -1;
 
@@ -195,7 +195,7 @@ int _check_reinit_sik_interfaces()
    if ( g_SiKRadiosState.bConfiguringToolInProgress && (g_SiKRadiosState.uTimeStartConfiguring != 0) )
    if ( g_TimeNow >= g_SiKRadiosState.uTimeStartConfiguring+500 )
    {
-      if ( hw_process_exists("ruby_sik_config") )
+      if ( hw_process_exists("Anhydrate_sik_config") )
       {
          g_SiKRadiosState.uTimeStartConfiguring = g_TimeNow - 400;
       }
@@ -203,7 +203,7 @@ int _check_reinit_sik_interfaces()
       {
          int iResult = -1;
          char szFile[128];
-         strcpy(szFile, FOLDER_RUBY_TEMP);
+         strcpy(szFile, FOLDER_Anhydrate_TEMP);
          strcat(szFile, FILE_TEMP_SIK_CONFIG_FINISHED);
          FILE* fd = fopen(szFile, "rb");
          if ( NULL != fd )
@@ -213,7 +213,7 @@ int _check_reinit_sik_interfaces()
             fclose(fd);
          }
          log_line("SiK radio configuration completed. Result: %d.", iResult);
-         sprintf(szFile, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
+         sprintf(szFile, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
          hw_execute_bash_command(szFile, NULL);
          g_SiKRadiosState.bConfiguringToolInProgress = false;
          reopen_marked_sik_interfaces();
@@ -430,7 +430,7 @@ void _send_radio_stats_to_controller()
       return;
 
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_TELEMETRY, PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS, STREAM_ID_TELEMETRY);
+   radio_packet_init(&PH, PACKET_COMPONENT_TELEMETRY, PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS, STREAM_ID_TELEMETRY);
    PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
    PH.vehicle_id_dest = g_uControllerId;
    
@@ -507,28 +507,28 @@ void _periodic_loop_check_ping()
 {
    if ( g_pCurrentModel->relay_params.isRelayEnabledOnRadioLinkId >= 0 )
    if ( g_pCurrentModel->relay_params.uRelayedVehicleId != 0 )
-   if ( g_TimeNow > s_uTimeLastCheckForRelayedVehicleRubyTelemetryAlarm + 200 )
+   if ( g_TimeNow > s_uTimeLastCheckForRelayedVehicleAnhydrateTelemetryAlarm + 200 )
    {
-      s_uTimeLastCheckForRelayedVehicleRubyTelemetryAlarm = g_TimeNow;
+      s_uTimeLastCheckForRelayedVehicleAnhydrateTelemetryAlarm = g_TimeNow;
       
-      u32 uLastTimeRecvRubyTelemetry = relay_get_time_last_received_ruby_telemetry_from_relayed_vehicle();
-      static u32 sl_uTimeLastSendRubyRelayedTelemetryLostAlarm = 0;
-      static u32 sl_uTimeLastSendRubyRelayedTelemetryRecoveredAlarm = 0;
-      if ( g_TimeNow > uLastTimeRecvRubyTelemetry + TIMEOUT_TELEMETRY_LOST )
+      u32 uLastTimeRecvAnhydrateTelemetry = relay_get_time_last_received_Anhydrate_telemetry_from_relayed_vehicle();
+      static u32 sl_uTimeLastSendAnhydrateRelayedTelemetryLostAlarm = 0;
+      static u32 sl_uTimeLastSendAnhydrateRelayedTelemetryRecoveredAlarm = 0;
+      if ( g_TimeNow > uLastTimeRecvAnhydrateTelemetry + TIMEOUT_TELEMETRY_LOST )
       {
-         if ( g_TimeNow > sl_uTimeLastSendRubyRelayedTelemetryLostAlarm + 10000 )
+         if ( g_TimeNow > sl_uTimeLastSendAnhydrateRelayedTelemetryLostAlarm + 10000 )
          {
-            sl_uTimeLastSendRubyRelayedTelemetryLostAlarm = g_TimeNow;
-            sl_uTimeLastSendRubyRelayedTelemetryRecoveredAlarm = 0;
+            sl_uTimeLastSendAnhydrateRelayedTelemetryLostAlarm = g_TimeNow;
+            sl_uTimeLastSendAnhydrateRelayedTelemetryRecoveredAlarm = 0;
             send_alarm_to_controller(ALARM_ID_GENERIC, ALARM_ID_GENERIC_TYPE_RELAYED_TELEMETRY_LOST, 0, 2);
          }
       }
       else
       {
-         if ( g_TimeNow > sl_uTimeLastSendRubyRelayedTelemetryRecoveredAlarm + 10000 )
+         if ( g_TimeNow > sl_uTimeLastSendAnhydrateRelayedTelemetryRecoveredAlarm + 10000 )
          {
-            sl_uTimeLastSendRubyRelayedTelemetryRecoveredAlarm = g_TimeNow;
-            sl_uTimeLastSendRubyRelayedTelemetryLostAlarm = 0;
+            sl_uTimeLastSendAnhydrateRelayedTelemetryRecoveredAlarm = g_TimeNow;
+            sl_uTimeLastSendAnhydrateRelayedTelemetryLostAlarm = 0;
             send_alarm_to_controller(ALARM_ID_GENERIC, ALARM_ID_GENERIC_TYPE_RELAYED_TELEMETRY_RECOVERED, 0, 2);
          }
       }
@@ -575,7 +575,7 @@ void _update_videobitrate_history_data()
    if ( g_TimeNow < g_SM_DevVideoBitrateHistory.uLastTimeSendToController + uMinSendTime )
       return;
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_TELEMETRY, PACKET_TYPE_RUBY_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY, STREAM_ID_TELEMETRY);
+   radio_packet_init(&PH, PACKET_COMPONENT_TELEMETRY, PACKET_TYPE_Anhydrate_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY, STREAM_ID_TELEMETRY);
    PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
    PH.vehicle_id_dest = 0;
    PH.total_length = sizeof(t_packet_header) + sizeof(shared_mem_dev_video_bitrate_history);
@@ -596,11 +596,11 @@ void _check_send_initial_vehicle_settings()
       log_line("Tell rx_commands to generate all model settings to send to controller.");
       t_packet_header PH;
       radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_VEHICLE_SEND_MODEL_SETTINGS, STREAM_ID_DATA);
-      PH.vehicle_id_src = PACKET_COMPONENT_RUBY;
+      PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header);
 
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
 
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -652,7 +652,7 @@ void _periodic_update_radio_stats()
 
          t_packet_header PH;
          t_packet_header_relay_radio_info PHRelayInfo;
-         radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_RELAY_RADIO_INFO, STREAM_ID_TELEMETRY);
+         radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_RELAY_RADIO_INFO, STREAM_ID_TELEMETRY);
          PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
          PH.vehicle_id_dest = g_uControllerId;
          PH.packet_flags_extended |= PACKET_FLAGS_EXTENDED_BIT_SEND_ON_HIGH_CAPACITY_LINK_ONLY;
@@ -762,7 +762,7 @@ void _update_tx_out_stats()
          if ( (0 != g_uControllerId) && g_bReceivedPairingRequest )
          {
             t_packet_header PH;
-            radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
+            radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
             PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
             PH.vehicle_id_dest = g_uControllerId;
             PH.total_length = sizeof(t_packet_header) + strlen(szBuff)+3*sizeof(u8);
@@ -808,7 +808,7 @@ void _update_tx_out_stats()
       if ( g_pCurrentModel->uDeveloperFlags & DEVELOPER_FLAGS_BIT_SEND_BACK_VEHICLE_TX_GAP )
       {
          t_packet_header PH;
-         radio_packet_init(&PH, PACKET_COMPONENT_TELEMETRY, PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY, STREAM_ID_TELEMETRY);
+         radio_packet_init(&PH, PACKET_COMPONENT_TELEMETRY, PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY, STREAM_ID_TELEMETRY);
          PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
          PH.vehicle_id_dest = 0;
          PH.total_length = sizeof(t_packet_header) + sizeof(t_packet_header_vehicle_tx_history);
@@ -849,7 +849,7 @@ int _update_debug_stats()
    if ( g_TimeNow >= g_TimeLastDebugFPSComputeTime + 1000 )
    {
       char szFile[128];
-      strcpy(szFile, FOLDER_RUBY_TEMP);
+      strcpy(szFile, FOLDER_Anhydrate_TEMP);
       strcat(szFile, FILE_TEMP_REINIT_RADIO_REQUEST);
       if( access(szFile, R_OK) != -1 )
       {

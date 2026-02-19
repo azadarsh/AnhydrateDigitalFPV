@@ -286,3 +286,4 @@ static inline void mavlink_msg_flight_information_decode(const mavlink_message_t
     memcpy(flight_information, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

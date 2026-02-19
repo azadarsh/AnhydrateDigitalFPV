@@ -236,3 +236,4 @@ static inline void mavlink_msg_terrain_check_decode(const mavlink_message_t* msg
     memcpy(terrain_check, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

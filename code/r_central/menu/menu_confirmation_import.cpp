@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -41,7 +41,7 @@
 
 #include "menu.h"
 #include "menu_confirmation_import.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 #include "../events.h"
 #include "../pairing.h"
 
@@ -92,7 +92,7 @@ void MenuConfirmationImport::onSelectItem()
          nResult = controller_utils_import_all_from_usb(true);
       if ( nResult == 0 )
       {
-         ruby_load_models();
+         Anhydrate_load_models();
 
          if ( ! load_Preferences() )
             save_Preferences();

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -60,12 +60,12 @@ void osd_warnings_reset()
 
 void _osd_warnings_check_pit_mode(Model* pActiveModel)
 {
-   if ( (NULL == pActiveModel) || ( ! g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].bGotRubyTelemetryInfo ) )
+   if ( (NULL == pActiveModel) || ( ! g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].bGotAnhydrateTelemetryInfo ) )
    {
       bHasPITModeWarning = false;
       return;
    }
-   if ( g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].headerRubyTelemetryExtended.uExtraRubyFlags & FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE )
+   if ( g_VehiclesRuntimeInfo[g_iCurrentActiveVehicleRuntimeInfoIndex].headerAnhydrateTelemetryExtended.uExtraAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE )
       bHasPITModeWarning = true;
 
    if ( ! bHasPITModeWarning )
@@ -170,9 +170,9 @@ void osd_warnings_render()
       if ( (0 == g_VehiclesRuntimeInfo[i].uVehicleId) || (MAX_U32 == g_VehiclesRuntimeInfo[i].uVehicleId) || (NULL == g_VehiclesRuntimeInfo[i].pModel) )
          continue;
 
-      if ( g_VehiclesRuntimeInfo[i].bGotRubyTelemetryInfo )
+      if ( g_VehiclesRuntimeInfo[i].bGotAnhydrateTelemetryInfo )
       {
-         u8 air_flags = g_VehiclesRuntimeInfo[i].headerRubyTelemetryExtended.throttled;
+         u8 air_flags = g_VehiclesRuntimeInfo[i].headerAnhydrateTelemetryExtended.throttled;
          if ( (0 != (air_flags & 0x0F)) || s_bDebugOSDShowAll )
          if ( ( g_TimeNow / 500 ) % 2 )
          {
@@ -366,3 +366,4 @@ void osd_warnings_render()
    }
    g_pRenderEngine->setGlobalAlfa(fAlfaOrg);
 }
+

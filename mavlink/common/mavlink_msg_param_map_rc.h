@@ -403,3 +403,4 @@ static inline void mavlink_msg_param_map_rc_decode(const mavlink_message_t* msg,
     memcpy(param_map_rc, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

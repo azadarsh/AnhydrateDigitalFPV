@@ -711,3 +711,4 @@ static inline void mavlink_msg_sim_state_decode(const mavlink_message_t* msg, ma
     memcpy(sim_state, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

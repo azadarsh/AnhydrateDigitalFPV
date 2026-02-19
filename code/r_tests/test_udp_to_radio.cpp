@@ -18,7 +18,7 @@
 #include <getopt.h>
 #include <poll.h>
 
-#define RUBY_PIPES_EXTRA_FLAGS O_NONBLOCK
+#define Anhydrate_PIPES_EXTRA_FLAGS O_NONBLOCK
 
 bool bQuit = false;
 int g_iPipeFD = -1;
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
       uBytesRead += nRecv;
 
       t_packet_header PH;
-      PH.packet_flags = PACKET_COMPONENT_RUBY;
+      PH.packet_flags = PACKET_COMPONENT_Anhydrate;
       PH.vehicle_id_src = 0;
       PH.vehicle_id_dest = PH.vehicle_id_src;
       PH.total_length = sizeof(t_packet_header) + nRecv;
@@ -322,3 +322,4 @@ int main(int argc, char *argv[])
    log_line("\nEnded\n");
    exit(0);
 }
+

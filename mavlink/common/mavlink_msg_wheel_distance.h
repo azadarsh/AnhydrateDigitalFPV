@@ -253,3 +253,4 @@ static inline void mavlink_msg_wheel_distance_decode(const mavlink_message_t* ms
     memcpy(wheel_distance, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

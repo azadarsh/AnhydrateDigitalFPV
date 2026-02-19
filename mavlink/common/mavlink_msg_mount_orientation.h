@@ -311,3 +311,4 @@ static inline void mavlink_msg_mount_orientation_decode(const mavlink_message_t*
     memcpy(mount_orientation, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -79,7 +79,7 @@ void MenuSystemAllParams::Render()
    float width = m_RenderWidth-2*m_sfMenuPaddingX;
    float height = m_RenderHeight-2*m_sfMenuPaddingY;
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_CONFIG_BOARD_TYPE);
    fd = fopen(szFile,"r");
    if ( NULL != fd )
@@ -574,4 +574,5 @@ void MenuSystemAllParams::onSelectItem()
 {
    Menu::onSelectItem();
 }
+
 

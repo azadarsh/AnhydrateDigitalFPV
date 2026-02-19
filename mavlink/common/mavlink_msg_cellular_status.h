@@ -361,3 +361,4 @@ static inline void mavlink_msg_cellular_status_decode(const mavlink_message_t* m
     memcpy(cellular_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

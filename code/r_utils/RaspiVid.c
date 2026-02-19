@@ -105,7 +105,7 @@ typedef unsigned char u8;
 typedef unsigned int u32;
 
 
-#define FIFO_RUBY_CAMERA1 "/tmp/ruby/fifocam1"
+#define FIFO_Anhydrate_CAMERA1 "/tmp/Anhydrate/fifocam1"
 #define IPC_CHANNEL_CSI_VIDEO_COMMANDS 81
 #define IPC_CHANNEL_MAX_MSG_SIZE 1600
 
@@ -585,16 +585,16 @@ void handle_sigint(int sig)
 
 void openOutputPipe()
 {
-   s_iOutputPipeHandle = open(FIFO_RUBY_CAMERA1, O_CREAT | O_WRONLY);
+   s_iOutputPipeHandle = open(FIFO_Anhydrate_CAMERA1, O_CREAT | O_WRONLY);
    if ( s_iOutputPipeHandle < 0 )
    {
      log_line_txt("ERROR: Failed to open output pipe for write. Pipe name:");
-     log_line_txt(FIFO_RUBY_CAMERA1);
+     log_line_txt(FIFO_Anhydrate_CAMERA1);
      return;
    }
 
    log_line_txt("Opened output pipe. Name:");
-   log_line_txt(FIFO_RUBY_CAMERA1);
+   log_line_txt(FIFO_Anhydrate_CAMERA1);
    log_line_int("fd:", s_iOutputPipeHandle);
    log_line_int("pipe default size (bytes):", fcntl(s_iOutputPipeHandle, F_GETPIPE_SZ));
 }
@@ -603,7 +603,7 @@ void openOutputPipe()
 void initLogStartTime()
 {
    char szFile[256];
-   strcpy(szFile, "/home/pi/ruby/config/");
+   strcpy(szFile, "/home/pi/Anhydrate/config/");
    strcat(szFile, "boot_timestamp.cfg");
    FILE* fd = fopen(szFile, "r");
    if ( NULL == fd )
@@ -2778,7 +2778,7 @@ static int wait_for_next_change(RASPIVID_STATE *state)
 
    if ( NULL != state )
    {
-      FILE* fCam = fopen("/home/pi/ruby/tmp/cam_name.txt", "w");
+      FILE* fCam = fopen("/home/pi/Anhydrate/tmp/cam_name.txt", "w");
       if ( NULL != fCam )
       {
          fprintf(fCam, "%s\n", state->common_settings.camera_name);
@@ -2974,7 +2974,7 @@ int main(int argc, const char **argv)
    if ( strcmp(argv[1], "-dbg") == 0 )
       s_iDebug = 1;
 
-   log_init("RubyVideoCap");
+   log_init("AnhydrateVideoCap");
    initLogStartTime();
 
    set_app_name(argv[0]);
@@ -3077,7 +3077,7 @@ int main(int argc, const char **argv)
 
    if ( s_bLog )
    {
-      s_fdLog = fopen("/home/pi/ruby/logs/log_video_csi.txt", "a");
+      s_fdLog = fopen("/home/pi/Anhydrate/logs/log_video_csi.txt", "a");
       if ( s_fdLog <= 0 )
       {
          s_bLog = 0;
@@ -3086,7 +3086,7 @@ int main(int argc, const char **argv)
    }
 
    log_line_txt("-------------------------------");
-   log_line_txt("Starting ruby_capture v11.5, b305...");
+   log_line_txt("Starting Anhydrate_capture v11.5, b305...");
    if ( s_iDebug )
       log_line_txt("Debug flag is set.");
    else
@@ -3461,3 +3461,4 @@ error:
 
    return exit_code;
 }
+

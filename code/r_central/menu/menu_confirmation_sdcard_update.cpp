@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -35,11 +35,11 @@
 #include "../../base/hardware.h"
 #include "../../base/hardware_procs.h"
 #include "../local_stats.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 
 #include "menu.h"
 #include "menu_confirmation_sdcard_update.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 #include "../events.h"
 #include "../osd/osd_common.h"
 
@@ -52,8 +52,8 @@ MenuConfirmationSDCardUpdate::MenuConfirmationSDCardUpdate()
    m_bUpdateFinished = false;
 
    setIconId(g_idIconSDCard);
-   addTopLine(L("A Ruby update is present on the SD card."));
-   addTopLine(L("Do you want to update Ruby from the SD card?"));
+   addTopLine(L("A Anhydrate update is present on the SD card."));
+   addTopLine(L("Do you want to update Anhydrate from the SD card?"));
    addMenuItem(new MenuItem(L("No")));
    addMenuItem(new MenuItem(L("Yes")));
    m_SelectedIndex = 1;
@@ -79,7 +79,7 @@ bool MenuConfirmationSDCardUpdate::periodicLoop()
       addTopLine(L("Update from SD card finished."));
       char szBuff[256];
       char szOutput[256];
-      hw_execute_bash_command("./ruby_start -ver", szOutput);
+      hw_execute_bash_command("./Anhydrate_start -ver", szOutput);
       removeTrailingNewLines(szOutput);
       sprintf(szBuff, L("Your controller was updated to version: %s"), szOutput);
       addTopLine(szBuff);
@@ -113,7 +113,7 @@ void* _thread_sdcard_update(void *argument)
    for( int i=0; i<10; i++ )
       hardware_sleep_ms(50);
 
-   ruby_central_has_sdcard_update(true);
+   Anhydrate_central_has_sdcard_update(true);
 
    if ( NULL != pFinished )
       *pFinished = true;

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -55,7 +55,7 @@
 #include "../base/radio_utils.h"
 #include "../base/hardware.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/parser_h264.h"
 #include "../base/camera_utils.h"
 #include "../common/string_utils.h"
@@ -66,7 +66,7 @@
 #include "rx_video_recording.h"
 #include "packets_utils.h"
 #include "timers.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "rx_video_recording_data.h"
 
 bool s_bIsRecording = false;
@@ -98,7 +98,7 @@ void _recording_send_status_to_central(u8 uStatus, u8 uErrorLevel, const char* s
 {
    t_packet_header PH;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_VIDEO_RECORDING, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY;
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate;
    PH.vehicle_id_dest = 0;
 
    PH.total_length = sizeof(t_packet_header) + sizeof(u8);
@@ -130,7 +130,7 @@ void _recording_send_status_to_central(u8 uStatus, u8 uErrorLevel, const char* s
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
 
-   if ( ! ruby_ipc_channel_send_message(g_fIPCToCentral, buffer, PH.total_length) )
+   if ( ! Anhydrate_ipc_channel_send_message(g_fIPCToCentral, buffer, PH.total_length) )
       log_ipc_send_central_error(buffer, PH.total_length);
    else
       log_line("Sent recording status %d to central.", uStatus);
@@ -139,7 +139,7 @@ void _recording_send_status_to_central(u8 uStatus, u8 uErrorLevel, const char* s
 bool _recording_write_info_file(u32 uDurrationMs)
 {
    char szFile[MAX_FILE_PATH_SIZE];
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_VIDEO_FILE_INFO);
    log_line("[VideoRecording-Th] Writing video info file %s ...", szFile);
    FILE* fd = fopen(szFile, "w");
@@ -147,7 +147,7 @@ bool _recording_write_info_file(u32 uDurrationMs)
    {
       system("sudo mount -o remount,rw /");
       char szTmp[MAX_FILE_PATH_SIZE];
-      sprintf(szTmp, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_VIDEO_FILE_INFO);
+      sprintf(szTmp, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_VIDEO_FILE_INFO);
       hw_execute_bash_command(szTmp, NULL);
       fd = fopen(szFile, "w");
    }
@@ -206,11 +206,11 @@ void _recording_cleanp_temp_recording_data()
       s_bIsRecordingToRAM = false;
    }
 
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s 2>/dev/null", FOLDER_RUBY_TEMP, FILE_TEMP_VIDEO_FILE_INFO);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s 2>/dev/null", FOLDER_Anhydrate_TEMP, FILE_TEMP_VIDEO_FILE_INFO);
    hw_execute_bash_command(szComm, NULL );
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s 2>/dev/null", FOLDER_RUBY_TEMP, FILE_TEMP_VIDEO_FILE_OSD);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s 2>/dev/null", FOLDER_Anhydrate_TEMP, FILE_TEMP_VIDEO_FILE_OSD);
    hw_execute_bash_command(szComm, NULL );
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s 2>/dev/null", FOLDER_RUBY_TEMP, FILE_TEMP_VIDEO_FILE_SRT);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s%s 2>/dev/null", FOLDER_Anhydrate_TEMP, FILE_TEMP_VIDEO_FILE_SRT);
    hw_execute_bash_command(szComm, NULL );
 }
 
@@ -230,7 +230,7 @@ void* _thread_video_recording(void *argument)
    sprintf(szComm, "chmod 777 %s* 2>/dev/null", FOLDER_MEDIA);
    hw_execute_bash_command(szComm, NULL);
 
-   strcpy(s_szFileRecordingOutput, FOLDER_RUBY_TEMP);
+   strcpy(s_szFileRecordingOutput, FOLDER_Anhydrate_TEMP);
    strcat(s_szFileRecordingOutput, FILE_TEMP_VIDEO_FILE);
    s_bIsRecordingToRAM = false;
 
@@ -254,7 +254,7 @@ void* _thread_video_recording(void *argument)
       {
          log_line("[VideoRecording-Th] Switched to SD card cache, not enough free ram. Free ram: %d Mb", (int)lf);
          _recording_send_status_to_central(0xFF, 1, "Not enough free memory. Switched recording cache to SD card.");
-         strcpy(s_szFileRecordingOutput, FOLDER_RUBY_TEMP);
+         strcpy(s_szFileRecordingOutput, FOLDER_Anhydrate_TEMP);
          strcat(s_szFileRecordingOutput, FILE_TEMP_VIDEO_FILE);
          s_bIsRecordingToRAM = false;
       }
@@ -274,7 +274,7 @@ void* _thread_video_recording(void *argument)
    hw_execute_bash_command(szComm, NULL);
 
    int iOpenFlags = O_CREAT | O_WRONLY;
-   //if ( RUBY_PIPES_EXTRA_FLAGS & O_NONBLOCK )
+   //if ( Anhydrate_PIPES_EXTRA_FLAGS & O_NONBLOCK )
    //   iOpenFlags |= O_NONBLOCK;
    s_iFileVideoRecordingOutput = open(s_szFileRecordingOutput, iOpenFlags);
    if ( -1 == s_iFileVideoRecordingOutput )
@@ -299,7 +299,7 @@ void* _thread_video_recording(void *argument)
    if ( g_pControllerSettings->iRecordOSD )
       rx_video_recording_data_start_osd();
 
-   //if ( RUBY_PIPES_EXTRA_FLAGS & O_NONBLOCK )
+   //if ( Anhydrate_PIPES_EXTRA_FLAGS & O_NONBLOCK )
    //if ( 0 != fcntl(s_iFileVideoRecordingOutput, F_SETFL, O_NONBLOCK) )
    //   log_softerror_and_alarm("[VideoRecording] Failed to set nonblock flag on video recording file");
 
@@ -463,10 +463,10 @@ void* _thread_video_recording(void *argument)
    _recording_send_status_to_central(2, 0, NULL);
    _recording_send_status_to_central(0xFF, 0, "Processing video recording file...");
 
-   sprintf(szComm, "rm -rf %s%s 2>/dev/null", FOLDER_RUBY_TEMP, FILE_TEMP_VIDEO_FILE_PROCESS_ERROR);
+   sprintf(szComm, "rm -rf %s%s 2>/dev/null", FOLDER_Anhydrate_TEMP, FILE_TEMP_VIDEO_FILE_PROCESS_ERROR);
    hw_execute_bash_command(szComm, NULL );
 
-   hw_execute_bash_command_nonblock("./ruby_video_proc", NULL);
+   hw_execute_bash_command_nonblock("./Anhydrate_video_proc", NULL);
 
    hardware_sleep_ms(900);
 
@@ -474,7 +474,7 @@ void* _thread_video_recording(void *argument)
    while ( true )
    {
       bool procRunning = false;
-      hw_process_get_pids("ruby_video_proc", szPIDs);
+      hw_process_get_pids("Anhydrate_video_proc", szPIDs);
       removeTrailingNewLines(szPIDs);
       if ( strlen(szPIDs) > 2 )
          procRunning = true;
@@ -490,7 +490,7 @@ void* _thread_video_recording(void *argument)
    log_line("[VideoRecording-Th] Video processing process finished.");
 
    char szFile[512];
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_VIDEO_FILE_PROCESS_ERROR);
    if ( access(szFile, R_OK) == -1 )
       _recording_send_status_to_central(0xFF, 0, "Completed processing video recording file");
@@ -512,7 +512,7 @@ void* _thread_video_recording(void *argument)
          fclose(fd);
    }
 
-   sprintf(szComm, "rm -rf %s%s 2>/dev/null", FOLDER_RUBY_TEMP, FILE_TEMP_VIDEO_FILE_PROCESS_ERROR);
+   sprintf(szComm, "rm -rf %s%s 2>/dev/null", FOLDER_Anhydrate_TEMP, FILE_TEMP_VIDEO_FILE_PROCESS_ERROR);
    hw_execute_bash_command(szComm, NULL );
   
    log_line("[VideoRecording-Th] Exit recording thread.");
@@ -618,17 +618,17 @@ void rx_video_recording_start()
    while ( iRetries > 0 )
    {
       iRetries--;
-      s_iPipeRecordingThreadRead = open(FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING, O_CREAT | O_RDONLY | O_NONBLOCK);
+      s_iPipeRecordingThreadRead = open(FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING, O_CREAT | O_RDONLY | O_NONBLOCK);
       if ( s_iPipeRecordingThreadRead > 0 )
          break;
       log_line("[VideoRecording] Failed to open video recording pipe read endpoint: %s, error code (%d): [%s]",
-            FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING, errno, strerror(errno));
+            FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING, errno, strerror(errno));
       hardware_sleep_ms(5);
    }
 
    if ( s_iPipeRecordingThreadRead <= 0 )
    {
-      log_softerror_and_alarm("[VideoRecording] Failed to open video recording pipe read endpoint: %s", FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING);
+      log_softerror_and_alarm("[VideoRecording] Failed to open video recording pipe read endpoint: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING);
       _recording_send_status_to_central(0xFF, 2, "Internal recording error. Error code: 2");
       _recording_send_status_to_central(0, 0, NULL);
       s_bIsRecording = false;
@@ -636,23 +636,23 @@ void rx_video_recording_start()
       return;
    }
 
-   log_line("[VideoRecording] Opened video recording pipe read endpoint: %s", FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING);
+   log_line("[VideoRecording] Opened video recording pipe read endpoint: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING);
 
    iRetries = 100;
    while ( iRetries > 0 )
    {
       iRetries--;
-      s_iPipeRecordingThreadWrite = open(FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING, O_CREAT | O_WRONLY | O_NONBLOCK);
+      s_iPipeRecordingThreadWrite = open(FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING, O_CREAT | O_WRONLY | O_NONBLOCK);
       if ( s_iPipeRecordingThreadWrite > 0 )
          break;
       log_line("[VideoRecording] Failed to open video recording pipe write endpoint: %s, error code (%d): [%s]",
-         FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING, errno, strerror(errno));
+         FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING, errno, strerror(errno));
       hardware_sleep_ms(5);
    }
 
    if ( s_iPipeRecordingThreadRead <= 0 )
    {
-      log_softerror_and_alarm("[VideoRecording] Failed to open video recording pipe write endpoint: %s", FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING);
+      log_softerror_and_alarm("[VideoRecording] Failed to open video recording pipe write endpoint: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING);
       close(s_iPipeRecordingThreadRead);
       s_iPipeRecordingThreadRead = -1;
       _recording_send_status_to_central(0xFF, 2, "Internal recording error. Error code: 3");
@@ -662,7 +662,7 @@ void rx_video_recording_start()
       return;
    }
 
-   log_line("[VideoRecording] Opened video recording pipe write endpoint: %s", FIFO_RUBY_STATION_VIDEO_STREAM_RECORDING);
+   log_line("[VideoRecording] Opened video recording pipe write endpoint: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING);
    log_line("[VideoRecording] Video recording pipe write flags: %s", str_get_pipe_flags(fcntl(s_iPipeRecordingThreadWrite, F_GETFL)));
    log_line("[VideoRecording] Video recording FIFO write default size: %d bytes", fcntl(s_iPipeRecordingThreadWrite, F_GETPIPE_SZ));
 
@@ -776,3 +776,4 @@ void rx_video_recording_periodic_loop()
    //   return;
    //s_TimeLastPeriodicChecksVideoRecording = g_TimeNow;
 }
+

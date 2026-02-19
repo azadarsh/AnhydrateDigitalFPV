@@ -12,3 +12,4 @@ bool relay_controller_must_forward_telemetry_from(Model* pMainModel, u32 uRelaye
 bool relay_vehicle_must_forward_video_from_relayed_vehicle(Model* pMainModel, u32 uRelayedVehicleId);
 bool relay_vehicle_must_forward_own_video(Model* pMainModel);
 bool relay_vehicle_must_forward_relayed_video(Model* pMainModel);
+

@@ -22,3 +22,4 @@ class MenuItemText: public MenuItem
       bool m_bIsSelectable;
       float m_fScale;
 };
+

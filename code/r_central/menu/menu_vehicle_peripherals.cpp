@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -30,7 +30,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "../../public/ruby_core_plugin.h"
+#include "../../public/Anhydrate_core_plugin.h"
 #include "../render_commands.h"
 #include "menu.h"
 #include "menu_vehicle.h"
@@ -309,3 +309,4 @@ void MenuVehiclePeripherals::onSelectItem()
       }
    }
 }
+

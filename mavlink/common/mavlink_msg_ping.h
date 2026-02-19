@@ -286,3 +286,4 @@ static inline void mavlink_msg_ping_decode(const mavlink_message_t* msg, mavlink
     memcpy(ping, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

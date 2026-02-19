@@ -236,3 +236,4 @@ static inline void mavlink_msg_log_erase_decode(const mavlink_message_t* msg, ma
     memcpy(log_erase, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

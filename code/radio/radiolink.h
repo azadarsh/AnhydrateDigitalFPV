@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -102,3 +102,4 @@ int radio_write_sik_packet(int interfaceIndex, u8* pData, int dataLength, u32 uT
 #ifdef __cplusplus
 }  
 #endif
+

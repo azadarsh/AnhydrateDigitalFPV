@@ -253,3 +253,4 @@ static inline void mavlink_msg_actuator_control_target_decode(const mavlink_mess
     memcpy(actuator_control_target, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

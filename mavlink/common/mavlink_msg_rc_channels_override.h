@@ -686,3 +686,4 @@ static inline void mavlink_msg_rc_channels_override_decode(const mavlink_message
     memcpy(rc_channels_override, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

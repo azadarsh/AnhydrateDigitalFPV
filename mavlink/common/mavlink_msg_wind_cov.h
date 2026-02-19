@@ -411,3 +411,4 @@ static inline void mavlink_msg_wind_cov_decode(const mavlink_message_t* msg, mav
     memcpy(wind_cov, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -139,7 +139,7 @@ int GPIODirection(int pin, int dir)
    
    if ( dir == IN )
    {
-      int mode = gpiod_line_request_input(line, "Ruby");
+      int mode = gpiod_line_request_input(line, "Anhydrate");
       if ( mode < 0 )
       {
          log_error_and_alarm("[GPIO] Dir: Failed to set input mode direction on GPIO (%s) line %d, pin %d", chipname, linenumber, pin);
@@ -215,7 +215,7 @@ int GPIORead(int pin)
       return 0;
    }
    
-   int mode = gpiod_line_request_input(line, "Ruby");
+   int mode = gpiod_line_request_input(line, "Anhydrate");
    if ( mode < 0 )
    {
       log_error_and_alarm("[GPIO] Failed to set input mode on GPIO (%s) line %d pin %d", chipname, linenumber, pin);
@@ -255,7 +255,7 @@ int GPIOWrite(int pin, int value)
       return 0;
   }
    
-   int mode = gpiod_line_request_output(line, "Ruby", 0);
+   int mode = gpiod_line_request_output(line, "Anhydrate", 0);
    if( mode < 0 )
    {
       log_error_and_alarm("[GPIO] Failed to set output mode on GPIO (%s) line %d pin %d", chipname, linenumber, pin);
@@ -389,3 +389,4 @@ int GPIOInitButtons()
 
    return failed;
 }
+

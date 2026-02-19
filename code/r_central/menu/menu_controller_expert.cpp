@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -145,7 +145,7 @@ void MenuControllerExpert::valuesToUI()
 
 void MenuControllerExpert::readConfigFile()
 {
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    ControllerSettings* pcs = get_ControllerSettings();
    if ( NULL == pcs )
@@ -154,7 +154,7 @@ void MenuControllerExpert::readConfigFile()
       return;
    }
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    #if defined(HW_PLATFORM_RASPBERRY)
    m_iDefaultARMFreq = config_file_get_value("arm_freq");
@@ -170,16 +170,16 @@ void MenuControllerExpert::readConfigFile()
       m_iDefaultVoltage = - m_iDefaultVoltage;
 
    pcs->iFreqARM = config_file_get_value("arm_freq");
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    pcs->iFreqGPU = config_file_get_value("gpu_freq");
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    pcs->iOverVoltage = config_file_get_value("over_voltage");
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    save_ControllerSettings();
    #endif
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 }
 
 void MenuControllerExpert::writeConfigFile()
@@ -192,20 +192,20 @@ void MenuControllerExpert::writeConfigFile()
    }
 
    #if defined(HW_PLATFORM_RASPBERRY)
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    hardware_mount_boot();
    hardware_sleep_ms(50);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    hw_execute_bash_command("cp /boot/config.txt config.txt", NULL);
 
    config_file_set_value("config.txt", "over_voltage", pcs->iOverVoltage);
    config_file_set_value("config.txt", "over_voltage_sdram", pcs->iOverVoltage);
    config_file_set_value("config.txt", "over_voltage_min", pcs->iOverVoltage);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    config_file_set_value("config.txt", "arm_freq", pcs->iFreqARM);
    config_file_set_value("config.txt", "arm_freq_min", pcs->iFreqARM);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    config_file_set_value("config.txt", "gpu_freq", pcs->iFreqGPU);
    config_file_set_value("config.txt", "gpu_freq_min", pcs->iFreqGPU);
@@ -213,15 +213,15 @@ void MenuControllerExpert::writeConfigFile()
    config_file_set_value("config.txt", "h264_freq_min", pcs->iFreqGPU);
    config_file_set_value("config.txt", "isp_freq_min", pcs->iFreqGPU);
    config_file_set_value("config.txt", "v3d_freq_min", pcs->iFreqGPU);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    config_file_set_value("config.txt", "sdram_freq", pcs->iFreqGPU);
    config_file_set_value("config.txt", "sdram_freq_min", pcs->iFreqGPU);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    hw_execute_bash_command("cp config.txt /boot/config.txt", NULL);
    #endif
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 }
 
 void MenuControllerExpert::addTopInfo()
@@ -234,7 +234,7 @@ void MenuControllerExpert::addTopInfo()
 
    u32 board_type = hardware_getBoardType();
    const char* szBoard = str_get_hardware_board_name(board_type);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    hw_execute_bash_command_raw("nproc --all", szOutput);
    szOutput[strlen(szOutput)-1] = 0;
@@ -271,7 +271,7 @@ void MenuControllerExpert::addTopInfo()
    hw_execute_bash_command_raw("vcgencmd measure_volts core", szOutput);
    sprintf(szBuffer, "CPU Voltage: %s", szOutput);
    addTopLine(szBuffer);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    char szTmp[256];
 
@@ -283,7 +283,7 @@ void MenuControllerExpert::addTopInfo()
    snprintf(szTmp, sizeof(szTmp)/sizeof(szTmp[0]), ", I%s", szOutput);
    strcat(szBuffer, szTmp);
    szBuffer[strlen(szBuffer)-1] = 0;
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    hw_execute_bash_command_raw("vcgencmd measure_volts sdram_p", szOutput);
    snprintf(szTmp, sizeof(szTmp)/sizeof(szTmp[0]), ", P%s", szOutput);
@@ -443,39 +443,39 @@ void MenuControllerExpert::onSelectItem()
       pMenu->m_yPos = 0.17;
       pMenu->m_Width = 0.6;
       
-      hw_execute_bash_command_raw_silent("./ruby_start -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_start -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_start: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_start: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_controller -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_controller -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_controller: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_controller: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_central -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_central -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_central: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_central: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_rt_station -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_rt_station -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_rt_station: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_rt_station: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_rx_telemetry -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_rx_telemetry -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_rx_telemetry: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_rx_telemetry: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_tx_rc -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_tx_rc -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_tx_rc: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_tx_rc: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_i2c -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_i2c -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_i2c: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_i2c: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
       snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "./%s -ver", VIDEO_PLAYER_PIPE);
@@ -496,19 +496,19 @@ void MenuControllerExpert::onSelectItem()
       snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "%s: %s", VIDEO_PLAYER_OFFLINE, szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_update_worker -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_update_worker -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_update_worker: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_update_worker: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_rt_vehicle -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_rt_vehicle -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_rt_vehicle: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_rt_vehicle: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
-      hw_execute_bash_command_raw_silent("./ruby_tx_telemetry -ver", szOutput);
+      hw_execute_bash_command_raw_silent("./Anhydrate_tx_telemetry -ver", szOutput);
       removeTrailingNewLines(szOutput);
-      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "ruby_tx_telemetry: %s", szOutput);
+      snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "Anhydrate_tx_telemetry: %s", szOutput);
       pMenu->addTopLine(szBuff);
 
       add_menu_to_stack(pMenu);
@@ -541,3 +541,4 @@ void MenuControllerExpert::onSelectItem()
    if ( bUpdatedConfig )
       writeConfigFile();
 }
+

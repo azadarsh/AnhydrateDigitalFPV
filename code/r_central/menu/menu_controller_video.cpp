@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -348,7 +348,7 @@ void MenuControllerVideo::onReturnFromChild(int iChildMenuId, int returnValue)
    #if defined (HW_PLATFORM_RADXA)
    if ( 2 == iChildMenuId/1000 )
    {
-      ruby_mark_reinit_hdmi_display();
+      Anhydrate_mark_reinit_hdmi_display();
       return;
    }
    #endif
@@ -454,7 +454,7 @@ void MenuControllerVideo::onSelectItem()
       pCS->iHDMIVSync = m_pItemsSelect[6]->getSelectedIndex();
       save_ControllerSettings();
       #if defined (HW_PLATFORM_RADXA)
-      ruby_drm_enable_vsync(pCS->iHDMIVSync?true:false);
+      Anhydrate_drm_enable_vsync(pCS->iHDMIVSync?true:false);
       send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_CONTROLLER_CHANGED, PACKET_COMPONENT_LOCAL_CONTROL);
       #endif
       invalidate();
@@ -583,7 +583,7 @@ void MenuControllerVideo::onSelectItem()
       log_line("Streamer output mode was changed to: %d", g_pControllerSettings->iStreamerOutputMode);
       save_ControllerSettings();
       pairing_stop();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       pairing_start_normal();
       return;
    }
@@ -598,3 +598,4 @@ void MenuControllerVideo::onSelectItem()
 
    }
 }
+

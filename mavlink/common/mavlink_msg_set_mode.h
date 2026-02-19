@@ -261,3 +261,4 @@ static inline void mavlink_msg_set_mode_decode(const mavlink_message_t* msg, mav
     memcpy(set_mode, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

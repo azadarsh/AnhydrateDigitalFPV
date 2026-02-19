@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -43,7 +43,7 @@
 #include "../../radio/radiopackets2.h"
 #include "../../renderer/render_engine.h"
 #include "../pairing.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 #include "../local_stats.h"
 #include "../link_watch.h"
 #include "../process_router_messages.h"
@@ -63,17 +63,17 @@ bool g_bOSDPluginsNeedTelemetryStreams = false;
 void _osd_plugins_populate_public_telemetry_info()
 {
    int iVehicleIndex = osd_get_current_data_source_vehicle_index();
-   if ( ! g_VehiclesRuntimeInfo[iVehicleIndex].bGotRubyTelemetryInfo )
+   if ( ! g_VehiclesRuntimeInfo[iVehicleIndex].bGotAnhydrateTelemetryInfo )
       return;
-   g_VehicleTelemetryInfo.pi_temperature = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.temperatureC;
-   g_VehicleTelemetryInfo.cpu_load = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.cpu_load;
-   g_VehicleTelemetryInfo.cpu_mhz = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.cpu_mhz;
-   g_VehicleTelemetryInfo.throttled = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.throttled;
-   g_VehicleTelemetryInfo.rssi_dbm = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.uplink_rssi_dbm[0];
-   g_VehicleTelemetryInfo.rssi_quality = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.uplink_link_quality[0];
-   strncpy(&g_VehicleTelemetryInfo.vehicle_name[0], (char*)&(g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.vehicle_name[0]), MAX_VEHICLE_NAME_LENGTH);
+   g_VehicleTelemetryInfo.pi_temperature = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.temperatureC;
+   g_VehicleTelemetryInfo.cpu_load = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.cpu_load;
+   g_VehicleTelemetryInfo.cpu_mhz = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.cpu_mhz;
+   g_VehicleTelemetryInfo.throttled = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.throttled;
+   g_VehicleTelemetryInfo.rssi_dbm = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.uplink_rssi_dbm[0];
+   g_VehicleTelemetryInfo.rssi_quality = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.uplink_link_quality[0];
+   strncpy(&g_VehicleTelemetryInfo.vehicle_name[0], (char*)&(g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.vehicle_name[0]), MAX_VEHICLE_NAME_LENGTH);
    g_VehicleTelemetryInfo.vehicle_name[MAX_VEHICLE_NAME_LENGTH-1] = 0;
-   g_VehicleTelemetryInfo.vehicle_type = g_VehiclesRuntimeInfo[iVehicleIndex].headerRubyTelemetryExtended.vehicle_type;
+   g_VehicleTelemetryInfo.vehicle_type = g_VehiclesRuntimeInfo[iVehicleIndex].headerAnhydrateTelemetryExtended.vehicle_type;
 
    if ( ! g_VehiclesRuntimeInfo[iVehicleIndex].bGotFCTelemetry )
       return;
@@ -387,7 +387,7 @@ void osd_plugins_load()
    {
       while ((dir = readdir(d)) != NULL)
       {
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          if ( strlen(dir->d_name) < 4 )
             continue;
          bool match = false;
@@ -496,10 +496,10 @@ void osd_plugins_render()
       memcpy(&telemetry_info, &g_VehicleTelemetryInfo, sizeof(vehicle_and_telemetry_info_t));      
       telemetry_info.pExtraInfo = &telemetry_info2;
       telemetry_info2.uTimeNow = g_TimeNow;
-      telemetry_info2.uTimeNowVehicle = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfo.uTimeNow;
+      telemetry_info2.uTimeNowVehicle = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfo.uTimeNow;
       telemetry_info2.uVehicleId = 0;
       telemetry_info2.uRelayedVehicleId = pModel->relay_params.uRelayedVehicleId;
-      telemetry_info2.uIsRelaing = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_IS_RELAYING;
+      telemetry_info2.uIsRelaing = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_IS_RELAYING;
       telemetry_info2.uIsSpectatorMode = pModel->is_spectator;
 
       telemetry_info2.uWindHeading = 0xFFFF;
@@ -516,8 +516,8 @@ void osd_plugins_render()
          if ( 0 != uSpeed )
             telemetry_info2.fWindSpeed = ((float)uSpeed-1)/100.0;
       }
-      telemetry_info2.uThrottleInput = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfo.uThrottleInput;
-      telemetry_info2.uThrottleOutput = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfo.uThrottleOutput;
+      telemetry_info2.uThrottleInput = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfo.uThrottleInput;
+      telemetry_info2.uThrottleOutput = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfo.uThrottleOutput;
       telemetry_info2.uVehicleId = pModel->uVehicleId;
       telemetry_info2.uIsSpectatorMode = (pModel->is_spectator?1:0);
 
@@ -751,3 +751,4 @@ char* osd_plugin_get_setting_option_name(int index, int sub_index, int option_in
    }
    return NULL;
 }
+

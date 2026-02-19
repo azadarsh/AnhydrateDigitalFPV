@@ -236,3 +236,4 @@ static inline void mavlink_msg_extended_sys_state_decode(const mavlink_message_t
     memcpy(extended_sys_state, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

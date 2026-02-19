@@ -26,3 +26,4 @@ class MenuController: public Menu
       bool m_bShownHDMIChangeNotif;
       int m_IndexDeveloper;
 };
+

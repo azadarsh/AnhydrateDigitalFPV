@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -215,7 +215,7 @@ void MenuVehicles::onReturnFromChild(int iChildMenuId, int returnValue)
       render_all(get_current_timestamp_ms(), true, false);
       pairing_stop();
 
-      ruby_set_active_model_id(0);
+      Anhydrate_set_active_model_id(0);
       g_pCurrentModel = NULL;
 
       int iModelsCount = getControllerModelsCount();
@@ -338,9 +338,9 @@ void MenuVehicles::onSelectItem()
       if ( 0 == pM->getSettingsFilesCount() )
       {
          hardware_unmount_usb();
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          sync();
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          delete pM;
          Menu* pm = new Menu(MENU_ID_SIMPLE_MESSAGE+10*1000,"No vehicle settings files",NULL);
          pm->m_xPos = 0.4; pm->m_yPos = 0.4;
@@ -403,3 +403,4 @@ void MenuVehicles::onSelectItem()
    pMenu->m_yPos = m_pMenuItems[m_SelectedIndex]->getItemRenderYPos() - g_pRenderEngine->textHeight(g_idFontMenu);
    add_menu_to_stack(pMenu);
 }
+

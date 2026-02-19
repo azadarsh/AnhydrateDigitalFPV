@@ -269,8 +269,8 @@ int main(int argc, char *argv[])
    log_line("Skips: %s", g_bSkip?"yes":"no");
    log_line("Buffers: %d", g_iBufferPacketsCount);
    char szComm[256];
-   //sprintf(szComm, "aplay -q --disable-resample -N -R 10000 -c 1 --rate %s --format %s %s 2>/dev/null &", g_szSpeed, g_szFormat, FIFO_RUBY_AUDIO1);
-   sprintf(szComm, "aplay -q -N -R 10000 -c 1 --rate %s --format %s %s 2>/dev/null &", g_szSpeed, g_szFormat, FIFO_RUBY_AUDIO1);
+   //sprintf(szComm, "aplay -q --disable-resample -N -R 10000 -c 1 --rate %s --format %s %s 2>/dev/null &", g_szSpeed, g_szFormat, FIFO_Anhydrate_AUDIO1);
+   sprintf(szComm, "aplay -q -N -R 10000 -c 1 --rate %s --format %s %s 2>/dev/null &", g_szSpeed, g_szFormat, FIFO_Anhydrate_AUDIO1);
    log_line("Executing player cmd: [%s]", szComm);
    hw_execute_bash_command_nonblock(szComm, NULL);
 
@@ -285,23 +285,23 @@ int main(int argc, char *argv[])
       return 0;
    }
 
-   log_line("Opening output pipe (%s)...", FIFO_RUBY_AUDIO1);
+   log_line("Opening output pipe (%s)...", FIFO_Anhydrate_AUDIO1);
    int iRetries = 20;
    while ( (s_fPipeAudioPlayerOutput <= 0) && (iRetries > 0) )
    {
       iRetries--;
-      s_fPipeAudioPlayerOutput = open(FIFO_RUBY_AUDIO1, O_WRONLY);
-      //s_fPipeAudioPlayerOutput = open(FIFO_RUBY_AUDIO1, O_WRONLY | O_NONBLOCK);
+      s_fPipeAudioPlayerOutput = open(FIFO_Anhydrate_AUDIO1, O_WRONLY);
+      //s_fPipeAudioPlayerOutput = open(FIFO_Anhydrate_AUDIO1, O_WRONLY | O_NONBLOCK);
       if ( s_fPipeAudioPlayerOutput > 0 )
          break;
-      log_error_and_alarm("Failed to open audio pipe write endpoint: %s, retry...",FIFO_RUBY_AUDIO1);
+      log_error_and_alarm("Failed to open audio pipe write endpoint: %s, retry...",FIFO_Anhydrate_AUDIO1);
       hardware_sleep_ms(20);
    }
    if ( s_fPipeAudioPlayerOutput > 0 )
-      log_line("Opened input file (%s) and output pipe (%s)", g_szFile, FIFO_RUBY_AUDIO1);
+      log_line("Opened input file (%s) and output pipe (%s)", g_szFile, FIFO_Anhydrate_AUDIO1);
    else
    {
-      log_error_and_alarm("Failed to open audio pipe write endpoint: %s",FIFO_RUBY_AUDIO1);
+      log_error_and_alarm("Failed to open audio pipe write endpoint: %s",FIFO_Anhydrate_AUDIO1);
       fclose(fp);
       hw_stop_process("aplay");
       return 0;
@@ -319,37 +319,37 @@ int main(int argc, char *argv[])
 
    if ( g_iBufferPacketsCount >= 0 )
    { 
-      s_fPipeAudioPlayerQueueRead = open(FIFO_RUBY_AUDIO_QUEUE, O_CREAT | O_RDONLY | O_NONBLOCK);
+      s_fPipeAudioPlayerQueueRead = open(FIFO_Anhydrate_AUDIO_QUEUE, O_CREAT | O_RDONLY | O_NONBLOCK);
       if ( s_fPipeAudioPlayerQueueRead <= 0 )
       {
-         log_error_and_alarm("Failed to open audio pipe queue read endpoint: %s",FIFO_RUBY_AUDIO_QUEUE);
+         log_error_and_alarm("Failed to open audio pipe queue read endpoint: %s",FIFO_Anhydrate_AUDIO_QUEUE);
          return 0;
       }
-      log_line("Opened successfully audio pipe queue read endpoint: %s", FIFO_RUBY_AUDIO_QUEUE);
+      log_line("Opened successfully audio pipe queue read endpoint: %s", FIFO_Anhydrate_AUDIO_QUEUE);
 
-      s_fPipeAudioPlayerQueueWrite = open(FIFO_RUBY_AUDIO_QUEUE, O_CREAT | O_WRONLY | O_NONBLOCK);
+      s_fPipeAudioPlayerQueueWrite = open(FIFO_Anhydrate_AUDIO_QUEUE, O_CREAT | O_WRONLY | O_NONBLOCK);
       if ( s_fPipeAudioPlayerQueueWrite <= 0 )
       {
-         log_error_and_alarm("[AudioRx] Failed to open audio pipe queue write endpoint: %s",FIFO_RUBY_AUDIO_QUEUE);
+         log_error_and_alarm("[AudioRx] Failed to open audio pipe queue write endpoint: %s",FIFO_Anhydrate_AUDIO_QUEUE);
          return 0;
       }
-      log_line("Opened successfully audio pipe queue write endpoint: %s", FIFO_RUBY_AUDIO_QUEUE);
+      log_line("Opened successfully audio pipe queue write endpoint: %s", FIFO_Anhydrate_AUDIO_QUEUE);
 
-      s_fPipeAudioBufferRead = open(FIFO_RUBY_AUDIO_BUFF, O_CREAT | O_RDONLY | O_NONBLOCK);
+      s_fPipeAudioBufferRead = open(FIFO_Anhydrate_AUDIO_BUFF, O_CREAT | O_RDONLY | O_NONBLOCK);
       if ( s_fPipeAudioBufferRead <= 0 )
       {
-         log_error_and_alarm("Failed to open audio pipe buffer read endpoint: %s",FIFO_RUBY_AUDIO_BUFF);
+         log_error_and_alarm("Failed to open audio pipe buffer read endpoint: %s",FIFO_Anhydrate_AUDIO_BUFF);
          return 0;
       }
-      log_line("Opened successfully audio pipe buffer read endpoint: %s", FIFO_RUBY_AUDIO_BUFF);
+      log_line("Opened successfully audio pipe buffer read endpoint: %s", FIFO_Anhydrate_AUDIO_BUFF);
 
-      s_fPipeAudioBufferWrite = open(FIFO_RUBY_AUDIO_BUFF, O_CREAT | O_WRONLY | O_NONBLOCK);
+      s_fPipeAudioBufferWrite = open(FIFO_Anhydrate_AUDIO_BUFF, O_CREAT | O_WRONLY | O_NONBLOCK);
       if ( s_fPipeAudioBufferWrite <= 0 )
       {
-         log_error_and_alarm("[AudioRx] Failed to open audio pipe buffer write endpoint: %s",FIFO_RUBY_AUDIO_BUFF);
+         log_error_and_alarm("[AudioRx] Failed to open audio pipe buffer write endpoint: %s",FIFO_Anhydrate_AUDIO_BUFF);
          return 0;
       }
-      log_line("Opened successfully audio pipe buffer write endpoint: %s", FIFO_RUBY_AUDIO_BUFF);
+      log_line("Opened successfully audio pipe buffer write endpoint: %s", FIFO_Anhydrate_AUDIO_BUFF);
 
       log_line("Player queue FIFO default size: %d bytes", fcntl(s_fPipeAudioPlayerQueueWrite, F_GETPIPE_SZ));
       fcntl(s_fPipeAudioPlayerQueueWrite, F_SETPIPE_SZ, 250000);
@@ -544,3 +544,4 @@ int main(int argc, char *argv[])
 
    return 0;
 } 
+

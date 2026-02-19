@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -236,3 +236,4 @@ u8* packets_queue_peek_packet(t_packet_queue* pQueue, int index, int* pLength)
 
    return pRet;
 }
+

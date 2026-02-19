@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -36,7 +36,7 @@
 #include "menu_item_section.h"
 #include "../popup_log.h"
 #include "../osd/osd_common.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 
 MenuControllerRecording::MenuControllerRecording(void)
 :Menu(MENU_ID_CONTROLLER_RECORDING, L("Video Recording Settings"), NULL)
@@ -374,7 +374,7 @@ void MenuControllerRecording::onSelectItem()
       save_ControllerSettings();
       valuesToUI();
       send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_CONTROLLER_CHANGED, PACKET_COMPONENT_LOCAL_CONTROL);
-      if ( ruby_is_recording() )
+      if ( Anhydrate_is_recording() )
          addMessage2(0, L("A recording is already in progress."), L("The new recoding options will take effect on the next recording."));
    }
 
@@ -384,7 +384,7 @@ void MenuControllerRecording::onSelectItem()
       save_ControllerSettings();
       valuesToUI();
       send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_CONTROLLER_CHANGED, PACKET_COMPONENT_LOCAL_CONTROL);
-      if ( ruby_is_recording() )
+      if ( Anhydrate_is_recording() )
          addMessage2(0, L("A recording is already in progress."), L("The new recoding options will take effect on the next recording."));
    }
    if ( (m_iIndexSTRTime == m_SelectedIndex) ||
@@ -424,8 +424,9 @@ void MenuControllerRecording::onSelectItem()
       if ( (NULL == g_pCurrentModel) || ( ! g_bFirstModelPairingDone) || ( g_pCurrentModel->telemetry_params.fc_telemetry_type != TELEMETRY_TYPE_MAVLINK) )
          addMessage("This parameter is recorded only when vehicle's telemtry type is MAVLink.");
 
-      if ( ruby_is_recording() )
+      if ( Anhydrate_is_recording() )
          addMessage2(0, L("A recording is already in progress."), L("The new recoding options will take effect on the next recording."));
    }
    save_Preferences();
 }
+

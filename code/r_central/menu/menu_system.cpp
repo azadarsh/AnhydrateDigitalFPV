@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -82,7 +82,7 @@ MenuSystem::MenuSystem(void)
    m_IndexAutoExport = addMenuItem(m_pItemsSelect[1]);
 
    m_IndexReset = addMenuItem(new MenuItem(L("Factory Reset"), L("Resets all the settings an files on the controller, as they where when the image was flashed.")));
-   m_IndexAbout = addMenuItem(new MenuItem("About", "Get info about Ruby system."));
+   m_IndexAbout = addMenuItem(new MenuItem("About", "Get info about Anhydrate system."));
 
    m_pItemsSelect[0] = new MenuItemSelect(L("Enable Developer Mode"), L("Used to enable expert settings and tweaks, to debug issues and test experimental features. Also, it disables some failsafe checks, parameters consistency checks and other options. It's recommended to leave this [Off] as it will degrade your system performance."));
    m_pItemsSelect[0]->addSelection(L("Off"));
@@ -143,21 +143,21 @@ void MenuSystem::onReturnFromChild(int iChildMenuId, int returnValue)
    {
       onEventReboot();
       #if defined(HW_PLATFORM_RASPBERRY)
-      hw_execute_bash_command("rm -rf /home/pi/ruby/logs", NULL);
-      hw_execute_bash_command("rm -rf /home/pi/ruby/media", NULL);
-      hw_execute_bash_command("rm -rf /home/pi/ruby/config", NULL);
-      hw_execute_bash_command("rm -rf /home/pi/ruby/tmp", NULL);
+      hw_execute_bash_command("rm -rf /home/pi/Anhydrate/logs", NULL);
+      hw_execute_bash_command("rm -rf /home/pi/Anhydrate/media", NULL);
+      hw_execute_bash_command("rm -rf /home/pi/Anhydrate/config", NULL);
+      hw_execute_bash_command("rm -rf /home/pi/Anhydrate/tmp", NULL);
       hw_execute_bash_command("mkdir -p config", NULL);
-      hw_execute_bash_command("touch /home/pi/ruby/config/firstboot.txt", NULL);
+      hw_execute_bash_command("touch /home/pi/Anhydrate/config/firstboot.txt", NULL);
       #endif
 
       #if defined(HW_PLATFORM_RADXA)
-      hw_execute_bash_command("rm -rf /home/radxa/ruby/logs", NULL);
-      hw_execute_bash_command("rm -rf /home/radxa/ruby/media", NULL);
-      hw_execute_bash_command("rm -rf /home/radxa/ruby/config", NULL);
-      hw_execute_bash_command("rm -rf /home/radxa/ruby/tmp", NULL);
+      hw_execute_bash_command("rm -rf /home/radxa/Anhydrate/logs", NULL);
+      hw_execute_bash_command("rm -rf /home/radxa/Anhydrate/media", NULL);
+      hw_execute_bash_command("rm -rf /home/radxa/Anhydrate/config", NULL);
+      hw_execute_bash_command("rm -rf /home/radxa/Anhydrate/tmp", NULL);
       hw_execute_bash_command("mkdir -p config", NULL);
-      hw_execute_bash_command("touch /home/radxa/ruby/config/firstboot.txt", NULL);
+      hw_execute_bash_command("touch /home/radxa/Anhydrate/config/firstboot.txt", NULL);
       #endif
 
       char szBuff[128];
@@ -181,11 +181,11 @@ void MenuSystem::onReturnFromChild(int iChildMenuId, int returnValue)
 
    if ( 10 == iChildMenuId/1000 )
    {
-      ruby_signal_alive();
-      ruby_pause_watchdog("export controller settings to USB stick");
+      Anhydrate_signal_alive();
+      Anhydrate_pause_watchdog("export controller settings to USB stick");
       int nReturn = controller_utils_export_all_to_usb();
-      ruby_resume_watchdog("finish export controller settings to USB stick");
-      ruby_signal_alive();
+      Anhydrate_resume_watchdog("finish export controller settings to USB stick");
+      Anhydrate_signal_alive();
 
       if ( nReturn == -1 )
       {
@@ -202,7 +202,7 @@ void MenuSystem::onReturnFromChild(int iChildMenuId, int returnValue)
          addMessage("Something failed during export!");
          return;
       }
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       
       addMessage("Done. All configuration files have been successfully exported. You can now remove the USB memory stick.");
       return;
@@ -210,12 +210,12 @@ void MenuSystem::onReturnFromChild(int iChildMenuId, int returnValue)
 
    if ( 11 == iChildMenuId/1000 )
    {
-      ruby_signal_alive();
-      ruby_pause_watchdog("import controller settings from USB stick");
+      Anhydrate_signal_alive();
+      Anhydrate_pause_watchdog("import controller settings from USB stick");
       pairing_stop();
       int nReturn = controller_utils_import_all_from_usb(false);
-      ruby_resume_watchdog("import controller settings finished.");
-      ruby_signal_alive();
+      Anhydrate_resume_watchdog("import controller settings finished.");
+      Anhydrate_signal_alive();
       if ( nReturn == -1 )
       {
          addMessage("ZIP program is missing!");
@@ -236,11 +236,11 @@ void MenuSystem::onReturnFromChild(int iChildMenuId, int returnValue)
          addMessage("Something failed during import!");
          return;
       }
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
 
       if ( nReturn >= 0 )
       {
-         ruby_load_models();
+         Anhydrate_load_models();
 
          if ( ! load_Preferences() )
             save_Preferences();
@@ -384,4 +384,5 @@ void MenuSystem::onSelectItem()
       return;
    }
 }
+
 

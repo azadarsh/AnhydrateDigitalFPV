@@ -411,3 +411,4 @@ static inline void mavlink_msg_global_position_int_decode(const mavlink_message_
     memcpy(global_position_int, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

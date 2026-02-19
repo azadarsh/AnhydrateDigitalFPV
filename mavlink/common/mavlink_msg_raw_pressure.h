@@ -311,3 +311,4 @@ static inline void mavlink_msg_raw_pressure_decode(const mavlink_message_t* msg,
     memcpy(raw_pressure, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

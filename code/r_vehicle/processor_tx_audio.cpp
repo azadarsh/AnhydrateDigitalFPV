@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -146,14 +146,14 @@ int ProcessorTxAudio::openAudioStream()
        m_iSchemeDataPackets, m_iSchemeECPackets, m_iSchemePacketSize);
 
    #if defined (HW_PLATFORM_RASPBERRY)
-   log_line("[AudioTx] Opening audio input stream: %s", FIFO_RUBY_AUDIO1);
-   m_iAudioStream = open(FIFO_RUBY_AUDIO1, O_RDONLY);
+   log_line("[AudioTx] Opening audio input stream: %s", FIFO_Anhydrate_AUDIO1);
+   m_iAudioStream = open(FIFO_Anhydrate_AUDIO1, O_RDONLY);
    if ( m_iAudioStream < 0 )
    {
-      log_softerror_and_alarm("[AudioTx] Failed to open audio input stream: %s", FIFO_RUBY_AUDIO1);
+      log_softerror_and_alarm("[AudioTx] Failed to open audio input stream: %s", FIFO_Anhydrate_AUDIO1);
       return 0;
    }
-   log_line("[AudioTx] Opened audio input stream: %s successfully. fd = %d", FIFO_RUBY_AUDIO1, m_iAudioStream);
+   log_line("[AudioTx] Opened audio input stream: %s successfully. fd = %d", FIFO_Anhydrate_AUDIO1, m_iAudioStream);
    #endif
 
    #if defined (HW_PLATFORM_OPENIPC_CAMERA)
@@ -175,7 +175,7 @@ void ProcessorTxAudio::closeAudioStream()
 
    if ( -1 != m_iAudioStream )
    {
-      log_line("[AudioTx] Closed audio input stream %s", FIFO_RUBY_AUDIO1);
+      log_line("[AudioTx] Closed audio input stream %s", FIFO_Anhydrate_AUDIO1);
       close(m_iAudioStream);
    }
    m_iAudioStream = -1;
@@ -219,7 +219,7 @@ int ProcessorTxAudio::startLocalRecording()
       fclose(m_fAudioRecordingFile);
 
    char szFile[512];
-   sprintf(szFile, "%s%s%d", FOLDER_RUBY_TEMP, FILE_TEMP_AUDIO_RECORDING, m_iRecordingFileNumber);
+   sprintf(szFile, "%s%s%d", FOLDER_Anhydrate_TEMP, FILE_TEMP_AUDIO_RECORDING, m_iRecordingFileNumber);
    m_fAudioRecordingFile = fopen(szFile, "wb");
    if ( NULL == m_fAudioRecordingFile )
    {
@@ -251,7 +251,7 @@ int ProcessorTxAudio::stopLocalRecording()
    for( int i=0; i<5; i++ )
    {
       m_iRecordingFileNumber++;
-      sprintf(szBuff, "rm -rf %s%s%d 2>/dev/null", FOLDER_RUBY_TEMP, FILE_TEMP_AUDIO_RECORDING, m_iRecordingFileNumber);
+      sprintf(szBuff, "rm -rf %s%s%d 2>/dev/null", FOLDER_Anhydrate_TEMP, FILE_TEMP_AUDIO_RECORDING, m_iRecordingFileNumber);
       hw_execute_bash_command(szBuff, NULL);
    }
    m_iRecordingFileNumber = 0;
@@ -296,7 +296,7 @@ int ProcessorTxAudio::tryReadAudioInputStream()
    iCountRead = read(m_iAudioStream, uBuffer, m_iSchemePacketSize);
    if ( iCountRead < 0 )
    {
-      log_error_and_alarm("[AudioTx] Failed to read from audio input fifo: %s, returned code: %d, error: %s", FIFO_RUBY_AUDIO1, iCountRead, strerror(errno));
+      log_error_and_alarm("[AudioTx] Failed to read from audio input fifo: %s, returned code: %d, error: %s", FIFO_Anhydrate_AUDIO1, iCountRead, strerror(errno));
       return -1;
    }
    #endif
@@ -382,7 +382,7 @@ void ProcessorTxAudio::_localRecordBuffer(u8* pBuffer, int iLength)
 
    m_iRecordingFileNumber++;
    char szBuff[256];
-   sprintf(szBuff, "%s%s%d", FOLDER_RUBY_TEMP, FILE_TEMP_AUDIO_RECORDING, m_iRecordingFileNumber);
+   sprintf(szBuff, "%s%s%d", FOLDER_Anhydrate_TEMP, FILE_TEMP_AUDIO_RECORDING, m_iRecordingFileNumber);
 
    m_fAudioRecordingFile = fopen(szBuff, "wb");
    if ( NULL == m_fAudioRecordingFile )

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -559,7 +559,7 @@ void MenuSearch::onShow()
 void MenuSearch::startSearch()
 {
    log_line("MenuSearch::startSearch() on band %s", str_getBandName(m_SupportedBandsList[m_SearchBandIndex]));
-   ruby_pause_watchdog("start search");
+   Anhydrate_pause_watchdog("start search");
 
    for( int i=0; i<hardware_get_radio_interfaces_count(); i++ )
    {
@@ -764,7 +764,7 @@ void MenuSearch::stopSearch()
       m_pPopupSearch = NULL;
    }
 
-   ruby_pause_watchdog("search stop");
+   Anhydrate_pause_watchdog("search stop");
 
    pairing_stop();
 
@@ -1055,30 +1055,30 @@ void MenuSearch::onSearchStep()
          uWaitTimeMs = 2500;
 
       bool bVehicleIsOnCurrentFreq = false;
-      if ( (g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo) && (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId != 0) )
+      if ( (g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo) && (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId != 0) )
       {
          char szTmpBuff[256];
          szTmpBuff[0] = 0;
-         for( int i=0; i<g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.radio_links_count; i++ )
+         for( int i=0; i<g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.radio_links_count; i++ )
          {
             char szTmp2[64];
-            sprintf(szTmp2, "%s ", str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[i]) );
+            sprintf(szTmp2, "%s ", str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[i]) );
             strcat(szTmpBuff, szTmp2);
          }
-         log_line("MenuSearch::onSearchStep() There is a vehicle found on current frequency. Vehicle id: %u, has %d radio links: %s.", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.radio_links_count, szTmpBuff);
-         for( int i=0; i<g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.radio_links_count; i++ )
+         log_line("MenuSearch::onSearchStep() There is a vehicle found on current frequency. Vehicle id: %u, has %d radio links: %s.", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.radio_links_count, szTmpBuff);
+         for( int i=0; i<g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.radio_links_count; i++ )
          {
-            if ( g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[i] == m_CurrentSearchFrequencyKhz )
+            if ( g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[i] == m_CurrentSearchFrequencyKhz )
                bVehicleIsOnCurrentFreq = true;
-            if ( g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[i] < 10000 )
-            if ( g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[i]*1000 == m_CurrentSearchFrequencyKhz )
+            if ( g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[i] < 10000 )
+            if ( g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[i]*1000 == m_CurrentSearchFrequencyKhz )
                bVehicleIsOnCurrentFreq = true;
          }
       }
       if ( bVehicleIsOnCurrentFreq )
       {
-         u8 vMaj = g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion;
-         u8 vMin = g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion;
+         u8 vMaj = g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion;
+         u8 vMin = g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion;
          vMaj = vMaj >> 4;
          vMin = vMin & 0x0F;
    
@@ -1086,13 +1086,13 @@ void MenuSearch::onSearchStep()
          char szFreq2[64];
          char szFreq3[64];
 
-         strcpy(szFreq1, str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[0]) );
-         strcpy(szFreq2, str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[1]) );
-         strcpy(szFreq3, str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[2]) );
+         strcpy(szFreq1, str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[0]) );
+         strcpy(szFreq2, str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[1]) );
+         strcpy(szFreq3, str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[2]) );
 
          log_line("MenuSearch::onSearchStep() Found a vehicle while searching on %s: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
-             str_format_frequency(m_CurrentSearchFrequencyKhz), g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, vMaj, vMin,
-             g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.radio_links_count,
+             str_format_frequency(m_CurrentSearchFrequencyKhz), g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, vMaj, vMin,
+             g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.radio_links_count,
              szFreq1, szFreq2, szFreq3 );
          m_bIsSearchPaused = true;
          g_bSearchFoundVehicle = true;
@@ -1111,20 +1111,20 @@ void MenuSearch::onSearchStep()
          add_menu_to_stack(pMenu);
          log_line("MenuSearch::onSearchStep() Added connect menu to stack");
       }
-      else if ( g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId != 0 )
+      else if ( g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId != 0 )
       {
          char szFreq1[64];
          char szFreq2[64];
          char szFreq3[64];
-         strcpy(szFreq1, str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[0]) );
-         strcpy(szFreq2, str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[1]) );
-         strcpy(szFreq3, str_format_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uRadioFrequenciesKhz[2]) );
+         strcpy(szFreq1, str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[0]) );
+         strcpy(szFreq2, str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[1]) );
+         strcpy(szFreq3, str_format_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uRadioFrequenciesKhz[2]) );
          log_softerror_and_alarm("Found a vehicle that emits on these frequencies %s, %s, %s, but is not on current search frequencty %s!",
             szFreq1, szFreq2, szFreq3, str_format_frequency(m_CurrentSearchFrequencyKhz) );
       }
       else
          log_line("MenuSearch::onSearchStep() No vehicle on current frequency (%s): got telem search info? %s, search telemetry VID: %u",
-           str_format_frequency(m_CurrentSearchFrequencyKhz), g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo?"yes":"no", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId);
+           str_format_frequency(m_CurrentSearchFrequencyKhz), g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo?"yes":"no", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId);
    }
 }
 
@@ -1169,7 +1169,7 @@ void MenuSearch::onReturnFromChild(int iChildMenuId, int returnValue)
    {
       log_line("MenuSearch: Save current original model, vehicle id: %u, it's controller id: %u. Received vehicle id while searching: %u",
          m_pModelOriginal->uVehicleId, m_pModelOriginal->uControllerId,
-         g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId );
+         g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId );
 
       saveControllerModel(m_pModelOriginal);
    }
@@ -1177,7 +1177,7 @@ void MenuSearch::onReturnFromChild(int iChildMenuId, int returnValue)
       log_line("MenuSearch: No original model, do not save it.");
 
    bool bIsNew = false;
-   if( ! ruby_is_first_pairing_done() )
+   if( ! Anhydrate_is_first_pairing_done() )
    {
       log_line("MenuSearch: First pairing was not completed before. Deleting all models.");
       deleteAllModels();
@@ -1186,20 +1186,20 @@ void MenuSearch::onReturnFromChild(int iChildMenuId, int returnValue)
    else
       log_line("MenuSearch: First pairing was already completed.");
 
-   if ( ! controllerHasModelWithId(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId) )
+   if ( ! controllerHasModelWithId(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId) )
       bIsNew = true;
 
    Model* pExistingModel = NULL;
    if ( ! bIsNew )
    {
-      pExistingModel = findModelWithId(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, 14);
+      pExistingModel = findModelWithId(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, 14);
       if ( NULL == pExistingModel )
          bIsNew = true;
    } 
    if ( bIsNew )
-      log_line("MenuSearch: The found vehicle VID %u is new (not on controller).", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId);
+      log_line("MenuSearch: The found vehicle VID %u is new (not on controller).", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId);
    else
-      log_line("MenuSearch: The found vehicle VID %u (is spectator: %s) already exists on controller.", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, pExistingModel->is_spectator?"yes":"no");
+      log_line("MenuSearch: The found vehicle VID %u (is spectator: %s) already exists on controller.", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, pExistingModel->is_spectator?"yes":"no");
    
    // Connect as Spectator
 
@@ -1212,21 +1212,21 @@ void MenuSearch::onReturnFromChild(int iChildMenuId, int returnValue)
          if ( (pExistingModel->is_spectator == false) || modelIsInControllerList(pExistingModel->uVehicleId) )
             deleteModel(pExistingModel);
       }
-      Model* pModel = addSpectatorModel(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId);
-      pModel->populateFromVehicleTelemetryData_v6(&(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended));
+      Model* pModel = addSpectatorModel(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId);
+      pModel->populateFromVehicleTelemetryData_v6(&(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended));
       pModel->is_spectator = true;
 
-      set_model_main_connect_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, m_CurrentSearchFrequencyKhz);
+      set_model_main_connect_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, m_CurrentSearchFrequencyKhz);
 
       stopSearch();
-      ruby_set_is_first_pairing_done();
+      Anhydrate_set_is_first_pairing_done();
       g_bFirstModelPairingDone = true;
       setCurrentModel(pModel->uVehicleId);
       g_pCurrentModel = getCurrentModel();
       setControllerCurrentModel(g_pCurrentModel->uVehicleId);
       saveControllerModel(g_pCurrentModel);
 
-      ruby_set_active_model_id(g_pCurrentModel->uVehicleId);
+      Anhydrate_set_active_model_id(g_pCurrentModel->uVehicleId);
 
       if ( bIsNew )
          onModelAdded(pModel->uVehicleId);
@@ -1261,28 +1261,28 @@ void MenuSearch::onReturnFromChild(int iChildMenuId, int returnValue)
       if ( bIsNew )
       {
          log_line("MenuSearch: Adding a new vehicle model as controller");
-         log_line("MenuSearch: Creating a vehicle model for VID: %u ...", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId);
-         pModel = addNewModel(g_SearchVehicleRuntimeInfo.uVehicleId, (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion>>4) & 0x0F, (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion & 0x0F));
+         log_line("MenuSearch: Creating a vehicle model for VID: %u ...", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId);
+         pModel = addNewModel(g_SearchVehicleRuntimeInfo.uVehicleId, (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion>>4) & 0x0F, (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion & 0x0F));
       }
       else
       {
-         pModel = findModelWithId(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, 15);
+         pModel = findModelWithId(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, 15);
          if ( NULL == pModel )
          {
             bIsNew = true;
-            log_line("MenuSearch: Creating a vehicle model for VID: %u ...", g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId);
-            pModel = addNewModel(g_SearchVehicleRuntimeInfo.uVehicleId, (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion>>4) &0x0F, (g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.rubyVersion & 0x0F));
+            log_line("MenuSearch: Creating a vehicle model for VID: %u ...", g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId);
+            pModel = addNewModel(g_SearchVehicleRuntimeInfo.uVehicleId, (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion>>4) &0x0F, (g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.AnhydrateVersion & 0x0F));
          }
          else
             log_line("MenuSearch: Found existing controller vehicle model for VID %u.", pModel->uVehicleId);
       }
-      pModel->populateFromVehicleTelemetryData_v6(&(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended));
+      pModel->populateFromVehicleTelemetryData_v6(&(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended));
       pModel->is_spectator = false;
-      set_model_main_connect_frequency(g_SearchVehicleRuntimeInfo.headerRubyTelemetryExtended.uVehicleId, m_CurrentSearchFrequencyKhz);
+      set_model_main_connect_frequency(g_SearchVehicleRuntimeInfo.headerAnhydrateTelemetryExtended.uVehicleId, m_CurrentSearchFrequencyKhz);
 
       stopSearch();
       log_line("MenuSearch: Save model VID %u, mode: %s", pModel->uVehicleId, (pModel->is_spectator)?"spectator":"control");
-      ruby_set_is_first_pairing_done();
+      Anhydrate_set_is_first_pairing_done();
       g_bFirstModelPairingDone = true;
       g_bDidAnUpdate = false;
       setCurrentModel(pModel->uVehicleId);
@@ -1291,9 +1291,9 @@ void MenuSearch::onReturnFromChild(int iChildMenuId, int returnValue)
       setControllerCurrentModel(g_pCurrentModel->uVehicleId);
       saveControllerModel(g_pCurrentModel);
 
-      ruby_set_active_model_id(g_pCurrentModel->uVehicleId);
+      Anhydrate_set_active_model_id(g_pCurrentModel->uVehicleId);
      
-      if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+      if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
          g_pCurrentModel->b_mustSyncFromVehicle = true;
       log_line("MenuSearch: Changed current main vehicle to vehicle id %u", g_pCurrentModel->uVehicleId);
       if ( bIsNew )
@@ -1369,7 +1369,7 @@ int MenuSearch::onBack()
          log_line("MenuSearch:onBack() no previous current model to switch back to.");
    }
 
-   ruby_resume_watchdog_force("search close menu");
+   Anhydrate_resume_watchdog_force("search close menu");
    return Menu::onBack();
 }
 
@@ -1413,14 +1413,14 @@ void MenuSearch::onSelectItem()
       }
       if ( ! m_bIsSearchingAuto )
       {
-         ruby_pause_watchdog("search manual freq");
+         Anhydrate_pause_watchdog("search manual freq");
          startSearch();
       }
       else
       {
          hardware_blockCurrentPressedKeys();
          stopSearch();
-         ruby_resume_watchdog("stop search manual freq");
+         Anhydrate_resume_watchdog("stop search manual freq");
       }
       return;
    }
@@ -1436,7 +1436,7 @@ void MenuSearch::onSelectItem()
          return;
       }
 
-      ruby_pause_watchdog("search on a freq");
+      Anhydrate_pause_watchdog("search on a freq");
       createSearchPopup();
       g_bSearching = true;
       render_all(get_current_timestamp_ms(), true);
@@ -1567,3 +1567,4 @@ void MenuSearch::createSearchPopup()
 
    popups_add_topmost(m_pPopupSearch);
 }
+

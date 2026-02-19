@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1733,4 +1733,5 @@ int hardware_radio_sik_write_packet(int iHWRadioInterfaceIndex, u8* pData, int i
    //log_line("[HW-RSK] Write: wrote %d bytes to SiK radio.", iLength);
    return 1;
 }
+
 

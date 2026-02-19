@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -435,7 +435,7 @@ void MenuRadioConfig::Render()
 
 void MenuRadioConfig::showProgressInfo()
 {
-   ruby_pause_watchdog("controller update radio config progress");
+   Anhydrate_pause_watchdog("controller update radio config progress");
    m_pPopupProgress = new Popup("Updating Radio Configuration. Please wait...",0.3,0.4, 0.5, 15);
    popups_add_topmost(m_pPopupProgress);
 
@@ -648,7 +648,7 @@ void MenuRadioConfig::onSelectItem()
       return;
 
    bool bConnectedToVehicle = false;
-   if ( link_has_received_main_vehicle_ruby_telemetry() )
+   if ( link_has_received_main_vehicle_Anhydrate_telemetry() )
    if ( pairing_isStarted() )
    if ( NULL != g_pCurrentModel )
    if ( NULL != get_vehicle_runtime_info_for_vehicle_id(g_pCurrentModel->uVehicleId) )
@@ -2143,3 +2143,4 @@ float MenuRadioConfig::drawRadioInterfaceCtrlInfo(float xStart, float xEnd, floa
 
    return (xTextLeft-xStart) + fMaxWidth;
 }
+

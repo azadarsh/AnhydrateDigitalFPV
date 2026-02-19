@@ -511,3 +511,4 @@ static inline void mavlink_msg_sys_status_decode(const mavlink_message_t* msg, m
     memcpy(sys_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -123,3 +123,4 @@ int popups_get_count();
 int popups_get_topmost_count();
 Popup* popups_get_at(int index);
 Popup* popups_get_topmost_at(int index);
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -36,7 +36,7 @@
 #include "../base/hardware_camera.h"
 #include "../base/hardware_cam_maj.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/parser_h264.h"
 #include "../base/utils.h"
 #include "../common/string_utils.h"
@@ -60,7 +60,7 @@
 #include "launchers_vehicle.h"
 #include "packets_utils.h"
 #include "adaptive_video.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 
 #define MAX_AUDIO_MAJ_BUFFER 4096
 
@@ -101,7 +101,7 @@ bool s_bIsRestartingMajestic = false;
 u32 s_uTimeMajesticStarted = 0;
 pthread_t s_pThreadRestartMajestic;
 
-void _video_source_majestic_move_ruby_to_other_cores()
+void _video_source_majestic_move_Anhydrate_to_other_cores()
 {
    int iPIDMajestic = hw_process_exists("majestic");
    int iPIDMajestic2 = hardware_camera_maj_get_current_pid();
@@ -138,11 +138,11 @@ void _video_source_majestic_check_cores_affinities_balance()
    }
 
    int iCPUCoreMaj = hw_process_get_current_core(iPIDMajestic);
-   int iCPUCoreRuby = hw_process_get_current_core(getpid());
+   int iCPUCoreAnhydrate = hw_process_get_current_core(getpid());
    
-   log_line("[VideoSourceMaj] Current CPU core for majestic is: %d, for ruby_rt_vehicle is: %d, %s", iCPUCoreMaj, iCPUCoreRuby, (iCPUCoreMaj == iCPUCoreRuby)?"the same":"are different");
-   if ( iCPUCoreMaj == iCPUCoreRuby )
-       _video_source_majestic_move_ruby_to_other_cores();
+   log_line("[VideoSourceMaj] Current CPU core for majestic is: %d, for Anhydrate_rt_vehicle is: %d, %s", iCPUCoreMaj, iCPUCoreAnhydrate, (iCPUCoreMaj == iCPUCoreAnhydrate)?"the same":"are different");
+   if ( iCPUCoreMaj == iCPUCoreAnhydrate )
+       _video_source_majestic_move_Anhydrate_to_other_cores();
 }
 
 void video_source_majestic_stop_program()
@@ -296,7 +296,7 @@ u32 video_source_majestic_start_program(u32 uOverwriteInitialBitrate, int iOverw
         (! (g_pCurrentModel->processesPriorities.uProcessesFlags & PROCESSES_FLAGS_ENABLE_AFFINITY_CORES)) &&
         (hw_procs_get_cpu_count() > 1) &&
         (g_pCurrentModel->processesPriorities.uProcessesFlags & PROCESSES_FLAGS_ENABLE_AFFINITY_CORES_BALANCE_OIPC) )
-      _video_source_majestic_move_ruby_to_other_cores();
+      _video_source_majestic_move_Anhydrate_to_other_cores();
 
    u32 uInitialVideoBitrate = hardware_camera_maj_get_current_bitrate();
    if ( NULL != pInitialKFSet )

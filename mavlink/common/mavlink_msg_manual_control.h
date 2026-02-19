@@ -336,3 +336,4 @@ static inline void mavlink_msg_manual_control_decode(const mavlink_message_t* ms
     memcpy(manual_control, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

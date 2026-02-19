@@ -404,3 +404,4 @@ static inline void mavlink_msg_uavcan_node_info_decode(const mavlink_message_t* 
     memcpy(uavcan_node_info, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -42,7 +42,7 @@
 
 #include "../shared_vars.h"
 #include "../pairing.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 
 static u32 s_idImageCalibrateHDMI = 0;
 
@@ -92,8 +92,8 @@ void MenuCalibrateHDMI::Render()
 
 int MenuCalibrateHDMI::onBack()
 {
-   if ( ruby_central_is_showing_mira() )
-      ruby_central_show_mira(false);
+   if ( Anhydrate_central_is_showing_mira() )
+      Anhydrate_central_show_mira(false);
    return Menu::onBack();
 }
 
@@ -102,10 +102,10 @@ void MenuCalibrateHDMI::onSelectItem()
    Menu::onSelectItem();
 
 
-   if ( ruby_central_is_showing_mira() )
-      ruby_central_show_mira(false);
+   if ( Anhydrate_central_is_showing_mira() )
+      Anhydrate_central_show_mira(false);
    else
-      ruby_central_show_mira(true);
+      Anhydrate_central_show_mira(true);
 
    if ( (-1 == m_SelectedIndex) || (m_pMenuItems[m_SelectedIndex]->isEditing()) )
       return;

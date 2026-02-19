@@ -286,3 +286,4 @@ static inline void mavlink_msg_scaled_pressure3_decode(const mavlink_message_t* 
     memcpy(scaled_pressure3, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

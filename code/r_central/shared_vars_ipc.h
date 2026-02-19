@@ -63,3 +63,4 @@ extern t_shared_mem_i2c_current* g_pSMVoltage;
 extern t_shared_mem_i2c_current g_SMVoltage;
 
 extern t_shared_mem_i2c_rotary_encoder_buttons_events* g_pSMRotaryEncoderButtonsEvents;
+

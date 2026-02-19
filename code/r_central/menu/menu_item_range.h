@@ -30,3 +30,4 @@ class MenuItemRange: public MenuItem
       float m_ValueCurrent;
       float m_ValueStep;
 };
+

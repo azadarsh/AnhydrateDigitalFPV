@@ -453,3 +453,4 @@ static inline void mavlink_msg_distance_sensor_decode(const mavlink_message_t* m
     memcpy(distance_sensor, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

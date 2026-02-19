@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -143,11 +143,12 @@ void MenuSwitchVehicle::onSelectItem()
       setControllerCurrentModel(g_pCurrentModel->uVehicleId);
       saveControllerModel(g_pCurrentModel);
 
-      ruby_set_active_model_id(g_pCurrentModel->uVehicleId);
+      Anhydrate_set_active_model_id(g_pCurrentModel->uVehicleId);
 
       g_bIsFirstConnectionToCurrentVehicle = true;
       onMainVehicleChanged(true);
       pairing_start_normal(); 
    }
 }
+
 

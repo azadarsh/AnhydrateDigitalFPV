@@ -361,3 +361,4 @@ static inline void mavlink_msg_local_position_ned_system_global_offset_decode(co
     memcpy(local_position_ned_system_global_offset, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

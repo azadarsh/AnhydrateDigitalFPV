@@ -303,3 +303,4 @@ static inline void mavlink_msg_vision_speed_estimate_decode(const mavlink_messag
     memcpy(vision_speed_estimate, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

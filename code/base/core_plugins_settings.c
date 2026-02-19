@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -33,7 +33,7 @@
 #include "base.h"
 #include "config.h"
 #include "core_plugins_settings.h"
-#include "../public/ruby_core_plugin.h"
+#include "../public/Anhydrate_core_plugin.h"
 #include "hardware.h"
 #include "hardware_procs.h"
 #include "flags.h"
@@ -439,4 +439,5 @@ char* get_CorePluginGUID(int iPluginIndex)
 
    return s_CorePluginsRuntimeInfo[iPluginIndex].szGUID;
 }
+
 

@@ -12,3 +12,4 @@ my_plugin: my_plugin_source.o
 
 clean:
 	rm -f my_plugin.so.* *.o
+

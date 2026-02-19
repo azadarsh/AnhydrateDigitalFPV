@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -37,7 +37,7 @@
 #include "menu.h"
 #include "shared_vars.h"
 #include "timers.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "handle_commands.h"
 #include "pairing.h"
 #include "osd_common.h"
@@ -105,7 +105,7 @@ void PopupCameraParams::onShow()
    m_iIndexVolume = -1;
 
    if ( (NULL == g_pCurrentModel) || (!pairing_isStarted()) ||
-        ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotFCTelemetry && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnyRubyTelemetry+2000 < g_TimeNow) ) )
+        ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotFCTelemetry && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnyAnhydrateTelemetry+2000 < g_TimeNow) ) )
    {
       m_fFixedWidth = 0.3;
       setTitle("Camera Adjustment");
@@ -506,4 +506,5 @@ void PopupCameraParams::handleRotaryEvents(bool bCW, bool bCCW, bool bFastCW, bo
       m_bHasPendingAudioChanges = false;
    }
 }
+
 

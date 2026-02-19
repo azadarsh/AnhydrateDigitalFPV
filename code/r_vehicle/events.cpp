@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -33,7 +33,7 @@
 #include "../base/base.h"
 #include "../base/config.h"
 #include "../base/models.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/string_utils.h"
 #include "events.h"
 #include "shared_vars.h"

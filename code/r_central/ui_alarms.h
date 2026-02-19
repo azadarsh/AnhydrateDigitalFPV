@@ -16,3 +16,4 @@ void alarms_render();
 
 void alarms_add_from_vehicle(u32 uVehicleId, u32 uAlarms, u32 uFlags1, u32 uFlags2);
 void alarms_add_from_local(u32 uAlarms, u32 uFlags1, u32 uFlags2);
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -210,15 +210,15 @@ void radio_reset_packets_default_frequencies(int iRCEnabled)
    }
 
 
-   s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_RUBY_PING_CLOCK] = 100;
-   s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_RUBY_PING_CLOCK_REPLY] = 100;
+   s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_Anhydrate_PING_CLOCK] = 100;
+   s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY] = 100;
 
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_PING_CLOCK] = 100;
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_PING_CLOCK_REPLY] = 100;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_PING_CLOCK] = 100;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY] = 100;
 
    // Controller to vehicle
 
-   s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_RUBY_PAIRING_REQUEST] = 200;
+   s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_Anhydrate_PAIRING_REQUEST] = 200;
    s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_COMMAND] = 200;
    s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_VIDEO_ADAPTIVE_VIDEO_PARAMS] = 50;
    s_uFrequencyRadioPacketsOnSlowLinkControllerToVehicle[PACKET_TYPE_RC_FULL_FRAME] = 50;
@@ -226,38 +226,38 @@ void radio_reset_packets_default_frequencies(int iRCEnabled)
    
    // Vehicle to controller
 
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_PAIRING_CONFIRMATION] = 200;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION] = 200;
    s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_COMMAND_RESPONSE] = 200;
    
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_SHORT] = 300;
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_EXTENDED] = 400;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_SHORT] = 300;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED] = 400;
    s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_FC_TELEMETRY] = 400;
    s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_FC_TELEMETRY_EXTENDED] = 400;
    s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_FC_RC_CHANNELS] = 400;
    s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RC_TELEMETRY] = 400;
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS] = 400;
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY] = 400;
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY] = 400;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS] = 400;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY] = 400;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY] = 400;
    
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_ALARM] = 100;
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_ALARM] = 100;
 
    s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_VIDEO_ADAPTIVE_VIDEO_PARAMS_ACK] = 50;
 
-   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_MODEL_SETTINGS] = 0; // Send at any rate
+   s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_MODEL_SETTINGS] = 0; // Send at any rate
 
    if( iRCEnabled )
    {
-      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_SHORT] = 330;
-      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_EXTENDED] = 400;
+      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_SHORT] = 330;
+      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED] = 400;
       s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_FC_TELEMETRY] = 330;
       s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_FC_TELEMETRY_EXTENDED] = 400;
       s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_FC_RC_CHANNELS] = 400;
       s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RC_TELEMETRY] = 400;
-      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS] = 400;
-      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY] = 400;
-      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY] = 400;
+      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS] = 400;
+      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY] = 400;
+      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY] = 400;
       
-      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_RUBY_ALARM] = 100;
+      s_uFrequencyRadioPacketsOnSlowLinkVehicleToController[PACKET_TYPE_Anhydrate_ALARM] = 100;
    }
 }
 
@@ -1498,7 +1498,7 @@ int radio_write_raw_ieee_packet(int interfaceIndex, u8* pData, int dataLength, i
    if ( s_bRadioDebugFlag )
    {
       t_packet_header* pPH = (t_packet_header*)&s_uLastPacketBuilt[0];
-      if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK )
+      if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK )
       {
          s_uLastRadioPingSentTime = get_current_timestamp_ms();
          s_uLastRadioPingId = s_uLastPacketBuilt[sizeof(t_packet_header)];
@@ -1574,7 +1574,7 @@ int radio_write_raw_ieee_packet(int interfaceIndex, u8* pData, int dataLength, i
    if ( dataLength <= 96 )
    {
       log_line("Sent buffer over the radio (%d bytes [%d headers, %d data]):", dataLength, s_uLastPacketSentRadioTapHeaderLength + s_uLastPacketSentIEEEHeaderLength, dataLength - s_uLastPacketSentRadioTapHeaderLength - s_uLastPacketSentIEEEHeaderLength);
-      log_buffer5(pData, dataLength, s_uLastPacketSentRadioTapHeaderLength, s_uLastPacketSentIEEEHeaderLength, 10,6,8 ); // 24 is size of Ruby packet header
+      log_buffer5(pData, dataLength, s_uLastPacketSentRadioTapHeaderLength, s_uLastPacketSentIEEEHeaderLength, 10,6,8 ); // 24 is size of Anhydrate packet header
    }
    #endif
 
@@ -1722,3 +1722,4 @@ int radio_write_sik_packet(int interfaceIndex, u8* pData, int dataLength, u32 uT
 
    return dataLength;
 }
+

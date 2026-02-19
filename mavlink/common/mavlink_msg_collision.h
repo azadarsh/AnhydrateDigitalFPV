@@ -361,3 +361,4 @@ static inline void mavlink_msg_collision_decode(const mavlink_message_t* msg, ma
     memcpy(collision, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

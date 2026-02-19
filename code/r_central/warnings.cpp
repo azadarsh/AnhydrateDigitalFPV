@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -46,7 +46,7 @@
 
 #include <ctype.h>
 #include "link_watch.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "popup_log.h"
 #include "timers.h"
 

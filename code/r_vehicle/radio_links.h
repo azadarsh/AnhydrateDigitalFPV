@@ -10,3 +10,4 @@ bool radio_links_apply_settings(Model* pModel, int iRadioLink, type_radio_links_
 u32 radio_links_get_last_start_time();
 bool radio_links_are_marked_for_restart();
 bool radio_links_restart(bool bAsync);
+

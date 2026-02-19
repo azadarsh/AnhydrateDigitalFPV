@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -32,7 +32,7 @@
 
 #include "test_link_params.h"
 #include "../base/models_list.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/radio_utils.h"
 #include "../base/hardware_camera.h"
 #include "../base/hardware_procs.h"
@@ -148,17 +148,17 @@ void _test_link_end_and_notify()
    log_line("[TestLink-%d] Notify other components to reload model (end test)", s_iTestLinkCurrentRunCount);
    t_packet_header PH;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_MODEL_CHANGED, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY | (MODEL_CHANGED_RADIO_LINK_PARAMS<<8) | (((u32)s_iTestLinkIndex)<<16);
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate | (MODEL_CHANGED_RADIO_LINK_PARAMS<<8) | (((u32)s_iTestLinkIndex)<<16);
    PH.total_length = sizeof(t_packet_header);
    radio_packet_compute_crc((u8*)&PH, PH.total_length);
 
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastActiveTime = get_current_timestamp_ms();
 
-   ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
-   ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
    if ( g_pCurrentModel->rc_params.rc_enabled )
-      ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
    
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -450,7 +450,7 @@ void _test_link_switch_to_state(int iNewState, u32 uTimeout)
 void _test_link_send_start_confirmation_message()
 {
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
    PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
    PH.vehicle_id_dest = g_uControllerId;
    PH.total_length = sizeof(t_packet_header) + PACKET_TYPE_TEST_RADIO_LINK_HEADER_SIZE + sizeof(type_radio_links_parameters);
@@ -553,7 +553,7 @@ void test_link_process_received_message(int iInterfaceIndex, u8* pPacketBuffer)
       s_iTestLinkCurrentStepSendCount++;
 
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header) + PACKET_TYPE_TEST_RADIO_LINK_HEADER_SIZE + 2*sizeof(u32);
@@ -610,7 +610,7 @@ void test_link_process_received_message(int iInterfaceIndex, u8* pPacketBuffer)
       s_iTestLinkCurrentStepSendCount++;
 
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header) + PACKET_TYPE_TEST_RADIO_LINK_HEADER_SIZE + 2*sizeof(u32);
@@ -666,7 +666,7 @@ void test_link_process_received_message(int iInterfaceIndex, u8* pPacketBuffer)
       s_iTestLinkCurrentStepSendCount++;
 
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header) + PACKET_TYPE_TEST_RADIO_LINK_HEADER_SIZE + 1;
@@ -813,7 +813,7 @@ void test_link_loop()
          s_iTestLinkCurrentStepSendCount++;
          s_uTimeLastUpdateCurrentState = g_TimeNow;
          t_packet_header PH;
-         radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
+         radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_TEST_RADIO_LINK, STREAM_ID_DATA);
          PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
          PH.vehicle_id_dest = g_uControllerId;
          PH.total_length = sizeof(t_packet_header) + PACKET_TYPE_TEST_RADIO_LINK_HEADER_SIZE + 1;
@@ -833,3 +833,4 @@ void test_link_loop()
       return;
    }
 }
+

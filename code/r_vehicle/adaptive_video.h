@@ -15,3 +15,4 @@ void adaptive_video_on_end_of_frame();
 void adaptive_video_check_update_params();
 void adaptive_video_periodic_loop();
 void adaptive_video_on_message_from_controller(u32 uRequestId, u8 uFlags, u32 uVideoBitrate, u16 uECScheme, u8 uStreamIndex, int iRadioDatarate, int iKeyframeMs, u8 uDRBoost);
+

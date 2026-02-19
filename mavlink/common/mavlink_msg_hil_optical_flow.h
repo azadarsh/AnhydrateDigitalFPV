@@ -486,3 +486,4 @@ static inline void mavlink_msg_hil_optical_flow_decode(const mavlink_message_t* 
     memcpy(hil_optical_flow, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

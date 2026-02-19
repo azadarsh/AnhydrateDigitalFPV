@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -441,3 +441,4 @@ void MenuControllerJoystick::onSelectItem()
       send_model_changed_message_to_router(MODEL_CHANGED_GENERIC, 0);
    }
 }
+

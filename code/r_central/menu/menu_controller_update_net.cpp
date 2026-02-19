@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -73,11 +73,11 @@ void MenuControllerUpdateNet::addItems()
       m_uImgIdInfoEth = g_pRenderEngine->loadIcon("res/info_ethusb.png");
    removeAllTopLines();
    addExtraHeightAtStart(0.14);
-   addTopLine(L("Connect your Ruby controller to your home internet router using an ETH cable and then press the [Check for Updates] button to check online if there are any Ruby updates available for your system."));
-   addTopLine(L("If your Ruby controller does not have an ETH port, you can use a USB to ETH adapter to connect it."));
+   addTopLine(L("Connect your Anhydrate controller to your home internet router using an ETH cable and then press the [Check for Updates] button to check online if there are any Anhydrate updates available for your system."));
+   addTopLine(L("If your Anhydrate controller does not have an ETH port, you can use a USB to ETH adapter to connect it."));
    addTopLine(L("Vehicles:"));
    addTopLine(L("If your controller gets updated then you will have the option to update over the radio link (OTA) your vehicles and air units as soon as you connect to them."));
-   m_iIndexMenuCheck = addMenuItem(new MenuItem(L("Check for Updates"), L("Checks for Ruby updates available online.")));
+   m_iIndexMenuCheck = addMenuItem(new MenuItem(L("Check for Updates"), L("Checks for Anhydrate updates available online.")));
    m_iIndexMenuBack = addMenuItem(new MenuItem(L("Back"), L("Closes this menu.")));
 
    m_pMenuItems[1]->setExtraHeight(getMenuFontHeight());
@@ -203,7 +203,7 @@ void* _thread_check_update(void *argument)
    pMenu->onUpdateCounter();
 
    hw_execute_bash_command("rm -rf ver-git.txt", NULL);
-   system("/usr/bin/wget --no-check-certificate -q https://raw.githubusercontent.com/RubyFPV/RubyFPV/refs/heads/main/version_ruby_base.txt -O ver-git.txt");
+   system("/usr/bin/wget --no-check-certificate -q https://raw.githubusercontent.com/AnhydrateDigitalFPV/AnhydrateDigitalFPV/refs/heads/main/version_Anhydrate_base.txt -O ver-git.txt");
 
    hardware_sleep_ms(500);
 
@@ -298,7 +298,7 @@ void MenuControllerUpdateNet::onFinishChecksUpdate()
    if ( m_iUpdateThreadResult == 1 )
    {
       char szURL[512];
-      snprintf(szURL, sizeof(szURL)/sizeof(szURL[0]), "https://github.com/RubyFPV/RubyFPV/releases/download/%d.%d/ruby_update_%d.%d.zip",
+      snprintf(szURL, sizeof(szURL)/sizeof(szURL[0]), "https://github.com/AnhydrateDigitalFPV/AnhydrateDigitalFPV/releases/download/%d.%d/Anhydrate_update_%d.%d.zip",
          m_iOnlineVersionMajor, m_iOnlineVersionMinor, m_iOnlineVersionMajor, m_iOnlineVersionMinor);
       log_line("Doing update from URL: (%s)", szURL);
       updateControllerSoftware(szURL);
@@ -306,7 +306,7 @@ void MenuControllerUpdateNet::onFinishChecksUpdate()
    }
 
    if ( m_iUpdateThreadResult == 2 )
-      addMessage(L("You already have the latest Ruby version."));
+      addMessage(L("You already have the latest Anhydrate version."));
    if ( m_iUpdateThreadResult == -1 )
       addMessage(L("Failed to check for new versions online. Please check your internet connection."));
    if ( m_iUpdateThreadResult == -2  )
@@ -365,3 +365,4 @@ void MenuControllerUpdateNet::onSelectItem()
       pthread_attr_destroy(&attr);
    }
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -45,7 +45,7 @@
 #include "shared_vars.h"
 #include "shared_vars_state.h"
 #include "timers.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 
 extern t_packet_queue s_QueueRadioPacketsHighPrio;
 

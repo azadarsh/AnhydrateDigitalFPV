@@ -118,3 +118,4 @@ u32 get_next_favorite(u32 uVehicleId)
    }
    return uVehicleId;
 }
+

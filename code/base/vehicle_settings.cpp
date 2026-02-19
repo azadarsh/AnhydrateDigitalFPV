@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -125,3 +125,4 @@ VehicleSettings* get_VehicleSettings()
       load_VehicleSettings();
    return &s_VehicleSettings;
 }
+

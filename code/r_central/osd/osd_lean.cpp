@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -182,31 +182,31 @@ void render_osd_layout_lean()
    }
    sprintf(szBuff, "LINK QUALITY %d%%", nQualityMain);
 
-   bool bHasRubyRC = false;
+   bool bHasAnhydrateRC = false;
    
    if ( NULL != g_pCurrentModel )
    if ( g_pCurrentModel->rc_params.rc_enabled && (!g_pCurrentModel->is_spectator) )
-      bHasRubyRC = true;
+      bHasAnhydrateRC = true;
  
-   if ( NULL != g_pCurrentModel && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
+   if ( NULL != g_pCurrentModel && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
    {
       int val = 0;
-      if ( bHasRubyRC )
-         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_rc_rssi;
-      else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI )
-         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_mavlink_rc_rssi;
+      if ( bHasAnhydrateRC )
+         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_rc_rssi;
+      else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI )
+         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_mavlink_rc_rssi;
 
-      //if ( ! bHasRubyRC )
+      //if ( ! bHasAnhydrateRC )
       //if ( val == 0 || val == 255 )
-      //if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RX_RSSI )
-      //   val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_mavlink_rx_rssi;
+      //if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RX_RSSI )
+      //   val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_mavlink_rx_rssi;
 
       if ( val != 255 )
          sprintf(szBuff, "RC RSSI: %d%%", val);
       else
          strcpy(szBuff, "RC RSSI: ---");
    }
-   if ( bHasRubyRC && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bRCFailsafeState )
+   if ( bHasAnhydrateRC && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bRCFailsafeState )
       strcpy(szBuff, "!RC FS!");
 
 
@@ -723,31 +723,31 @@ void render_osd_layout_lean_extended()
    sprintf(szBuff2, "LINK");
    if ( s_bDebugOSDShowAll || (g_pCurrentModel->osd_params.osd_flags[osd_get_current_layout_index()] & OSD_FLAG_SHOW_RADIO_LINKS) )
    {
-      bool bHasRubyRC = false;
+      bool bHasAnhydrateRC = false;
    
       if ( NULL != g_pCurrentModel )
       if ( g_pCurrentModel->rc_params.rc_enabled && (!g_pCurrentModel->is_spectator) )
-         bHasRubyRC = true;
+         bHasAnhydrateRC = true;
  
-      if ( NULL != g_pCurrentModel && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
+      if ( NULL != g_pCurrentModel && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
       {
-         if ( bHasRubyRC )
+         if ( bHasAnhydrateRC )
          {
-            sprintf(szBuff, "RC RSSI: %d%%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_rc_rssi);
+            sprintf(szBuff, "RC RSSI: %d%%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_rc_rssi);
             strcpy(szBuff2, "RC RSSI");
          }
-         else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI )
+         else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI )
          {
-            sprintf(szBuff, "RC RSSI: %d%%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_mavlink_rc_rssi);
+            sprintf(szBuff, "RC RSSI: %d%%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_mavlink_rc_rssi);
             strcpy(szBuff2, "RC RSSI");
          }
-         else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI )
+         else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI )
          {
-            sprintf(szBuff, "RC RSSI: %d%%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_mavlink_rx_rssi);
+            sprintf(szBuff, "RC RSSI: %d%%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_mavlink_rx_rssi);
             strcpy(szBuff2, "RC RSSI");
          }
       }
-      if ( bHasRubyRC && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bRCFailsafeState )
+      if ( bHasAnhydrateRC && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bRCFailsafeState )
       {
          strcpy(szBuff, "!RC FS!");
          strcpy(szBuff2, "RC RSSI");
@@ -797,3 +797,4 @@ void render_osd_layout_lean_extended()
       xCell += xCellWidth;
    }
 }
+

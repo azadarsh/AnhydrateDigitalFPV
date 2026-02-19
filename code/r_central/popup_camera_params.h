@@ -37,3 +37,4 @@ class PopupCameraParams: public Popup
       u32 m_uTimeLastChange;
       MenuItemSlider* m_pSlider;
 };
+

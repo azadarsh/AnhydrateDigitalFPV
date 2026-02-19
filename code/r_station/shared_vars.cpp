@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -43,7 +43,7 @@ u32 g_uControllerId = MAX_U32;
 
 bool g_bSearching = false;
 u32  g_uSearchFrequency = 0;
-u32  g_uAcceptedFirmwareType = MODEL_FIRMWARE_TYPE_RUBY;
+u32  g_uAcceptedFirmwareType = MODEL_FIRMWARE_TYPE_Anhydrate;
 bool g_bUpdateInProgress = false;
 
 // Router
@@ -101,3 +101,4 @@ int g_iDebugShowKeyFramesAfterRelaySwitch = 0;
 int g_iGetSiKConfigAsyncResult = 0;
 int g_iGetSiKConfigAsyncRadioInterfaceIndex = -1;
 u8 g_uGetSiKConfigAsyncVehicleLinkIndex = 0;
+

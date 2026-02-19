@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -34,14 +34,14 @@
 #include "telemetry.h"
 #include "shared_vars.h"
 #include "timers.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/msp.h"
 
 void broadcast_vehicle_stats();
 bool isRadioLinksInitInProgress();
 
 extern int s_fIPCToRouter;
-extern t_packet_header_ruby_telemetry_extended_v6 sPHRTE;
+extern t_packet_header_Anhydrate_telemetry_extended_v6 sPHRTE;
 extern u32 s_CountMessagesFromFCPerSecond;
 
 u8 s_uMSPRawInputStream[256]; // Max size is one byte long
@@ -141,7 +141,7 @@ void _send_msp_telemetry_packet_to_controller(bool bSendIfEmpty)
 
    if ( g_bRouterReady && (!g_bLongTaskStarted) && (! isRadioLinksInitInProgress()) )
    {
-      int result = ruby_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
+      int result = Anhydrate_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
       if ( result != PH.total_length )
          log_softerror_and_alarm("[Telem] Failed to send data to router. Sent result: %d", result );
    }
@@ -611,7 +611,7 @@ void telemetry_msp_send_to_controller()
 
    if ( g_bRouterReady && (! isRadioLinksInitInProgress()) )
    {
-      int result = ruby_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
+      int result = Anhydrate_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
       if ( result != PH.total_length )
          log_softerror_and_alarm("Failed to send data to router. Sent result: %d", result );
    }
@@ -619,3 +619,4 @@ void telemetry_msp_send_to_controller()
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
 }
+

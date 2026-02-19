@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -60,7 +60,7 @@ RenderEngineCairo::RenderEngineCairo()
    log_line("[RenderEngineCairo] RendererCairo: Init started.");
    m_bMustTestFontAccess = true;
    m_bHasNewFont = false;
-   type_drm_display_attributes* pDisplayInfo = ruby_drm_get_main_display_info();
+   type_drm_display_attributes* pDisplayInfo = Anhydrate_drm_get_main_display_info();
    m_iRenderWidth = pDisplayInfo->iWidth;
    m_iRenderHeight = pDisplayInfo->iHeight;
    m_fPixelWidth = 1.0/(float)m_iRenderWidth;
@@ -69,8 +69,8 @@ RenderEngineCairo::RenderEngineCairo()
    log_line("[RenderEngineCairo] Display size is: %d x %d, pixel size: %.4f x %.4f",
     m_iRenderWidth, m_iRenderHeight,
     m_fPixelWidth, m_fPixelHeight);
-   type_drm_buffer* pMainDisplayBuffer = ruby_drm_core_get_main_draw_buffer();
-   type_drm_buffer* pBackDisplayBuffer = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pMainDisplayBuffer = Anhydrate_drm_core_get_main_draw_buffer();
+   type_drm_buffer* pBackDisplayBuffer = Anhydrate_drm_core_get_back_draw_buffer();
    
    log_line("[RenderEngineCairo] Display buffers size: front: %d x %d, back: %d x %d",
       pMainDisplayBuffer->uWidth, pMainDisplayBuffer->uHeight,
@@ -138,7 +138,7 @@ void RenderEngineCairo::startFrame()
    s_iLastCairoFontFamilyId = -1;
    s_bLastCairoFontStyleBold = false;
    
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    
    memset(pOutputBufferInfo->pData, m_uClearBufferByte, pOutputBufferInfo->uSize);
    
@@ -174,7 +174,7 @@ void RenderEngineCairo::endFrame()
       cairo_destroy(m_pCairoTempCtx);
    m_pCairoTempCtx = NULL;
 
-   ruby_drm_swap_mainback_buffers();
+   Anhydrate_drm_swap_mainback_buffers();
    RenderEngine::endFrame();
 }
 
@@ -208,7 +208,7 @@ cairo_t* RenderEngineCairo::_createTempDrawContext()
    s_iLastCairoFontFamilyId = -1;
    s_bLastCairoFontStyleBold = false;
 
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    
    if ( pOutputBufferInfo->uBufferId == m_uRenderDrawSurfacesIds[0] )
    if ( NULL != m_pMainCairoSurface[0] )
@@ -558,7 +558,7 @@ void RenderEngineCairo::bltImage(float xPosDest, float yPosDest, float fWidthDes
    if ( (xDest < 0) || (yDest < 0) || (xDest+wDest > m_iRenderWidth) || (yDest+hDest > m_iRenderHeight) )
       return;
 
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pSrcImageData = cairo_image_surface_get_data(m_pImages[indexImage]);
    int iSrcImageStride = cairo_image_surface_get_stride(m_pImages[indexImage]);
 
@@ -648,7 +648,7 @@ void RenderEngineCairo::bltSprite(float xPosDest, float yPosDest, int iSrcX, int
    if ( (xDest < 0) || (yDest < 0) || (xDest+iSrcWidth >= m_iRenderWidth) || (yDest+iSrcHeight >= m_iRenderHeight) )
       return;
 
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pSrcImageData = cairo_image_surface_get_data(m_pImages[indexImage]);
    int iSrcImageStride = cairo_image_surface_get_stride(m_pImages[indexImage]);
 
@@ -718,7 +718,7 @@ void RenderEngineCairo::drawIcon(float xPos, float yPos, float fWidth, float fHe
    if ( (x < 0) || (y < 0) || (x+w >= m_iRenderWidth) || (y+h >= m_iRenderHeight) )
       return;
 
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pSrcImageData = cairo_image_surface_get_data(m_pIcons[indexIcon]);
    int iSrcImageStride = cairo_image_surface_get_stride(m_pIcons[indexIcon]);
 
@@ -810,7 +810,7 @@ void RenderEngineCairo::bltIcon(float xPosDest, float yPosDest, int iSrcX, int i
    if ( (ixPosDest < 0) || (iyPosDest < 0) || (ixPosDest+iSrcWidth >= m_iRenderWidth) || (iyPosDest+iSrcHeight >= m_iRenderHeight) )
       return;
 
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pSrcImageData = cairo_image_surface_get_data(m_pIcons[indexIcon]);
    int iSrcImageStride = cairo_image_surface_get_stride(m_pIcons[indexIcon]);
 
@@ -880,7 +880,7 @@ inline void RenderEngineCairo::_blend_pixel(unsigned char* pixel, unsigned char 
 
 void RenderEngineCairo::_draw_hline(int x, int y, int w, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pDestLine = (&(pOutputBufferInfo->pData[0])) + y*pOutputBufferInfo->uStride + 4*x;
    for( int i=0; i<w; i++ )
    {
@@ -893,7 +893,7 @@ void RenderEngineCairo::_draw_hline(int x, int y, int w, unsigned char r, unsign
 
 void RenderEngineCairo::_draw_vline(int x, int y, int h, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pDestLine = (&(pOutputBufferInfo->pData[0])) + y*pOutputBufferInfo->uStride + 4*x;
    for( int i=0; i<h; i++ )
    {
@@ -1015,7 +1015,7 @@ void RenderEngineCairo::drawRect(float xPos, float yPos, float fWidth, float fHe
    // Output surface format order is: BGRA
    if ( a > 2 )
    {
-      type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+      type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
       u32* pDest = NULL;
       u32 uColor = (((u32)a) << 24) | (((u32)r) << 16) | (((u32)g) << 8) | ((u32)b);
 
@@ -1176,7 +1176,7 @@ void RenderEngineCairo::drawRoundRect(float xPos, float yPos, float fWidth, floa
       u8 g = m_ColorFill[1];
       u8 b = m_ColorFill[2];
       u8 a = m_ColorFill[3];
-      type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+      type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
       for( int y=0; y<h; y++ )
       {
          u8* pDestLine = (u8*)&(pOutputBufferInfo->pData[(ySt+y)*pOutputBufferInfo->uStride]);
@@ -1284,7 +1284,7 @@ void RenderEngineCairo::drawRoundRectMenu(float xPos, float yPos, float fWidth, 
       u8 g = m_ColorFill[1];
       u8 b = m_ColorFill[2];
       u8 a = m_ColorFill[3];
-      type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+      type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
       for( int y=0; y<h; y++ )
       {
          u8* pDestLine = (u8*)&(pOutputBufferInfo->pData[(ySt+y)*pOutputBufferInfo->uStride]);
@@ -1830,7 +1830,7 @@ void RenderEngineCairo::_bltFontChar(int iDestX, int iDestY, int iSrcX, int iSrc
    if ( (iDestX < 0) || (iDestY < 0) || (iDestX+iSrcWidth >= m_iRenderWidth) || (iDestY+iSrcHeight >= m_iRenderHeight) )
       return;
 
-   type_drm_buffer* pOutputBufferInfo = ruby_drm_core_get_back_draw_buffer();
+   type_drm_buffer* pOutputBufferInfo = Anhydrate_drm_core_get_back_draw_buffer();
    u8* pSrcImageData = cairo_image_surface_get_data((cairo_surface_t*)pFont->pImageObject);
    int iSrcImageStride = cairo_image_surface_get_stride((cairo_surface_t*)pFont->pImageObject);
 
@@ -1859,3 +1859,4 @@ void RenderEngineCairo::_bltFontChar(int iDestX, int iDestY, int iSrcX, int iSrc
       }
    }
 }
+

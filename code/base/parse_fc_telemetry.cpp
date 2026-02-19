@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -298,7 +298,7 @@ bool _check_add_fc_message(char* szMessage)
    return true;
 }
 
-void _process_mav_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_ruby_telemetry_extended_v6* pPHRTE, u8 vehicleType)
+void _process_mav_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE, u8 vehicleType)
 {
    char szBuff[512];
    u32 tmp32;
@@ -533,14 +533,14 @@ void _process_mav_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_
          if ( /*(tmpi != 255) &&*/ (NULL != pPHRTE) )
          {
             pdpfct->rc_rssi = (tmpi*100)/255;
-            if ( ! (pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI) )
+            if ( ! (pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI) )
             {
                log_line("Received RC RSSI from FC through MAVLink, value: %d", pdpfct->rc_rssi);
-               pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI;
+               pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI;
             }
             pPHRTE->uplink_mavlink_rc_rssi = pdpfct->rc_rssi;
          }
-         //if ( NULL != pPHRTE && (pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI) && (tmpi == 255) )
+         //if ( NULL != pPHRTE && (pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI) && (tmpi == 255) )
          //   pPHRTE->uplink_mavlink_rc_rssi = 255;
 
          s_MAVLinkRCChannels[0] = mavlink_msg_rc_channels_raw_get_chan1_raw(&msgMav);
@@ -559,14 +559,14 @@ void _process_mav_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_
          if ( /*(tmpi != 255) &&*/ (NULL != pPHRTE) )
          {
             pdpfct->rc_rssi = (tmpi*100)/255;
-            if ( ! (pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI) )
+            if ( ! (pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI) )
             {
                log_line("Received RC RSSI from FC through MAVLink, value: %d", pdpfct->rc_rssi);
-               pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI;
+               pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI;
             }
             pPHRTE->uplink_mavlink_rc_rssi = pdpfct->rc_rssi;
          }
-         //if ( NULL != pPHRTE && (pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI) && (tmpi == 255) )
+         //if ( NULL != pPHRTE && (pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI) && (tmpi == 255) )
          //   pPHRTE->uplink_mavlink_rc_rssi = 255;
 
          s_MAVLinkRCChannels[0] = mavlink_msg_rc_channels_get_chan1_raw(&msgMav);
@@ -592,10 +592,10 @@ void _process_mav_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_
 
          if ( NULL != pPHRTE )
          {
-            if ( ! (pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RX_RSSI) )
+            if ( ! (pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RX_RSSI) )
             {
                log_line("Received RX RSSI from FC through MAVLink, value: %d", tmp8);
-               pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RX_RSSI;
+               pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RX_RSSI;
             }
             pPHRTE->uplink_mavlink_rx_rssi = tmp8;
          }
@@ -712,7 +712,7 @@ void _process_mav_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_
    }
 }
 
-bool parse_telemetry_from_fc( u8* buffer, int length, t_packet_header_fc_telemetry* pphfct, t_packet_header_ruby_telemetry_extended_v6* pPHRTE, u8 vehicleType, int telemetry_type )
+bool parse_telemetry_from_fc( u8* buffer, int length, t_packet_header_fc_telemetry* pphfct, t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE, u8 vehicleType, int telemetry_type )
 {
    if ( telemetry_type == TELEMETRY_TYPE_LTM )
       return parse_telemetry_from_fc_ltm(buffer, length, pphfct, pPHRTE, vehicleType);

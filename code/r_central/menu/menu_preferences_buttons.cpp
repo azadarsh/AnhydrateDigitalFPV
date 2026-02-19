@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -268,7 +268,7 @@ void MenuButtons::onSelectItem()
       pCS->nRotaryEncoderSpeed = m_pItemsSelect[6]->getSelectedIndex();
       save_ControllerSettings();
       char szBuff[128];
-      sprintf(szBuff, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_I2C_UPDATED);
+      sprintf(szBuff, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_I2C_UPDATED);
       hw_execute_bash_command_silent(szBuff, NULL);
       valuesToUI();
       return;
@@ -287,7 +287,7 @@ void MenuButtons::onSelectItem()
       pCS->nRotaryEncoderSpeed2 = m_pItemsSelect[8]->getSelectedIndex();
       save_ControllerSettings();
       char szBuff[128];
-      sprintf(szBuff, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_I2C_UPDATED);
+      sprintf(szBuff, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_I2C_UPDATED);
       hw_execute_bash_command_silent(szBuff, NULL);
       valuesToUI();
       return;
@@ -296,3 +296,4 @@ void MenuButtons::onSelectItem()
    save_Preferences();
    hardware_swap_buttons(p->iSwapUpDownButtons);
 }
+

@@ -303,3 +303,4 @@ static inline void mavlink_msg_param_value_decode(const mavlink_message_t* msg, 
     memcpy(param_value, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

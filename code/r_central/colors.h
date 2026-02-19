@@ -32,3 +32,4 @@ const double* get_Color_OSDElementChanged();
 void set_Color_OSDText(float r, float g, float b, float a);
 void set_Color_OSDOutline(float r, float g, float b, float a);
 
+

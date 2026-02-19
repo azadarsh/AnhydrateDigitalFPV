@@ -54,3 +54,4 @@ class MenuItemRadio: public MenuItem
       float m_fSelectorWidth;
       float m_fLegendDx;
 };
+

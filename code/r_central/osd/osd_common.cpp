@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -58,7 +58,7 @@
 #include "../launchers_controller.h"
 
 
-u32 g_idIconRuby = 0;
+u32 g_idIconAnhydrate = 0;
 u32 g_idIconOpenIPC = 0;
 u32 g_idIconDrone = 0;
 u32 g_idIconPlane = 0;
@@ -295,7 +295,7 @@ float _osd_convertHeightMeters(float m)
 
 bool osd_load_resources()
 {
-   g_idIconRuby = g_pRenderEngine->loadIcon("res/icon_ruby.png");
+   g_idIconAnhydrate = g_pRenderEngine->loadIcon("res/icon_Anhydrate.png");
    g_idIconOpenIPC = g_pRenderEngine->loadIcon("res/openipc.png");
    g_idIconDrone = g_pRenderEngine->loadIcon("res/icon_v_drone.png");
    g_idIconPlane = g_pRenderEngine->loadIcon("res/icon_v_plane.png");
@@ -563,7 +563,7 @@ float osd_show_value_centered(float x, float y, const char* szValue, u32 fontId)
 
 u32 osd_getVehicleIcon(int vehicle_type)
 {
-   u32 idIcon = g_idIconRuby;
+   u32 idIcon = g_idIconAnhydrate;
 
    if ( (vehicle_type & MODEL_TYPE_MASK) == MODEL_TYPE_DRONE )
       idIcon = g_idIconDrone;
@@ -928,3 +928,4 @@ u32 osd_get_current_data_source_vehicle_id()
       uVehicleId = g_VehiclesRuntimeInfo[s_iCurrentOSDVehicleDataSourceRuntimeIndex].pModel->uVehicleId;
    return uVehicleId;
 }
+

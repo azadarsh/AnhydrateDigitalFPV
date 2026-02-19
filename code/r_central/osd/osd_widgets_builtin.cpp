@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -105,3 +105,4 @@ void osd_widget_builtin_altitude_render(type_osd_widget* pWidgetInfo, type_osd_w
    //double c[4] = {255,0,0,0.9};
    //g_pRenderEngine->setColors(c);
 }
+

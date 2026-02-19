@@ -386,3 +386,4 @@ static inline void mavlink_msg_video_stream_status_decode(const mavlink_message_
     memcpy(video_stream_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -486,3 +486,4 @@ static inline void mavlink_msg_gps2_raw_decode(const mavlink_message_t* msg, mav
     memcpy(gps2_raw, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

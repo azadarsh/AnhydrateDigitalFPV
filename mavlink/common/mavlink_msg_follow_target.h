@@ -457,3 +457,4 @@ static inline void mavlink_msg_follow_target_decode(const mavlink_message_t* msg
     memcpy(follow_target, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

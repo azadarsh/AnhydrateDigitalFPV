@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -432,7 +432,7 @@ void rx_scope_read_data()
       s_RXScopeRXSlices[sliceIndex].received_telemetry++;
    else if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_COMMANDS )
       s_RXScopeRXSlices[sliceIndex].received_commands++;
-   else if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_RUBY )
+   else if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_Anhydrate )
       s_RXScopeRXSlices[sliceIndex].received_commands++;
    else if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_VIDEO )
    {
@@ -526,3 +526,4 @@ void rx_scope_loop()
          s_RXScopeZoom = 3;
    }
 }
+

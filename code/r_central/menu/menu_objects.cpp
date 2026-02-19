@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -2091,7 +2091,7 @@ static void * _thread_generate_upload(void *argument)
    hw_execute_bash_command(szComm, NULL);
 
    char szPathTempUpload[MAX_FILE_PATH_SIZE];
-   strcpy(szPathTempUpload, FOLDER_RUBY_TEMP);
+   strcpy(szPathTempUpload, FOLDER_Anhydrate_TEMP);
    strcat(szPathTempUpload, "tempUploadFiles/");
    sprintf(szComm, "mkdir -p %s", szPathTempUpload);
    hw_execute_bash_command(szComm, NULL);
@@ -2111,7 +2111,7 @@ static void * _thread_generate_upload(void *argument)
       log_error_and_alarm("ThreadGenerateUpload: Invalid vehicle board type: none of the known ones.");
 
    strcpy(szFile, szFolderLocalUpdateBinaries);
-   strcat(szFile, "ruby_start");
+   strcat(szFile, "Anhydrate_start");
    if ( ! hardware_file_check_and_fix_access(szFile) )
    {
       log_softerror_and_alarm("ThreadGenerateUpload: vehicle update binaries are missing from folder: %s", szFolderLocalUpdateBinaries);
@@ -2127,10 +2127,10 @@ static void * _thread_generate_upload(void *argument)
    snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s%s %s 2>/dev/null", FOLDER_CONFIG, FILE_INFO_LAST_UPDATE, szPathTempUpload);
    hw_execute_bash_command(szComm, NULL);
 
-   // This is added for updating vehicles older than 11.6, they look for ruby_update_vehicle to execute on update
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %sruby_update %sruby_update_vehicle", szFolderLocalUpdateBinaries, szFolderLocalUpdateBinaries);
+   // This is added for updating vehicles older than 11.6, they look for Anhydrate_update_vehicle to execute on update
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %sAnhydrate_update %sAnhydrate_update_vehicle", szFolderLocalUpdateBinaries, szFolderLocalUpdateBinaries);
    hw_execute_bash_command(szComm, NULL);
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "chmod 777 %s/ruby_update_vehicle", szFolderLocalUpdateBinaries);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "chmod 777 %s/Anhydrate_update_vehicle", szFolderLocalUpdateBinaries);
    hw_execute_bash_command(szComm, NULL);
 
    snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s* %s 2>/dev/null", szFolderLocalUpdateBinaries, szPathTempUpload);
@@ -2201,7 +2201,7 @@ static void * _thread_generate_upload(void *argument)
 bool Menu::_generate_upload_archive(char* szArchiveName)
 {
    g_TimeNow = get_current_timestamp_ms();
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    s_bThreadGenerateUploadError = false;
    s_szThreadGenerateUploadErrorString[0] = 0;
@@ -2209,7 +2209,7 @@ bool Menu::_generate_upload_archive(char* szArchiveName)
    if ( 0 != pthread_create(&pThread, NULL, &_thread_generate_upload, szArchiveName) )
    {
       render_commands_set_progress_percent(-1, true);
-      ruby_resume_watchdog("upload generate failed");
+      Anhydrate_resume_watchdog("upload generate failed");
       g_bUpdateInProgress = false;
       addMessage(L("There was an error generating software upload file."));
       return false;
@@ -2229,7 +2229,7 @@ bool Menu::_generate_upload_archive(char* szArchiveName)
       if ( checkCancelUpload() )
       {
          render_commands_set_progress_percent(-1, true);
-         ruby_resume_watchdog("upload canceled");
+         Anhydrate_resume_watchdog("upload canceled");
          g_bUpdateInProgress = false;
          return false;
       }
@@ -2251,12 +2251,12 @@ bool Menu::_generate_upload_archive(char* szArchiveName)
    if ( s_iThreadGenerateUploadCounter < 0 )
       s_iThreadGenerateUploadCounter = 0;
    g_TimeNow = get_current_timestamp_ms();
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    if ( s_bThreadGenerateUploadError )
    {
       render_commands_set_progress_percent(-1, true);
-      ruby_resume_watchdog("upload thread error");
+      Anhydrate_resume_watchdog("upload thread error");
       g_bUpdateInProgress = false;
       return false;
    }
@@ -2278,7 +2278,7 @@ bool Menu::uploadSoftware()
 {
    log_line("Menu: Start upload procedure for vehicle software version %d.%d (mode: %s)...", get_sw_version_major(g_pCurrentModel), get_sw_version_minor(g_pCurrentModel), g_pCurrentModel->is_spectator?"spectator mode":"control mode");
 
-   ruby_pause_watchdog("uploading software to vehicle");
+   Anhydrate_pause_watchdog("uploading software to vehicle");
    render_commands_init();
    g_bUpdateInProgress = true;
    render_commands_set_progress_percent(0, true);
@@ -2297,7 +2297,7 @@ bool Menu::uploadSoftware()
    if ( ! _generate_upload_archive(szArchiveToUpload) )
    {
       render_commands_set_progress_percent(-1, true);
-      ruby_resume_watchdog("upload failed");
+      Anhydrate_resume_watchdog("upload failed");
       g_bUpdateInProgress = false;
       if ( s_bThreadGenerateUploadError )
          addMessage2(0, L("Vehicle update binary files are missing or update procedure changed. Please update (again) your controller."), s_szThreadGenerateUploadErrorString);
@@ -2317,7 +2317,7 @@ bool Menu::uploadSoftware()
    if ( ! _uploadVehicleUpdate(szArchiveToUpload) )
    {
       render_commands_set_progress_percent(-1, true);
-      ruby_resume_watchdog("upload failed");
+      Anhydrate_resume_watchdog("upload failed");
       g_bUpdateInProgress = false;
       addMessage(L("There was an error updating your vehicle."));
       return false;
@@ -2341,7 +2341,7 @@ bool Menu::uploadSoftware()
       hardware_sleep_ms(100);
       g_TimeNow = get_current_timestamp_ms();
       g_TimeNowMicros = get_current_timestamp_micros();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       if ( checkCancelUpload() )
       {
          log_line("Update was canceled by user.");
@@ -2413,7 +2413,7 @@ bool Menu::uploadSoftware()
    }
    if ( bProcessingFailed )
    {
-      ruby_resume_watchdog("upload processing failed");
+      Anhydrate_resume_watchdog("upload processing failed");
       g_bUpdateInProgress = false;
       send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_UPDATE_STOPED,0);
       if ( 0 != szProcessingError[0] )
@@ -2433,7 +2433,7 @@ bool Menu::uploadSoftware()
       {
          g_TimeNow = get_current_timestamp_ms();
          try_read_messages_from_router(50);
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          if ( g_TimeNow > (uTimeLastRender+100) )
          {
             uTimeLastRender = g_TimeNow;
@@ -2456,7 +2456,7 @@ bool Menu::uploadSoftware()
             break;
          }
          try_read_messages_from_router(50);
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          if ( g_TimeNow > (uTimeLastRender+100) )
          {
             uTimeLastRender = g_TimeNow;
@@ -2480,7 +2480,7 @@ bool Menu::uploadSoftware()
    g_bAskedForNegociateRadioLink = false;
    g_bUpdateInProgress = false;
    send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_UPDATE_STOPED,0);
-   ruby_resume_watchdog("update finished");
+   Anhydrate_resume_watchdog("update finished");
 
    log_line("Finished software upload procedure.");
    return true;
@@ -2786,7 +2786,7 @@ bool Menu::_uploadVehicleUpdate(const char* szArchiveToUpload)
    }
 
    log_line("Uploading %d sw segments", nTotalPackets);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_UPDATE_STARTED,0);
 
@@ -2814,7 +2814,7 @@ bool Menu::_uploadVehicleUpdate(const char* szArchiveToUpload)
 
          g_TimeNow = get_current_timestamp_ms();
          g_TimeNowMicros = get_current_timestamp_micros();
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
 
          for( int k=0; k<2; k++ )
             handle_commands_send_single_oneway_command(0, COMMAND_ID_UPLOAD_SW_TO_VEHICLE63, bWaitAck, pPacket, pcpsp->block_length+sizeof(command_packet_sw_package));
@@ -2840,7 +2840,7 @@ bool Menu::_uploadVehicleUpdate(const char* szArchiveToUpload)
       {
          g_TimeNow = get_current_timestamp_ms();
          g_TimeNowMicros = get_current_timestamp_micros();
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
 
          if ( ! handle_commands_send_command_once_to_vehicle(COMMAND_ID_UPLOAD_SW_TO_VEHICLE63, resendCounter, bWaitAck, pPacket, pcpsp->block_length+sizeof(command_packet_sw_package)) )
          {
@@ -2919,7 +2919,7 @@ bool Menu::_uploadVehicleUpdate(const char* szArchiveToUpload)
 
       g_TimeNow = get_current_timestamp_ms();
       g_TimeNowMicros = get_current_timestamp_micros();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
 
       if ( ! gotResponse )
       {
@@ -3064,3 +3064,4 @@ void Menu::addUnsupportedMessageOpenIPCSigmaster(const char* szMessage)
    pm->m_bDisableStacking = true;
    add_menu_to_stack(pm);
 }
+

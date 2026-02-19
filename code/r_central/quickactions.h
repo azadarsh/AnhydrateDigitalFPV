@@ -11,3 +11,4 @@ void executeQuickActionSwitchPITMode();
 void executeQuickActionToggleRCEnabled();
 void executeQuickActionCameraProfileSwitch();
 void executeQuickActionOSDSize();
+

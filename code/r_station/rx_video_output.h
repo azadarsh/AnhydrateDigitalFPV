@@ -21,3 +21,4 @@ void rx_video_output_on_changed_video_params(video_parameters_t* pOldVideoParams
 void rx_video_output_signal_restart_streamer();
 void rx_video_output_periodic_loop();
 
+

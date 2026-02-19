@@ -51,3 +51,4 @@ int refresh_rate(drmModeModeInfo *mode)
 
 	return res;
 }
+

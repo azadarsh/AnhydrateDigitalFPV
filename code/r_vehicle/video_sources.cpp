@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -36,7 +36,7 @@
 #include "../base/hardware_procs.h"
 #include "../base/hardware_camera.h"
 #include "../base/hardware_cam_maj.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/camera_utils.h"
 #include "../base/utils.h"
 #include "../common/string_utils.h"
@@ -57,7 +57,7 @@
 #include "video_source_majestic.h"
 #include "negociate_radio.h"
 #include "packets_utils.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 
 u32 s_uLastVideoSourcesStreamDataAvailable = 0;
 u32 s_uTotalVideoSourceReadBytes = 0;
@@ -178,8 +178,8 @@ bool video_sources_is_caputure_process_running()
    else
    {
       szOutput[0] = 0;
-      hw_execute_bash_command("ps -aef | grep ruby_ | grep capture", szOutput);
-      if ( NULL != strstr(szOutput, "ruby_capture") )
+      hw_execute_bash_command("ps -aef | grep Anhydrate_ | grep capture", szOutput);
+      if ( NULL != strstr(szOutput, "Anhydrate_capture") )
          return true;
    }
    return false;

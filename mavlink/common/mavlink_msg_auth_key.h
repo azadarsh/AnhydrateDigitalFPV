@@ -211,3 +211,4 @@ static inline void mavlink_msg_auth_key_decode(const mavlink_message_t* msg, mav
     memcpy(auth_key, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

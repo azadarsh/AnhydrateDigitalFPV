@@ -253,3 +253,4 @@ static inline void mavlink_msg_gps_rtcm_data_decode(const mavlink_message_t* msg
     memcpy(gps_rtcm_data, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

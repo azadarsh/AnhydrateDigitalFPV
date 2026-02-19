@@ -11,3 +11,4 @@ target_compile_options(test_spi PRIVATE -Wall)
 
 # pull in common dependencies
 target_link_libraries(test_spi pico_stdlib hardware_spi)
+

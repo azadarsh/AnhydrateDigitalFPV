@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -439,11 +439,9 @@ int load_Preferences()
    }
 
    if ( bOk && (1 != fscanf(fd, "%d", &s_Preferences.iShowCompactMenus)) )
-   {
       s_Preferences.iShowCompactMenus = 1;
-   }
 
-   if ( bOk && 1 != fscanf(fd, "%u", &s_Preferences.uEnabledQuickMenu) )
+   if ( bOk && (1 != fscanf(fd, "%u", &s_Preferences.uEnabledQuickMenu)) )
       s_Preferences.uEnabledQuickMenu = 0xFFFFFFFF;
 
    // ----------------------------------------------------
@@ -563,3 +561,4 @@ int getPreferencesDoNotShowAgain(int iUniqueId) { return 0; }
 void setPreferencesDoNotShowAgain(int iUniqueId, int iDoNotShowAgain){}
 void removePreferencesDoNotShowAgain(int iUniqueId){}
 #endif
+

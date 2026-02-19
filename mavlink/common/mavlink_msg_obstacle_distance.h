@@ -328,3 +328,4 @@ static inline void mavlink_msg_obstacle_distance_decode(const mavlink_message_t*
     memcpy(obstacle_distance, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

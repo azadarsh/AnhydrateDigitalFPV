@@ -71,5 +71,6 @@ I - intracoded (fullimage)
 P - predictive
 B - bipredictive (not used in Raspberry)
 
-./ruby_capture_raspi -cd H264 -n -fl -w 1280 -h 720 -fps 30 -g 12 -b 7000000 -ih -pf main -lev 4.1 -if cyclic -br 57 -co -11 -sa -20 -sh 9 -vf -hf -drc med -ex backlight -awb auto -mm backlit -a "DEV" -log -t 0 -o - >> tmp/ruby/fifocam &
+./Anhydrate_capture_raspi -cd H264 -n -fl -w 1280 -h 720 -fps 30 -g 12 -b 7000000 -ih -pf main -lev 4.1 -if cyclic -br 57 -co -11 -sa -20 -sh 9 -vf -hf -drc med -ex backlight -awb auto -mm backlit -a "DEV" -log -t 0 -o - >> tmp/Anhydrate/fifocam &
+
 

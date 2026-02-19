@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -37,12 +37,12 @@
 #include "../base/hardware_files.h"
 #include "../base/hardware_radio.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 
 #include <pthread.h>
 #include "launchers_vehicle.h"
 #include "process_upload.h"
-#include "ruby_rx_commands.h"
+#include "Anhydrate_rx_commands.h"
 #include "video_source_csi.h"
 #include "shared_vars.h"
 #include "timers.h"
@@ -113,10 +113,10 @@ void _sw_update_close_remove_temp_files()
    s_uSWPacketsMaxSize = 0;
 
    char szComm[256];
-   sprintf(szComm, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS);
+   sprintf(szComm, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS);
    hw_execute_bash_command(szComm, NULL);
 
-   sprintf(szComm, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS_APPLY);
+   sprintf(szComm, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS_APPLY);
    hw_execute_bash_command(szComm, NULL);
 
    s_bProcessUploadInProgress = false;
@@ -152,7 +152,7 @@ void _process_upload_send_status_to_controller(u8 uStatus, int iRepeatCount)
    uStatusCounterProcessUpload++;
 
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_OTA_UPDATE_STATUS, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_OTA_UPDATE_STATUS, STREAM_ID_DATA);
    PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
    PH.vehicle_id_dest = g_pCurrentModel->uControllerId;
    PH.total_length = sizeof(t_packet_header)+sizeof(u8)+sizeof(u32);
@@ -165,7 +165,7 @@ void _process_upload_send_status_to_controller(u8 uStatus, int iRepeatCount)
 
    for( int i=0; i<iRepeatCount; i++ )
    {
-      ruby_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastActiveTime = g_TimeNow;
       hardware_sleep_ms(50);
@@ -193,7 +193,7 @@ static void * _thread_process_upload(void *argument)
    char szFile[MAX_FILE_PATH_SIZE];
    char szComm[512];
 
-   sprintf(szComm, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS_APPLY);
+   sprintf(szComm, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS_APPLY);
    hw_execute_bash_command(szComm, NULL);
 
    strcpy(szFile, FOLDER_CONFIG);
@@ -226,28 +226,28 @@ static void * _thread_process_upload(void *argument)
 
    log_line("Binaries versions before update:");
    char szOutput[2048];
-   hw_execute_ruby_process_wait(NULL, "ruby_start", "-ver", szOutput, 1);
-   log_line("ruby_start: [%s]", szOutput);
-   hw_execute_ruby_process_wait(NULL, "ruby_rt_vehicle", "-ver", szOutput, 1);
-   log_line("ruby_rt_vehicle: [%s]", szOutput);
-   hw_execute_ruby_process_wait(NULL, "ruby_tx_telemetry", "-ver", szOutput, 1);
-   log_line("ruby_tx_telemetry: [%s]", szOutput);
+   hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_start", "-ver", szOutput, 1);
+   log_line("Anhydrate_start: [%s]", szOutput);
+   hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_rt_vehicle", "-ver", szOutput, 1);
+   log_line("Anhydrate_rt_vehicle: [%s]", szOutput);
+   hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_tx_telemetry", "-ver", szOutput, 1);
+   log_line("Anhydrate_tx_telemetry: [%s]", szOutput);
    
-   sprintf(szComm, "chmod 777 %sruby* 2>/dev/null", FOLDER_BINARIES);
+   sprintf(szComm, "chmod 777 %sAnhydrate* 2>/dev/null", FOLDER_BINARIES);
    hw_execute_bash_command(szComm, NULL);
    sprintf(szComm, "chmod 777 %sonyx* 2>/dev/null", FOLDER_BINARIES);
    hw_execute_bash_command(szComm, NULL);
 
-   sprintf(szComm, "mkdir -p %s", FOLDER_RUBY_TEMP);
+   sprintf(szComm, "mkdir -p %s", FOLDER_Anhydrate_TEMP);
    hw_execute_bash_command(szComm, NULL);
 
    #if defined (HW_PLATFORM_RASPBERRY) || defined (HW_PLATFORM_RADXA)
    log_line("Running on Raspberry/Radxa hardware");
-   sprintf(szComm, "nice -n 19 ionice -c 3 tar -C %s -zxf %s 2>&1 1>/dev/null", FOLDER_RUBY_TEMP, s_szUpdateArchiveFile);
+   sprintf(szComm, "nice -n 19 ionice -c 3 tar -C %s -zxf %s 2>&1 1>/dev/null", FOLDER_Anhydrate_TEMP, s_szUpdateArchiveFile);
    #endif
    #ifdef HW_PLATFORM_OPENIPC_CAMERA
    log_line("Running on OpenIPC hardware");
-   sprintf(szComm, "tar -C %s -xf %s 2>&1 1>/dev/null", FOLDER_RUBY_TEMP, s_szUpdateArchiveFile);
+   sprintf(szComm, "tar -C %s -xf %s 2>&1 1>/dev/null", FOLDER_Anhydrate_TEMP, s_szUpdateArchiveFile);
    #endif
    
    hardware_sleep_ms(500);
@@ -259,10 +259,10 @@ static void * _thread_process_upload(void *argument)
    {
       s_bThreadProcessArchiveFinished = true;
       log_softerror_and_alarm("[ProcessUploadTh] Failed to create thread archive processing.");
-      log_line("Extracting binaries to location: %s", FOLDER_RUBY_TEMP);   
+      log_line("Extracting binaries to location: %s", FOLDER_Anhydrate_TEMP);   
       hw_execute_bash_command_raw(szComm, NULL);
       //system(szComm);
-      log_line("Done extracting to location: %s", FOLDER_RUBY_TEMP);
+      log_line("Done extracting to location: %s", FOLDER_Anhydrate_TEMP);
       log_line("Done extracting archive.");
    }
    else
@@ -279,65 +279,65 @@ static void * _thread_process_upload(void *argument)
    _process_upload_send_status_to_controller(OTA_UPDATE_STATUS_UPDATING, 40);
 
    bool bIsOnyx = false;
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, "onyxfpv_start");
    if ( access( szFile, R_OK ) != -1 )
       bIsOnyx = true;
 
    if ( bIsOnyx )
    {
-      sprintf(szComm, "rm -rf %sruby_* 2>/dev/null", FOLDER_BINARIES);
+      sprintf(szComm, "rm -rf %sAnhydrate_* 2>/dev/null", FOLDER_BINARIES);
       hw_execute_bash_command(szComm, NULL);
    }
 
    if ( bIsOnyx )
-      sprintf(szComm, "cp -rf %sonyxfpv_* %s", FOLDER_RUBY_TEMP, FOLDER_BINARIES);
+      sprintf(szComm, "cp -rf %sonyxfpv_* %s", FOLDER_Anhydrate_TEMP, FOLDER_BINARIES);
    else
-      sprintf(szComm, "cp -rf %sruby_* %s", FOLDER_RUBY_TEMP, FOLDER_BINARIES);
+      sprintf(szComm, "cp -rf %sAnhydrate_* %s", FOLDER_Anhydrate_TEMP, FOLDER_BINARIES);
    hw_execute_bash_command(szComm, NULL);
 
    if ( bIsOnyx )
       sprintf(szComm, "chmod 777 %sonyx* 2>/dev/null", FOLDER_BINARIES);
    else
-      sprintf(szComm, "chmod 777 %sruby* 2>/dev/null", FOLDER_BINARIES);
+      sprintf(szComm, "chmod 777 %sAnhydrate* 2>/dev/null", FOLDER_BINARIES);
    hw_execute_bash_command(szComm, NULL);
    hardware_sleep_ms(50);
 
    #if defined(HW_PLATFORM_OPENIPC_CAMERA)
-   hw_execute_bash_command("rm -rf /usr/sbin/ruby_update_* 2>/dev/null", NULL);
-   hw_execute_bash_command("rm -rf /usr/sbin/ruby_alive 2>/dev/null", NULL);
+   hw_execute_bash_command("rm -rf /usr/sbin/Anhydrate_update_* 2>/dev/null", NULL);
+   hw_execute_bash_command("rm -rf /usr/sbin/Anhydrate_alive 2>/dev/null", NULL);
    hw_execute_bash_command("rm -rf /usr/sbin/majestic 2>/dev/null", NULL);
    #else
-   hw_execute_bash_command("rm -rf ruby_update_* 2>/dev/null", NULL);
+   hw_execute_bash_command("rm -rf Anhydrate_update_* 2>/dev/null", NULL);
    #endif
 
    log_line("Binaries versions after update:");
    if ( bIsOnyx )
    {
-      hw_execute_ruby_process_wait(NULL, "onyxfpv_start", "-ver", szOutput, 1);
+      hw_execute_Anhydrate_process_wait(NULL, "onyxfpv_start", "-ver", szOutput, 1);
       log_line("onyxfpv_start: [%s]", szOutput);
-      hw_execute_ruby_process_wait(NULL, "onyxfpv_router_v", "-ver", szOutput, 1);
+      hw_execute_Anhydrate_process_wait(NULL, "onyxfpv_router_v", "-ver", szOutput, 1);
       log_line("onyxfpv_router_v: [%s]", szOutput);
-      hw_execute_ruby_process_wait(NULL, "onyxfpv_tx_telemetry", "-ver", szOutput, 1);
+      hw_execute_Anhydrate_process_wait(NULL, "onyxfpv_tx_telemetry", "-ver", szOutput, 1);
       log_line("onyxfpv_tx_telemetry: [%s]", szOutput);
-      hw_execute_ruby_process_wait(NULL, "onyxfpv_update", "-ver", szOutput, 1);
+      hw_execute_Anhydrate_process_wait(NULL, "onyxfpv_update", "-ver", szOutput, 1);
       log_line("onyxfpv_update: [%s]", szOutput);
    }
    else
    {
-      hw_execute_ruby_process_wait(NULL, "ruby_start", "-ver", szOutput, 1);
-      log_line("ruby_start: [%s]", szOutput);
-      hw_execute_ruby_process_wait(NULL, "ruby_rt_vehicle", "-ver", szOutput, 1);
-      log_line("ruby_rt_vehicle: [%s]", szOutput);
-      hw_execute_ruby_process_wait(NULL, "ruby_tx_telemetry", "-ver", szOutput, 1);
-      log_line("ruby_tx_telemetry: [%s]", szOutput);
-      hw_execute_ruby_process_wait(NULL, "ruby_update", "-ver", szOutput, 1);
-      log_line("ruby_update: [%s]", szOutput);
+      hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_start", "-ver", szOutput, 1);
+      log_line("Anhydrate_start: [%s]", szOutput);
+      hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_rt_vehicle", "-ver", szOutput, 1);
+      log_line("Anhydrate_rt_vehicle: [%s]", szOutput);
+      hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_tx_telemetry", "-ver", szOutput, 1);
+      log_line("Anhydrate_tx_telemetry: [%s]", szOutput);
+      hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_update", "-ver", szOutput, 1);
+      log_line("Anhydrate_update: [%s]", szOutput);
    }
 
    #ifdef HW_PLATFORM_RASPBERRY
-   if ( access( "ruby_capture_raspi", R_OK ) != -1 )
-      hw_execute_bash_command("cp -rf ruby_capture_raspi /opt/vc/bin/raspivid", NULL);
+   if ( access( "Anhydrate_capture_raspi", R_OK ) != -1 )
+      hw_execute_bash_command("cp -rf Anhydrate_capture_raspi /opt/vc/bin/raspivid", NULL);
    if ( access( "onyxfpv_capture_raspi", R_OK ) != -1 )
       hw_execute_bash_command("cp -rf onyxfpv_capture_raspi /opt/vc/bin/raspivid", NULL);
 
@@ -345,7 +345,7 @@ static void * _thread_process_upload(void *argument)
    if ( bIsOnyx )
       strcat(szFile, "onyxfpv_config.txt");
    else
-      strcat(szFile, "ruby_config.txt");
+      strcat(szFile, "Anhydrate_config.txt");
 
    if ( access( szFile, R_OK ) != -1 )
    {
@@ -360,7 +360,7 @@ static void * _thread_process_upload(void *argument)
    if ( bIsOnyx )
    {
       hw_execute_bash_command("chmod 777 /root/.profile 2>/dev/null", NULL);
-      hw_execute_bash_command("sed -i -e 's/ruby/onyxfpv/g' /root/.profile", NULL);
+      hw_execute_bash_command("sed -i -e 's/Anhydrate/onyxfpv/g' /root/.profile", NULL);
       hw_execute_bash_command("chmod 777 /root/.profile 2>/dev/null", NULL);
    }
    #endif
@@ -368,23 +368,23 @@ static void * _thread_process_upload(void *argument)
    #ifdef HW_PLATFORM_OPENIPC_CAMERA
    if ( bIsOnyx )
    {
-      hw_execute_bash_command("chmod 777 /etc/init.d/S73ruby 2>/dev/null", NULL);
-      hw_execute_bash_command("sed -i -e 's/ruby/onyxfpv/g' /etc/init.d/S73ruby", NULL);
-      hw_execute_bash_command("sed -i -e 's/Ruby/OnyxFPV/g' /etc/init.d/S73ruby", NULL);
-      hw_execute_bash_command("mv -f /etc/init.d/S73ruby /etc/init.d/S73onyxfpv", NULL);
+      hw_execute_bash_command("chmod 777 /etc/init.d/S73Anhydrate 2>/dev/null", NULL);
+      hw_execute_bash_command("sed -i -e 's/Anhydrate/onyxfpv/g' /etc/init.d/S73Anhydrate", NULL);
+      hw_execute_bash_command("sed -i -e 's/Anhydrate/OnyxFPV/g' /etc/init.d/S73Anhydrate", NULL);
+      hw_execute_bash_command("mv -f /etc/init.d/S73Anhydrate /etc/init.d/S73onyxfpv", NULL);
       hw_execute_bash_command("chmod 777 /etc/init.d/S73onyxfpv 2>/dev/null", NULL);
    }
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, "majestic");
    if ( access(szFile, R_OK) != -1 )
    {
-      sprintf(szComm, "mv -f %smajestic /usr/bin/majestic", FOLDER_RUBY_TEMP);
+      sprintf(szComm, "mv -f %smajestic /usr/bin/majestic", FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
       hw_execute_bash_command("chmod 777 /usr/bin/majestic", NULL);
    }
    #endif
 
-   //sprintf(szComm, "ls -al %sruby_update*", FOLDER_BINARIES);
+   //sprintf(szComm, "ls -al %sAnhydrate_update*", FOLDER_BINARIES);
    //hw_execute_bash_command_raw(szComm, szOutput);
    //log_line("Update files: [%s]", szOutput);
 
@@ -392,7 +392,7 @@ static void * _thread_process_upload(void *argument)
 
    char szUpdateBinariesFolder[MAX_FILE_PATH_SIZE];
    #if defined (HW_PLATFORM_OPENIPC_CAMERA)
-   strcpy(szUpdateBinariesFolder, FOLDER_RUBY_TEMP);
+   strcpy(szUpdateBinariesFolder, FOLDER_Anhydrate_TEMP);
    #else
    strcpy(szUpdateBinariesFolder, FOLDER_BINARIES);
    #endif
@@ -400,7 +400,7 @@ static void * _thread_process_upload(void *argument)
    if ( bIsOnyx )
       strcat(szFile, "onyxfpv_update");
    else
-      strcat(szFile, "ruby_update");
+      strcat(szFile, "Anhydrate_update");
 
    if ( access( szFile, R_OK ) != -1 )
       log_line("Update binary is present [%s]", szFile);
@@ -417,9 +417,9 @@ static void * _thread_process_upload(void *argument)
    if ( access( szFile, R_OK ) != -1 )
    {
       if ( bIsOnyx )
-         hw_execute_ruby_process_wait(NULL, "onyxfpv_update", "-pre", NULL, 1);
+         hw_execute_Anhydrate_process_wait(NULL, "onyxfpv_update", "-pre", NULL, 1);
       else
-         hw_execute_ruby_process_wait(NULL, "ruby_update", "-pre", NULL, 1);
+         hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_update", "-pre", NULL, 1);
    }
    #endif
 
@@ -429,18 +429,18 @@ static void * _thread_process_upload(void *argument)
 
    // Copy log file to last update
    //#if defined(HW_PLATFORM_OPENIPC_CAMERA)
-   //hw_execute_bash_command("cp -rf /tmp/logs/log_system.txt /root/ruby/last_update_log.txt", NULL);
+   //hw_execute_bash_command("cp -rf /tmp/logs/log_system.txt /root/Anhydrate/last_update_log.txt", NULL);
    //#endif
    #if defined(HW_PLATFORM_RASPBERRY)
    if ( bIsOnyx )
       hw_execute_bash_command("cp -rf /home/pi/onyx/logs/log_system.txt /home/pi/onyx/logs/last_update_log.txt", NULL);
    else
-      hw_execute_bash_command("cp -rf /home/pi/ruby/logs/log_system.txt /home/pi/ruby/logs/last_update_log.txt", NULL);
+      hw_execute_bash_command("cp -rf /home/pi/Anhydrate/logs/log_system.txt /home/pi/Anhydrate/logs/last_update_log.txt", NULL);
    #endif
    log_line("Done updating. Cleaning up and reboot");
    s_bUpdateAppliedRebooting = true;
 
-   sprintf(szComm, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS_APPLY);
+   sprintf(szComm, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS_APPLY);
    hw_execute_bash_command_silent(szComm, NULL);
 
    log_line("Give time for power leds to signal end of update...");
@@ -553,7 +553,7 @@ void process_sw_upload_new(u32 command_param, u8* pBuffer, int length)
 
    if ( ! s_bSoftwareUpdateStoppedVideoPipeline )
    {
-      sprintf(szComm, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS);
+      sprintf(szComm, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_UPDATE_IN_PROGRESS);
       hw_execute_bash_command(szComm, NULL);
       s_bSoftwareUpdateStoppedVideoPipeline = true;
       sendControlMessage(PACKET_TYPE_LOCAL_CONTROL_PAUSE_VIDEO, 0);
@@ -589,12 +589,12 @@ void process_sw_upload_new(u32 command_param, u8* pBuffer, int length)
 
       if ( params->type == 0 )
       {
-         sprintf(s_szUpdateArchiveFile, "%s%s", FOLDER_UPDATES, "ruby_update.zip");
+         sprintf(s_szUpdateArchiveFile, "%s%s", FOLDER_UPDATES, "Anhydrate_update.zip");
          log_line("Receiving update zip file, to save it in (%s)", s_szUpdateArchiveFile);
       }
       else
       {
-         sprintf(s_szUpdateArchiveFile, "%s%s", FOLDER_UPDATES, "ruby_update.tar");
+         sprintf(s_szUpdateArchiveFile, "%s%s", FOLDER_UPDATES, "Anhydrate_update.tar");
          log_line("Receiving update tar file, to save it in (%s)", s_szUpdateArchiveFile);
       }
    }

@@ -7,3 +7,4 @@ bool vehicle_is_favorite(u32 uVehicleId);
 bool remove_favorite(u32 uVehicleId);
 bool add_favorite(u32 uVehicleId);
 u32 get_next_favorite(u32 uVehicleId);
+

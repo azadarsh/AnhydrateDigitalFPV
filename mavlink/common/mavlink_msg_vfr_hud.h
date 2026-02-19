@@ -336,3 +336,4 @@ static inline void mavlink_msg_vfr_hud_decode(const mavlink_message_t* msg, mavl
     memcpy(vfr_hud, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

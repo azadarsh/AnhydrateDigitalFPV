@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -47,7 +47,7 @@
 void controller_launch_router(bool bSearchMode, int iFirmwareType)
 {
    log_line("Starting controller router (%s)", bSearchMode?"in search mode":"in normal mode");
-   if ( hw_process_exists("ruby_rt_station") )
+   if ( hw_process_exists("Anhydrate_rt_station") )
    {
       log_line("Controller router process already running. Do nothing.");
       return;
@@ -60,7 +60,7 @@ void controller_launch_router(bool bSearchMode, int iFirmwareType)
    if ( bSearchMode )
    {
    
-      if ( (g_iSearchSiKAirDataRate >= 0) && (iFirmwareType == MODEL_FIRMWARE_TYPE_RUBY) )
+      if ( (g_iSearchSiKAirDataRate >= 0) && (iFirmwareType == MODEL_FIRMWARE_TYPE_Anhydrate) )
       {
          if ( g_pControllerSettings->iPrioritiesAdjustment && (g_pControllerSettings->iThreadPriorityRouter > 100) )
             sprintf(szPrefix, "nice -n %d", g_pControllerSettings->iThreadPriorityRouter - 120);
@@ -91,39 +91,39 @@ void controller_launch_router(bool bSearchMode, int iFirmwareType)
    if ( ! g_pControllerSettings->iPrioritiesAdjustment )
       szPrefix[0] = 0;
 
-   hw_execute_ruby_process(szPrefix, "ruby_rt_station", szParams, NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_rt_station", szParams, NULL);
    log_line("Done launching controller router.");
 }
 
 void controller_stop_router()
 {
-   hw_stop_process("ruby_rt_station");
+   hw_stop_process("Anhydrate_rt_station");
 }
 
 void controller_launch_rx_telemetry()
 {
-   if ( hw_process_exists("ruby_rx_telemetry") )
+   if ( hw_process_exists("Anhydrate_rx_telemetry") )
    {
-      log_line("ruby_rx_telemetry process already running. Do nothing.");
+      log_line("Anhydrate_rx_telemetry process already running. Do nothing.");
       return;
    }
    char szPrefix[32];
    szPrefix[0] = 0;
    if ( g_pControllerSettings->iPrioritiesAdjustment && (g_pControllerSettings->iThreadPriorityOthers > 100) )
       sprintf(szPrefix, "nice -n %d", g_pControllerSettings->iThreadPriorityOthers - 120);
-   hw_execute_ruby_process(szPrefix, "ruby_rx_telemetry", NULL, NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_rx_telemetry", NULL, NULL);
 }
 
 void controller_stop_rx_telemetry()
 {
-   hw_stop_process("ruby_rx_telemetry");
+   hw_stop_process("Anhydrate_rx_telemetry");
 }
 
 void controller_launch_tx_rc()
 {
-   if ( hw_process_exists("ruby_tx_rc") )
+   if ( hw_process_exists("Anhydrate_tx_rc") )
    {
-      log_line("ruby_tx_rc process already running. Do nothing.");
+      log_line("Anhydrate_tx_rc process already running. Do nothing.");
       return;
    }
 
@@ -148,12 +148,12 @@ void controller_launch_tx_rc()
    }
    #endif
 
-   hw_execute_ruby_process(szPrefix, "ruby_tx_rc", szParams, NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_tx_rc", szParams, NULL);
 }
 
 void controller_stop_tx_rc()
 {
-   hw_stop_process("ruby_tx_rc");
+   hw_stop_process("Anhydrate_tx_rc");
 }
 
 
@@ -252,12 +252,12 @@ void controller_start_i2c()
 
    if ( g_pControllerSettings->iPrioritiesAdjustment && (g_pControllerSettings->iThreadPriorityOthers > 100) )
       sprintf(szPrefix, "nice -n %d", g_pControllerSettings->iThreadPriorityOthers - 120);
-   hw_execute_ruby_process(szPrefix, "ruby_i2c", NULL, NULL);
+   hw_execute_Anhydrate_process(szPrefix, "Anhydrate_i2c", NULL, NULL);
 }
 
 void controller_stop_i2c()
 {
-   hw_stop_process("ruby_i2c");
+   hw_stop_process("Anhydrate_i2c");
 }
 
 bool _controller_wait_for_stop_process(const char* szProcName)
@@ -290,14 +290,15 @@ void controller_wait_for_stop_all()
 {
    log_line("Waiting for all pairing processes to stop...");
 
-   if ( ! _controller_wait_for_stop_process("ruby_rx_telemetry") )
-      log_softerror_and_alarm("Failed to wait for stopping: ruby_rx_telemetry");
+   if ( ! _controller_wait_for_stop_process("Anhydrate_rx_telemetry") )
+      log_softerror_and_alarm("Failed to wait for stopping: Anhydrate_rx_telemetry");
 
-   if ( ! _controller_wait_for_stop_process("ruby_tx_rc") )
-      log_softerror_and_alarm("Failed to wait for stopping: ruby_tx_rc");
+   if ( ! _controller_wait_for_stop_process("Anhydrate_tx_rc") )
+      log_softerror_and_alarm("Failed to wait for stopping: Anhydrate_tx_rc");
 
-   if ( ! _controller_wait_for_stop_process("ruby_rt_router") )
-      log_softerror_and_alarm("Failed to wait for stopping: ruby_rt_router");
+   if ( ! _controller_wait_for_stop_process("Anhydrate_rt_router") )
+      log_softerror_and_alarm("Failed to wait for stopping: Anhydrate_rt_router");
 
    log_line("All pairing processes have finished and exited.");
 }
+

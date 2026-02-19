@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -42,7 +42,7 @@
 #include "../base/msp.h"
 #include "../base/models_list.h"
 #include "../base/commands.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/parser_h264.h"
 #include "../base/camera_utils.h"
 #include "../common/string_utils.h"
@@ -53,7 +53,7 @@
 #include "../radio/radio_duplicate_det.h"
 #include "../radio/radio_tx.h"
 #include "../radio/radio_rx.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "relay_rx.h"
 #include "test_link_params.h"
 #include "shared_vars.h"
@@ -68,8 +68,8 @@ u32 s_uRadioRxReadTimeoutCount = 0;
 
 u32 s_uTotalBadPacketsReceived = 0;
 
-u32 s_TimeLastLoggedSearchingRubyTelemetry = 0;
-u32 s_TimeLastLoggedSearchingRubyTelemetryVehicleId = 0;
+u32 s_TimeLastLoggedSearchingAnhydrateTelemetry = 0;
+u32 s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId = 0;
 
 ParserH264 s_ParserH264RadioInput;
 
@@ -86,7 +86,7 @@ void init_radio_rx_structures()
    s_ParserH264RadioInput.init();
 }
 
-int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* pPacketBuffer)
+int _process_received_Anhydrate_message(int iRuntimeIndex, int iInterfaceIndex, u8* pPacketBuffer)
 {
    t_packet_header* pPH = (t_packet_header*)pPacketBuffer;
    
@@ -98,17 +98,17 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
 
    if ( NULL == pModel )
    {
-      log_softerror_and_alarm("Received Ruby message for unknown model.");
+      log_softerror_and_alarm("Received Anhydrate message for unknown model.");
       return 0;
    }   
    if ( (uPacketType == PACKET_TYPE_SIK_CONFIG) ||
         (uPacketType == PACKET_TYPE_OTA_UPDATE_STATUS) ||
-        (uPacketType == PACKET_TYPE_RUBY_RELAY_RADIO_INFO) ||
-        (uPacketType == PACKET_TYPE_RUBY_MODEL_SETTINGS) ||
-        (uPacketType == PACKET_TYPE_RUBY_MESSAGE) )
+        (uPacketType == PACKET_TYPE_Anhydrate_RELAY_RADIO_INFO) ||
+        (uPacketType == PACKET_TYPE_Anhydrate_MODEL_SETTINGS) ||
+        (uPacketType == PACKET_TYPE_Anhydrate_MESSAGE) )
    {
       if ( -1 != g_fIPCToCentral )
-         ruby_ipc_channel_send_message(g_fIPCToCentral, (u8*)pPH, iTotalLength);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, (u8*)pPH, iTotalLength);
       else
          log_softerror_and_alarm("Received %s message (%d bytes without PH) but there is not channel to central to notify it.", str_get_packet_type(uPacketType), iTotalLength - sizeof(t_packet_header));
 
@@ -121,7 +121,7 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       return 0;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_RADIO_CONFIG_UPDATED )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_RADIO_CONFIG_UPDATED )
    {
       log_line("Received vehicle's current radio configuration from vehicle uid %u, packet size: %d bytes.", uVehicleIdSrc, iTotalLength);
       if ( ! is_sw_version_atleast(pModel, 11, 7) )
@@ -166,7 +166,7 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       saveControllerModel(pModel);
 
       pPH->packet_flags = PACKET_COMPONENT_LOCAL_CONTROL;
-      ruby_ipc_channel_send_message(g_fIPCToCentral, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(g_fIPCToCentral, (u8*)pPH, pPH->total_length);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
 
@@ -179,7 +179,7 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       return 0;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION )
    {      
       u32 uResendCount = 0;
       u16 uVehicleSoftwareVersion = 0;
@@ -192,7 +192,7 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
 
       if ( ! g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsPairingDone )
       {
-         ruby_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, iTotalLength);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, iTotalLength);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
 
@@ -202,20 +202,20 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       return 0;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_RADIO_REINITIALIZED )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_RADIO_REINITIALIZED )
    {
       log_line("Received message that vehicle radio interfaces where reinitialized.");
       t_packet_header PH;
       radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_BROADCAST_RADIO_REINITIALIZED, STREAM_ID_DATA);
       PH.total_length = sizeof(t_packet_header);
       radio_packet_compute_crc((u8*)&PH, PH.total_length);
-      ruby_ipc_channel_send_message(g_fIPCToCentral, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(g_fIPCToCentral, (u8*)&PH, PH.total_length);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       return 0;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_ALARM )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_ALARM )
    {
       u32 uAlarmIndex = 0;
       u32 uAlarm = 0;
@@ -306,14 +306,14 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       }
       
       log_line("Sending the alarm to central...");
-      ruby_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, iTotalLength);
+      Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, iTotalLength);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       log_line("Sent alarm to central");
       return 0;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
    if ( iTotalLength >= (int)(sizeof(t_packet_header) + 2*sizeof(u8) + sizeof(u32)) )
    {
       u8 uPingId = 0;
@@ -363,7 +363,7 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       return 0;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_LOG_FILE_SEGMENT )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_LOG_FILE_SEGMENT )
    if ( iTotalLength >= (int)sizeof(t_packet_header) )
    {
       t_packet_header_file_segment* pPHFS = (t_packet_header_file_segment*)(pPacketBuffer + sizeof(t_packet_header));
@@ -383,12 +383,12 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
             fwrite(pData, 1, pPHFS->segment_size, fd);
             fclose(fd);
          }
-         // Forward the message as a local control message to ruby_central
+         // Forward the message as a local control message to Anhydrate_central
          pPH->packet_flags &= (~PACKET_FLAGS_MASK_MODULE);
          pPH->packet_flags |= PACKET_COMPONENT_LOCAL_CONTROL;
          pPH->packet_type = PACKET_TYPE_LOCAL_CONTROL_RECEIVED_VEHICLE_LOG_SEGMENT;
          
-         ruby_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, pPH->total_length);
 
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -408,7 +408,7 @@ int _process_received_ruby_message(int iRuntimeIndex, int iInterfaceIndex, u8* p
       if ( iTotalLength > (int)sizeof(t_packet_header) + 2*(int)sizeof(u8) )
       {
          radio_stats_reset_interfaces_rx_info(&g_SM_RadioStats, "Received a negociate radio links Ack");
-         ruby_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, iTotalLength);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pPacketBuffer, iTotalLength);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       }
@@ -438,236 +438,236 @@ void _process_received_single_packet_while_searching(int interfaceIndex, u8* pDa
          memcpy(packet, (u8*)&PH, sizeof(t_packet_header));
          radio_packet_compute_crc(packet, PH.total_length);
 
-         ruby_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       }
       return;
    }
 
-   // Ruby telemetry is always sent to central and rx telemetry (to populate Ruby telemetry shared object)
+   // Anhydrate telemetry is always sent to central and rx telemetry (to populate Anhydrate telemetry shared object)
    if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_TELEMETRY )
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED )
    {
-      // v3,v4,v5 ruby telemetry
+      // v3,v4,v5 Anhydrate telemetry
       bool bIsV3 = false;
       bool bIsV4 = false;
       bool bIsV5 = false;
       bool bIsV6 = false;
 
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v3)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v3)))
          bIsV3 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v3) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v3) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)))
          bIsV3 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v3) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v3) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)))
          bIsV3 = true;
       if ( bIsV3 )
       {
-         t_packet_header_ruby_telemetry_extended_v3* pPHRTE = (t_packet_header_ruby_telemetry_extended_v3*)(pData + sizeof(t_packet_header));
-         if ( (pPHRTE->rubyVersion >> 4) > 10 )
+         t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v3*)(pData + sizeof(t_packet_header));
+         if ( (pPHRTE->AnhydrateVersion >> 4) > 10 )
             bIsV3 = false;
-         if ( (pPHRTE->rubyVersion >> 4) == 10 )
-         if ( (pPHRTE->rubyVersion & 0x0F) > 4 )
+         if ( (pPHRTE->AnhydrateVersion >> 4) == 10 )
+         if ( (pPHRTE->AnhydrateVersion & 0x0F) > 4 )
             bIsV3 = false;
       }
 
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v4)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4)))
          bIsV4 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v4) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)))
          bIsV4 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v4) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)))
          bIsV4 = true;
       if ( bIsV4 )
       {
-         t_packet_header_ruby_telemetry_extended_v4* pPHRTE = (t_packet_header_ruby_telemetry_extended_v4*)(pData + sizeof(t_packet_header));
-         if ( (pPHRTE->rubyVersion >> 4) < 10 )
+         t_packet_header_Anhydrate_telemetry_extended_v4* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v4*)(pData + sizeof(t_packet_header));
+         if ( (pPHRTE->AnhydrateVersion >> 4) < 10 )
             bIsV4 = false;
-         if ( (pPHRTE->rubyVersion >> 4) == 10 )
-         if ( (pPHRTE->rubyVersion & 0x0F) < 4 )
+         if ( (pPHRTE->AnhydrateVersion >> 4) == 10 )
+         if ( (pPHRTE->AnhydrateVersion & 0x0F) < 4 )
             bIsV4 = false;
       }
 
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v5)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5)))
          bIsV5 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v5) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)))
          bIsV5 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v5) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)))
          bIsV5 = true;
       if ( bIsV5 )
       {
-         t_packet_header_ruby_telemetry_extended_v5* pPHRTE = (t_packet_header_ruby_telemetry_extended_v5*)(pData + sizeof(t_packet_header));
-         if ( (pPHRTE->rubyVersion >> 4) < 11 )
+         t_packet_header_Anhydrate_telemetry_extended_v5* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v5*)(pData + sizeof(t_packet_header));
+         if ( (pPHRTE->AnhydrateVersion >> 4) < 11 )
             bIsV5 = false;
-         if ( (pPHRTE->rubyVersion >> 4) == 11 )
-         if ( (pPHRTE->rubyVersion & 0x0F) < 2 )
+         if ( (pPHRTE->AnhydrateVersion >> 4) == 11 )
+         if ( (pPHRTE->AnhydrateVersion & 0x0F) < 2 )
             bIsV5 = false;
       }
 
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v6)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6)))
          bIsV6 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v6) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)))
          bIsV6 = true;
-      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v6) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)))
+      if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)))
          bIsV6 = true;
       if ( bIsV6 )
       {
-         t_packet_header_ruby_telemetry_extended_v6* pPHRTE = (t_packet_header_ruby_telemetry_extended_v6*)(pData + sizeof(t_packet_header));
-         if ( (pPHRTE->rubyVersion >> 4) < 11 )
+         t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v6*)(pData + sizeof(t_packet_header));
+         if ( (pPHRTE->AnhydrateVersion >> 4) < 11 )
             bIsV6 = false;
-         if ( (pPHRTE->rubyVersion >> 4) == 11 )
-         if ( (pPHRTE->rubyVersion & 0x0F) < 5 )
+         if ( (pPHRTE->AnhydrateVersion >> 4) == 11 )
+         if ( (pPHRTE->AnhydrateVersion & 0x0F) < 5 )
             bIsV6 = false;
       }
 
       log_line("Received telemetry while searching. V3=%s V4=%s V5=%s V6=%s", bIsV3?"yes":"no", bIsV4?"yes":"no", bIsV5?"yes":"no", bIsV6?"yes":"no");
       if ( (!bIsV3) && (!bIsV4) && (!bIsV5) && (!bIsV6) )
       {
-         t_packet_header_ruby_telemetry_extended_v3* pPHRTE = (t_packet_header_ruby_telemetry_extended_v3*)(pData + sizeof(t_packet_header)); 
+         t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v3*)(pData + sizeof(t_packet_header)); 
          log_softerror_and_alarm("Received unknown telemetry version while searching (on %d Mhz). VID: %u, Version: %d.%d, Size: %d bytes",
-            g_uSearchFrequency/1000, pPH->vehicle_id_src, pPHRTE->rubyVersion >> 4, pPHRTE->rubyVersion & 0x0F, pPH->total_length);
+            g_uSearchFrequency/1000, pPH->vehicle_id_src, pPHRTE->AnhydrateVersion >> 4, pPHRTE->AnhydrateVersion & 0x0F, pPH->total_length);
          log_softerror_and_alarm("PH: %d bytes, TelemV3: %d bytes, TelemV4: %d bytes, TelemV5: %d bytes, TelemV6: %d bytes, Extra info: %d bytes, Extra info retr: %d bytes",
-           sizeof(t_packet_header), sizeof(t_packet_header_ruby_telemetry_extended_v3),
-           sizeof(t_packet_header_ruby_telemetry_extended_v4),
-           sizeof(t_packet_header_ruby_telemetry_extended_v5),
-           sizeof(t_packet_header_ruby_telemetry_extended_v6),
-           sizeof(t_packet_header_ruby_telemetry_extended_extra_info),
-           sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+           sizeof(t_packet_header), sizeof(t_packet_header_Anhydrate_telemetry_extended_v3),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_v4),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_v5),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_v6),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
          log_softerror_and_alarm("Expected PH + PTelemExt + Extra + Retr: %d bytes",
-             sizeof(t_packet_header) + sizeof(t_packet_header_ruby_telemetry_extended_v6) + sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+             sizeof(t_packet_header) + sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
       }
       else
       {
-         t_packet_header_ruby_telemetry_extended_v3* pPHRTE = (t_packet_header_ruby_telemetry_extended_v3*)(pData + sizeof(t_packet_header)); 
+         t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v3*)(pData + sizeof(t_packet_header)); 
          log_line("Received telemetry while searching (on %d Mhz). VID: %u, Version: %d.%d, Size: %d bytes",
-            g_uSearchFrequency/1000, pPH->vehicle_id_src, pPHRTE->rubyVersion >> 4, pPHRTE->rubyVersion & 0x0F, pPH->total_length);
+            g_uSearchFrequency/1000, pPH->vehicle_id_src, pPHRTE->AnhydrateVersion >> 4, pPHRTE->AnhydrateVersion & 0x0F, pPH->total_length);
          log_line("PH: %d bytes, TelemV3: %d bytes, TelemV4: %d bytes, TelemV5: %d bytes, TelemV6: %d bytes, Extra info: %d bytes, Extra info retr: %d bytes",
-           sizeof(t_packet_header), sizeof(t_packet_header_ruby_telemetry_extended_v3),
-           sizeof(t_packet_header_ruby_telemetry_extended_v4),
-           sizeof(t_packet_header_ruby_telemetry_extended_v5),
-           sizeof(t_packet_header_ruby_telemetry_extended_v6),
-           sizeof(t_packet_header_ruby_telemetry_extended_extra_info),
-           sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+           sizeof(t_packet_header), sizeof(t_packet_header_Anhydrate_telemetry_extended_v3),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_v4),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_v5),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_v6),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info),
+           sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
          log_line("Expected PH + PTelemExt + Extra + Retr: %d bytes",
-             sizeof(t_packet_header) + sizeof(t_packet_header_ruby_telemetry_extended_v6) + sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+             sizeof(t_packet_header) + sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
       }
       if ( bIsV3 )
       {
-         t_packet_header_ruby_telemetry_extended_v3* pPHRTE = (t_packet_header_ruby_telemetry_extended_v3*)(pData + sizeof(t_packet_header));
-         u8 vMaj = (pPHRTE->rubyVersion) >> 4;
-         u8 vMin = (pPHRTE->rubyVersion) & 0x0F;
-         if ( (g_TimeNow >= s_TimeLastLoggedSearchingRubyTelemetry + 200) || (s_TimeLastLoggedSearchingRubyTelemetryVehicleId != pPH->vehicle_id_src) )
+         t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v3*)(pData + sizeof(t_packet_header));
+         u8 vMaj = (pPHRTE->AnhydrateVersion) >> 4;
+         u8 vMin = (pPHRTE->AnhydrateVersion) & 0x0F;
+         if ( (g_TimeNow >= s_TimeLastLoggedSearchingAnhydrateTelemetry + 200) || (s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId != pPH->vehicle_id_src) )
          {
-            s_TimeLastLoggedSearchingRubyTelemetry = g_TimeNow;
-            s_TimeLastLoggedSearchingRubyTelemetryVehicleId = pPH->vehicle_id_src;
+            s_TimeLastLoggedSearchingAnhydrateTelemetry = g_TimeNow;
+            s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId = pPH->vehicle_id_src;
             char szFreq1[64];
             char szFreq2[64];
             char szFreq3[64];
             strcpy(szFreq1, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[0]));
             strcpy(szFreq2, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[1]));
             strcpy(szFreq3, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[2]));
-            log_line("Received a Ruby telemetry packet (version 3) while searching: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
+            log_line("Received a Anhydrate telemetry packet (version 3) while searching: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
              pPHRTE->uVehicleId, vMaj, vMin, pPHRTE->radio_links_count, 
              szFreq1, szFreq2, szFreq3 );
          }
          if ( -1 != g_fIPCToCentral )
-            ruby_ipc_channel_send_message(g_fIPCToCentral, pData, length);
+            Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, length);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       }
       if ( bIsV4 )
       {
-         t_packet_header_ruby_telemetry_extended_v4* pPHRTE = (t_packet_header_ruby_telemetry_extended_v4*)(pData + sizeof(t_packet_header));
-         u8 vMaj = pPHRTE->rubyVersion;
-         u8 vMin = pPHRTE->rubyVersion;
+         t_packet_header_Anhydrate_telemetry_extended_v4* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v4*)(pData + sizeof(t_packet_header));
+         u8 vMaj = pPHRTE->AnhydrateVersion;
+         u8 vMin = pPHRTE->AnhydrateVersion;
          vMaj = vMaj >> 4;
          vMin = vMin & 0x0F;
-         if ( (g_TimeNow >= s_TimeLastLoggedSearchingRubyTelemetry + 200) || (s_TimeLastLoggedSearchingRubyTelemetryVehicleId != pPH->vehicle_id_src) )
+         if ( (g_TimeNow >= s_TimeLastLoggedSearchingAnhydrateTelemetry + 200) || (s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId != pPH->vehicle_id_src) )
          {
-            s_TimeLastLoggedSearchingRubyTelemetry = g_TimeNow;
-            s_TimeLastLoggedSearchingRubyTelemetryVehicleId = pPH->vehicle_id_src;
+            s_TimeLastLoggedSearchingAnhydrateTelemetry = g_TimeNow;
+            s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId = pPH->vehicle_id_src;
             char szFreq1[64];
             char szFreq2[64];
             char szFreq3[64];
             strcpy(szFreq1, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[0]));
             strcpy(szFreq2, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[1]));
             strcpy(szFreq3, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[2]));
-            log_line("Received a Ruby telemetry packet (version 4) while searching: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
+            log_line("Received a Anhydrate telemetry packet (version 4) while searching: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
              pPHRTE->uVehicleId, vMaj, vMin, pPHRTE->radio_links_count, 
              szFreq1, szFreq2, szFreq3 );
          }
          if ( -1 != g_fIPCToCentral )
-            ruby_ipc_channel_send_message(g_fIPCToCentral, pData, length);
+            Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, length);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       }
 
       if ( bIsV5 )
       {
-         t_packet_header_ruby_telemetry_extended_v5* pPHRTE = (t_packet_header_ruby_telemetry_extended_v5*)(pData + sizeof(t_packet_header));
-         u8 vMaj = pPHRTE->rubyVersion;
-         u8 vMin = pPHRTE->rubyVersion;
+         t_packet_header_Anhydrate_telemetry_extended_v5* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v5*)(pData + sizeof(t_packet_header));
+         u8 vMaj = pPHRTE->AnhydrateVersion;
+         u8 vMin = pPHRTE->AnhydrateVersion;
          vMaj = vMaj >> 4;
          vMin = vMin & 0x0F;
-         if ( (g_TimeNow >= s_TimeLastLoggedSearchingRubyTelemetry + 200) || (s_TimeLastLoggedSearchingRubyTelemetryVehicleId != pPH->vehicle_id_src) )
+         if ( (g_TimeNow >= s_TimeLastLoggedSearchingAnhydrateTelemetry + 200) || (s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId != pPH->vehicle_id_src) )
          {
-            s_TimeLastLoggedSearchingRubyTelemetry = g_TimeNow;
-            s_TimeLastLoggedSearchingRubyTelemetryVehicleId = pPH->vehicle_id_src;
+            s_TimeLastLoggedSearchingAnhydrateTelemetry = g_TimeNow;
+            s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId = pPH->vehicle_id_src;
             char szFreq1[64];
             char szFreq2[64];
             char szFreq3[64];
             strcpy(szFreq1, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[0]));
             strcpy(szFreq2, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[1]));
             strcpy(szFreq3, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[2]));
-            log_line("Received a Ruby telemetry packet (version 5) while searching: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
+            log_line("Received a Anhydrate telemetry packet (version 5) while searching: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
              pPHRTE->uVehicleId, vMaj, vMin, pPHRTE->radio_links_count, 
              szFreq1, szFreq2, szFreq3 );
          }
          if ( -1 != g_fIPCToCentral )
-            ruby_ipc_channel_send_message(g_fIPCToCentral, pData, length);
+            Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, length);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       }
 
       if ( bIsV6 )
       {
-         t_packet_header_ruby_telemetry_extended_v6* pPHRTE = (t_packet_header_ruby_telemetry_extended_v6*)(pData + sizeof(t_packet_header));
-         u8 vMaj = pPHRTE->rubyVersion;
-         u8 vMin = pPHRTE->rubyVersion;
+         t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v6*)(pData + sizeof(t_packet_header));
+         u8 vMaj = pPHRTE->AnhydrateVersion;
+         u8 vMin = pPHRTE->AnhydrateVersion;
          vMaj = vMaj >> 4;
          vMin = vMin & 0x0F;
-         if ( (g_TimeNow >= s_TimeLastLoggedSearchingRubyTelemetry + 200) || (s_TimeLastLoggedSearchingRubyTelemetryVehicleId != pPH->vehicle_id_src) )
+         if ( (g_TimeNow >= s_TimeLastLoggedSearchingAnhydrateTelemetry + 200) || (s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId != pPH->vehicle_id_src) )
          {
-            s_TimeLastLoggedSearchingRubyTelemetry = g_TimeNow;
-            s_TimeLastLoggedSearchingRubyTelemetryVehicleId = pPH->vehicle_id_src;
+            s_TimeLastLoggedSearchingAnhydrateTelemetry = g_TimeNow;
+            s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId = pPH->vehicle_id_src;
             char szFreq1[64];
             char szFreq2[64];
             char szFreq3[64];
             strcpy(szFreq1, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[0]));
             strcpy(szFreq2, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[1]));
             strcpy(szFreq3, str_format_frequency(pPHRTE->uRadioFrequenciesKhz[2]));
-            log_line("Received a Ruby telemetry packet (version 6) while searching on %s: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
+            log_line("Received a Anhydrate telemetry packet (version 6) while searching on %s: vehicle ID: %u, version: %d.%d, radio links (%d): %s, %s, %s",
              str_format_frequency(g_uSearchFrequency),
              pPHRTE->uVehicleId, vMaj, vMin, pPHRTE->radio_links_count, 
              szFreq1, szFreq2, szFreq3 );
          }
          if ( -1 != g_fIPCToCentral )
-            ruby_ipc_channel_send_message(g_fIPCToCentral, pData, length);
+            Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, length);
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       }
    }
 
    if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_TELEMETRY )
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_TELEMETRY_SHORT )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT )
    {
-      if ( (g_TimeNow >= s_TimeLastLoggedSearchingRubyTelemetry + 2000) || (s_TimeLastLoggedSearchingRubyTelemetryVehicleId != pPH->vehicle_id_src) )
+      if ( (g_TimeNow >= s_TimeLastLoggedSearchingAnhydrateTelemetry + 2000) || (s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId != pPH->vehicle_id_src) )
       {
-         s_TimeLastLoggedSearchingRubyTelemetry = g_TimeNow;
-         s_TimeLastLoggedSearchingRubyTelemetryVehicleId = pPH->vehicle_id_src;
-         log_line("Received a Ruby telemetry short packet while searching: vehicle ID: %u", pPH->vehicle_id_src );
+         s_TimeLastLoggedSearchingAnhydrateTelemetry = g_TimeNow;
+         s_TimeLastLoggedSearchingAnhydrateTelemetryVehicleId = pPH->vehicle_id_src;
+         log_line("Received a Anhydrate telemetry short packet while searching: vehicle ID: %u", pPH->vehicle_id_src );
       }
       if ( -1 != g_fIPCToCentral )
-         ruby_ipc_channel_send_message(g_fIPCToCentral, pData, length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, length);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
    }   
@@ -681,64 +681,64 @@ bool _check_update_first_pairing_done_if_needed(int iInterfaceIndex, u8* pPacket
       return true;
 
    t_packet_header* pPH = (t_packet_header*)pPacketData;
-   if ( pPH->packet_type != PACKET_TYPE_RUBY_TELEMETRY_EXTENDED )
+   if ( pPH->packet_type != PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED )
       return false;
 
    int iTelemetryVersion = 0;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v3)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v3)) )
       iTelemetryVersion = 3;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v3) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v3) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)) )
       iTelemetryVersion = 3;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v3) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v3) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)) )
       iTelemetryVersion = 3;
 
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v4)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4)) )
       iTelemetryVersion = 4;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v4) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)) )
       iTelemetryVersion = 4;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v4) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)) )
       iTelemetryVersion = 4;
 
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v5)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5)) )
       iTelemetryVersion = 5;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v5) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)) )
       iTelemetryVersion = 5;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v5) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)) )
       iTelemetryVersion = 5;
 
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v6)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6)) )
       iTelemetryVersion = 6;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v6) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info)) )
       iTelemetryVersion = 6;
-   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_ruby_telemetry_extended_v6) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)) )
+   if ( pPH->total_length == ((u16)sizeof(t_packet_header)+(u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info) + (u16)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)) )
       iTelemetryVersion = 6;
 
    if ( 0 == iTelemetryVersion )
       return false;
 
-   u8 uRubyVersion = 0;
+   u8 uAnhydrateVersion = 0;
    if ( 3 == iTelemetryVersion )
    {
-      t_packet_header_ruby_telemetry_extended_v3* pPHRTE = (t_packet_header_ruby_telemetry_extended_v3*)(pPacketData+sizeof(t_packet_header));
-      uRubyVersion = pPHRTE->rubyVersion;
+      t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v3*)(pPacketData+sizeof(t_packet_header));
+      uAnhydrateVersion = pPHRTE->AnhydrateVersion;
    }
    if ( 4 == iTelemetryVersion )
    {
-      t_packet_header_ruby_telemetry_extended_v4* pPHRTE = (t_packet_header_ruby_telemetry_extended_v4*)(pPacketData+sizeof(t_packet_header));
-      uRubyVersion = pPHRTE->rubyVersion;
+      t_packet_header_Anhydrate_telemetry_extended_v4* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v4*)(pPacketData+sizeof(t_packet_header));
+      uAnhydrateVersion = pPHRTE->AnhydrateVersion;
    }
    if ( 5 == iTelemetryVersion )
    {
-      t_packet_header_ruby_telemetry_extended_v5* pPHRTE = (t_packet_header_ruby_telemetry_extended_v5*)(pPacketData+sizeof(t_packet_header));
-      uRubyVersion = pPHRTE->rubyVersion;
+      t_packet_header_Anhydrate_telemetry_extended_v5* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v5*)(pPacketData+sizeof(t_packet_header));
+      uAnhydrateVersion = pPHRTE->AnhydrateVersion;
    }
    if ( 6 == iTelemetryVersion )
    {
-      t_packet_header_ruby_telemetry_extended_v6* pPHRTE = (t_packet_header_ruby_telemetry_extended_v6*)(pPacketData+sizeof(t_packet_header));
-      uRubyVersion = pPHRTE->rubyVersion;
+      t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v6*)(pPacketData+sizeof(t_packet_header));
+      uAnhydrateVersion = pPHRTE->AnhydrateVersion;
    }
 
-   if ( 0 == uRubyVersion )
+   if ( 0 == uAnhydrateVersion )
       return false;
 
    u32 uStreamPacketIndex = pPH->stream_packet_idx;
@@ -763,12 +763,12 @@ bool _check_update_first_pairing_done_if_needed(int iInterfaceIndex, u8* pPacket
    g_pCurrentModel->b_mustSyncFromVehicle = true;
    g_pCurrentModel->is_spectator = false;
    deleteAllModels();
-   addNewModel(pPH->vehicle_id_src, (uRubyVersion>>4) &0x0F, uRubyVersion & 0x0F);
+   addNewModel(pPH->vehicle_id_src, (uAnhydrateVersion>>4) &0x0F, uAnhydrateVersion & 0x0F);
    replaceModel(0, g_pCurrentModel);
    saveControllerModel(g_pCurrentModel);
    logControllerModels();
    set_model_main_connect_frequency(g_pCurrentModel->uVehicleId, uCurrentFrequencyKhz);
-   ruby_set_is_first_pairing_done();
+   Anhydrate_set_is_first_pairing_done();
 
    resetVehicleRuntimeInfo(0);
    g_State.vehiclesRuntimeInfo[0].uVehicleId = uVehicleIdSrc;
@@ -784,7 +784,7 @@ bool _check_update_first_pairing_done_if_needed(int iInterfaceIndex, u8* pPacket
    u8 packet[MAX_PACKET_TOTAL_SIZE];
    memcpy(packet, (u8*)&PH, sizeof(t_packet_header));
    radio_packet_compute_crc(packet, PH.total_length);
-   if ( ruby_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
+   if ( Anhydrate_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
       log_line("Sent notification to central that first parining was done.");
    else
       log_softerror_and_alarm("Failed to send notification to central that first parining was done.");
@@ -800,8 +800,8 @@ void _check_update_bidirectional_link_state(int iInterfaceIndex, int iRuntimeInd
    if ( uPacketType == PACKET_TYPE_COMMAND_RESPONSE )
       bPacketIsAck = true;
 
-   if ( (uPacketType == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION) ||
-        (uPacketType == PACKET_TYPE_RUBY_PING_CLOCK_REPLY) ||
+   if ( (uPacketType == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION) ||
+        (uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY) ||
         (uPacketType == PACKET_TYPE_VIDEO_ADAPTIVE_VIDEO_PARAMS_ACK) ||
         (uPacketType == PACKET_TYPE_TEST_RADIO_LINK) )
       bPacketIsAck = true;
@@ -1087,14 +1087,14 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
 
       if ( !bIsRelayedPacket )
       {
-         // Ruby telemetry is always sent to central, so that wrong vehicle or relayed vehicles can be detected
+         // Anhydrate telemetry is always sent to central, so that wrong vehicle or relayed vehicles can be detected
          if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_TELEMETRY )
-         if ( (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED) || 
+         if ( (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED) || 
               (uPacketType == PACKET_TYPE_FC_TELEMETRY) ||
               (uPacketType == PACKET_TYPE_FC_TELEMETRY_EXTENDED) )
          {
             if ( -1 != g_fIPCToCentral )
-               ruby_ipc_channel_send_message(g_fIPCToCentral, pData, iDataLength);
+               Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, iDataLength);
             if ( NULL != g_pProcessStats )
                g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
          }         
@@ -1102,20 +1102,20 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
       }
    }
 
-   if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_RUBY )
+   if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_Anhydrate )
    {
       if ( bIsRelayedPacket )
       {
-         if ( (uPacketType == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION) ||
-              (uPacketType == PACKET_TYPE_RUBY_PING_CLOCK_REPLY) ||
+         if ( (uPacketType == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION) ||
+              (uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY) ||
               (uPacketType == PACKET_TYPE_VIDEO_ADAPTIVE_VIDEO_PARAMS_ACK) ||
               (uPacketType == PACKET_TYPE_NEGOCIATE_RADIO_LINKS) ||
               (uPacketType == PACKET_TYPE_TEST_RADIO_LINK) ||
-              (uPacketType == PACKET_TYPE_RUBY_MESSAGE) )
-            _process_received_ruby_message(iRuntimeIndex, iInterfaceIndex, pData);
+              (uPacketType == PACKET_TYPE_Anhydrate_MESSAGE) )
+            _process_received_Anhydrate_message(iRuntimeIndex, iInterfaceIndex, pData);
          return;
       }
-      _process_received_ruby_message(iRuntimeIndex, iInterfaceIndex, pData);
+      _process_received_Anhydrate_message(iRuntimeIndex, iInterfaceIndex, pData);
       return;
    }
 
@@ -1148,7 +1148,7 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
       if ( bIsRelayedPacket )
          return;
 
-      ruby_ipc_channel_send_message(g_fIPCToCentral, pData, iDataLength);
+      Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, iDataLength);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       
@@ -1214,9 +1214,9 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
                pPHTR->telem_segment_index, pPH->total_length - sizeof(t_packet_header) - sizeof(t_packet_header_telemetry_raw), pPH->total_length);
          }
          #endif
-         if ( (uPacketType != PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS ) &&
-              (uPacketType != PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY) )
-            ruby_ipc_channel_send_message(g_fIPCToTelemetry, pData, iDataLength);
+         if ( (uPacketType != PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS ) &&
+              (uPacketType != PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY) )
+            Anhydrate_ipc_channel_send_message(g_fIPCToTelemetry, pData, iDataLength);
       }
 
       if ( is_sw_version_atleast(pModel, 11, 6) )
@@ -1227,17 +1227,17 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
             t_packet_header_fc_telemetry* pPHFCTelem = (t_packet_header_fc_telemetry*) (pData + sizeof(t_packet_header));
             memcpy(&g_State.vehiclesRuntimeInfo[iRuntimeIndex].headerFCTelemetry, pPHFCTelem, sizeof(t_packet_header_fc_telemetry));
          }
-         if ( uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED )
+         if ( uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED )
          {
-            g_State.vehiclesRuntimeInfo[iRuntimeIndex].uTimeLastRecvRubyTelemetryExtended = g_TimeNow;
-            t_packet_header_ruby_telemetry_extended_v6* pPHRubyTelem = (t_packet_header_ruby_telemetry_extended_v6*) (pData + sizeof(t_packet_header));
-            memcpy(&g_State.vehiclesRuntimeInfo[iRuntimeIndex].headerRubyTelemetryExtended, pPHRubyTelem, sizeof(t_packet_header_ruby_telemetry_extended_v6));
+            g_State.vehiclesRuntimeInfo[iRuntimeIndex].uTimeLastRecvAnhydrateTelemetryExtended = g_TimeNow;
+            t_packet_header_Anhydrate_telemetry_extended_v6* pPHAnhydrateTelem = (t_packet_header_Anhydrate_telemetry_extended_v6*) (pData + sizeof(t_packet_header));
+            memcpy(&g_State.vehiclesRuntimeInfo[iRuntimeIndex].headerAnhydrateTelemetryExtended, pPHAnhydrateTelem, sizeof(t_packet_header_Anhydrate_telemetry_extended_v6));
          }
-         if ( uPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT )
+         if ( uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT )
          {
-            g_State.vehiclesRuntimeInfo[iRuntimeIndex].uTimeLastRecvRubyTelemetryShort = g_TimeNow;
-            t_packet_header_ruby_telemetry_short* pPHFCTelemShort = (t_packet_header_ruby_telemetry_short*) (pData + sizeof(t_packet_header));
-            memcpy(&g_State.vehiclesRuntimeInfo[iRuntimeIndex].headerRubyTelemetryShort, pPHFCTelemShort, sizeof(t_packet_header_ruby_telemetry_short));
+            g_State.vehiclesRuntimeInfo[iRuntimeIndex].uTimeLastRecvAnhydrateTelemetryShort = g_TimeNow;
+            t_packet_header_Anhydrate_telemetry_short* pPHFCTelemShort = (t_packet_header_Anhydrate_telemetry_short*) (pData + sizeof(t_packet_header));
+            memcpy(&g_State.vehiclesRuntimeInfo[iRuntimeIndex].headerAnhydrateTelemetryShort, pPHFCTelemShort, sizeof(t_packet_header_Anhydrate_telemetry_short));
          }
          if ( uPacketType == PACKET_TYPE_TELEMETRY_MSP )
          {
@@ -1245,58 +1245,58 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
          }
       }
 
-      if ( uPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT )
+      if ( uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT )
       {
-         t_packet_header_ruby_telemetry_short* pPHRTShort = (t_packet_header_ruby_telemetry_short*) (pData + sizeof(t_packet_header));
+         t_packet_header_Anhydrate_telemetry_short* pPHRTShort = (t_packet_header_Anhydrate_telemetry_short*) (pData + sizeof(t_packet_header));
 
-         if ( pPHRTShort->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
+         if ( pPHRTShort->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
             g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = false;
          else
             g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = true;
          
-         if ( pPHRTShort->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
+         if ( pPHRTShort->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
             g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = false;
          else
             g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = true;
       }
 
-      if ( uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED )
+      if ( uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED )
       {
          if ( get_sw_version_build(pModel) >= 305 )
          {
-            t_packet_header_ruby_telemetry_extended_v6* pPHRTE = (t_packet_header_ruby_telemetry_extended_v6*) (pData + sizeof(t_packet_header));
-            if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
+            t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v6*) (pData + sizeof(t_packet_header));
+            if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = false;
             else
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = true;
             
-            if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
+            if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = false;
             else
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = true;
          }
          else if ( get_sw_version_build(pModel) >= 290 )
          {
-            t_packet_header_ruby_telemetry_extended_v5* pPHRTE = (t_packet_header_ruby_telemetry_extended_v5*) (pData + sizeof(t_packet_header));
-            if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
+            t_packet_header_Anhydrate_telemetry_extended_v5* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v5*) (pData + sizeof(t_packet_header));
+            if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = false;
             else
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = true;
             
-            if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
+            if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = false;
             else
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = true;
          }
          else if ( get_sw_version_build(pModel) > 281 )
          {
-            t_packet_header_ruby_telemetry_extended_v4* pPHRTE = (t_packet_header_ruby_telemetry_extended_v4*) (pData + sizeof(t_packet_header));
-            if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
+            t_packet_header_Anhydrate_telemetry_extended_v4* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v4*) (pData + sizeof(t_packet_header));
+            if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER )
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = false;
             else
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleFastUplinkFromControllerLost = true;
             
-            if ( pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
+            if ( pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER )
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = false;
             else
                g_State.vehiclesRuntimeInfo[iRuntimeIndex].bIsVehicleSlowUplinkFromControllerLost = true;
@@ -1305,10 +1305,10 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
       bool bSendToCentral = false;
       bool bSendRelayedTelemetry = false;
 
-      // Ruby telemetry and FC telemetry from relayed vehicle is always sent to central to detect the relayed vehicle
+      // Anhydrate telemetry and FC telemetry from relayed vehicle is always sent to central to detect the relayed vehicle
       if ( bIsRelayedPacket )
-      if ( (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT) ||
+      if ( (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT) ||
            (uPacketType == PACKET_TYPE_FC_TELEMETRY) ||
            (uPacketType == PACKET_TYPE_FC_TELEMETRY_EXTENDED) ||
            (uPacketType == PACKET_TYPE_TELEMETRY_MSP))
@@ -1319,24 +1319,24 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
          bSendRelayedTelemetry = true;
 
       if ( (! bIsRelayedPacket) || bSendRelayedTelemetry )
-      if ( (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED) ||
+      if ( (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED) ||
            (uPacketType == PACKET_TYPE_FC_TELEMETRY) ||
            (uPacketType == PACKET_TYPE_FC_TELEMETRY_EXTENDED) ||
            (uPacketType == PACKET_TYPE_FC_RC_CHANNELS) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY ) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS ) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_VIDEO_INFO_STATS) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY ) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS ) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_INFO_STATS) ||
            (uPacketType == PACKET_TYPE_TELEMETRY_RAW_DOWNLOAD) ||
            (uPacketType == PACKET_TYPE_DEBUG_INFO) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY) ||
            (uPacketType == PACKET_TYPE_TELEMETRY_MSP))
          bSendToCentral = true;
 
       if ( bSendToCentral )
       {
-         ruby_ipc_channel_send_message(g_fIPCToCentral, pData, iDataLength);
+         Anhydrate_ipc_channel_send_message(g_fIPCToCentral, pData, iDataLength);
         
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -1358,7 +1358,7 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
          return;
 
       if ( -1 != g_fIPCToRC )
-         ruby_ipc_channel_send_message(g_fIPCToRC, pData, iDataLength);
+         Anhydrate_ipc_channel_send_message(g_fIPCToRC, pData, iDataLength);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
 
@@ -1389,3 +1389,4 @@ void process_received_single_radio_packet(int iInterfaceIndex, u8* pData, int iD
       return;
    }
 } 
+

@@ -26,7 +26,7 @@ void core_plugin_util_log_line(const char* szLine)
    if ( -1 == s_logServiceMessageQueueCorePlugin )
    {
       key_t key;
-      key = ftok("ruby_logger", 123);
+      key = ftok("Anhydrate_logger", 123);
    
       s_logServiceMessageQueueCorePlugin = msgget(key, 0222);
    }
@@ -60,4 +60,5 @@ void core_plugin_util_log_line(const char* szLine)
 #ifdef __cplusplus
 }  
 #endif 
+
 

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -140,7 +140,7 @@ void _hardware_detectSystemType()
    
    char szBuff[256];
    char szFile[MAX_FILE_PATH_SIZE];
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_CONFIG_SYSTEM_TYPE);
    FILE* fd = fopen(szFile, "r");
    if ( NULL != fd )
@@ -270,7 +270,7 @@ void _hardware_detectSystemType()
    else
       log_line("[Hardware] Detected system as controller.");
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_CONFIG_SYSTEM_TYPE);
    fd = fopen(szFile, "w");
    if ( NULL != fd )
@@ -279,7 +279,7 @@ void _hardware_detectSystemType()
       fclose(fd);
    }
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_CONFIG_BOARD_TYPE);
    fd = fopen(szFile, "w");
    if ( NULL == fd )
@@ -292,17 +292,17 @@ void _hardware_detectSystemType()
 
 
    #if defined (HW_PLATFORM_RASPBERRY)
-   fd = fopen("/boot/ruby_board.txt", "w");
+   fd = fopen("/boot/Anhydrate_board.txt", "w");
    if ( NULL != fd )
    {
       fprintf(fd, "%u\n", s_uHardwareBoardType);
       fclose(fd);
    }
-   hw_execute_bash_command("cat /proc/device-tree/model > /boot/ruby_board_desc.txt", NULL);
+   hw_execute_bash_command("cat /proc/device-tree/model > /boot/Anhydrate_board_desc.txt", NULL);
    #endif
 
    #if defined (HW_PLATFORM_OPENIPC_CAMERA)
-   hw_execute_bash_command("cat /proc/device-tree/model > /root/ruby/config/ruby_board_desc.txt", NULL);
+   hw_execute_bash_command("cat /proc/device-tree/model > /root/Anhydrate/config/Anhydrate_board_desc.txt", NULL);
    #endif
 
    log_line("[Hardware] Detected system Type: %s", s_iHardwareSystemIsVehicle?"[vehicle]":"[controller]");
@@ -476,25 +476,25 @@ int init_hardware_only_detection_pins()
    #ifdef HW_CAPABILITY_GPIO
    if (-1 == GPIOExport(GPIOGetPinDetectVehicle()))
    {
-      log_line("[Hardware] Failed to get GPIO access to Ruby type PIN.");
+      log_line("[Hardware] Failed to get GPIO access to Anhydrate type PIN.");
       return(0);
    }
 
    if (-1 == GPIODirection(GPIOGetPinDetectVehicle(), IN))
    {
-      log_line("[Hardware] Failed set GPIO configuration for Ruby type PIN.");
+      log_line("[Hardware] Failed set GPIO configuration for Anhydrate type PIN.");
       return(0);
    }
 
    if (-1 == GPIOExport(GPIOGetPinDetectController()) )
    {
-      log_line("[Hardware] Failed to get GPIO access to Ruby type C PIN.");
+      log_line("[Hardware] Failed to get GPIO access to Anhydrate type C PIN.");
       return(0);
    }
 
    if (-1 == GPIODirection(GPIOGetPinDetectController(), IN))
    {
-      log_line("[Hardware] Failed set GPIO configuration for Ruby type C PIN.");
+      log_line("[Hardware] Failed set GPIO configuration for Anhydrate type C PIN.");
       return(0);
    }
 
@@ -632,9 +632,9 @@ void _hardware_detect_board_radxa(char* szBoardId)
       bool bVRx = false;
       if ( access("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", R_OK) == -1 )
          bVRx = true;
-      if ( access("/home/radxa/ruby", R_OK) != -1 )
+      if ( access("/home/radxa/Anhydrate", R_OK) != -1 )
       if ( access("/home/8812eu_radxa.ko", R_OK) != -1 )
-      if ( (access("/home/radxa/ruby/drivers", R_OK) == -1) || bVRx )
+      if ( (access("/home/radxa/Anhydrate/drivers", R_OK) == -1) || bVRx )
       {
          hw_execute_bash_command_raw("lsusb | grep 0bda:a81a", szOutput);
          char* pId = strstr(szOutput, "0bda:a81a");

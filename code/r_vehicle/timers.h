@@ -60,3 +60,4 @@ extern u32 g_uTimeLastVideoTxOverload;
 extern u32 g_uTimeToSaveVeyeCameraParams;
 
 extern u32 g_uTimeRequestedReboot;
+

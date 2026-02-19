@@ -95,3 +95,4 @@ class MenuItem
      bool  m_bCustomTextColor;
      double m_TextColor[4];
 };
+

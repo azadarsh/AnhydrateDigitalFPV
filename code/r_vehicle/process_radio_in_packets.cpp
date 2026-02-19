@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -37,17 +37,17 @@
 #include "../base/hardware.h"
 #include "../base/hardware_procs.h"
 #include "../base/radio_utils.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/radio_stats.h"
 #include "../common/string_utils.h"
 #include "../radio/radiolink.h"
 #include "../radio/radio_rx.h"
 #include "../radio/radio_tx.h"
 
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 #include "packets_utils.h"
 #include "processor_tx_video.h"
-#include "process_received_ruby_messages.h"
+#include "process_received_Anhydrate_messages.h"
 #include "launchers_vehicle.h"
 #include "processor_relay.h"
 #include "shared_vars.h"
@@ -316,16 +316,16 @@ void process_received_single_radio_packet(int iRadioInterface, u8* pData, int da
       if ( ! s_bRCLinkDetected )
       {
          char szBuff[128];
-         snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_RC_DETECTED);
+         snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_RC_DETECTED);
          hw_execute_bash_command(szBuff, NULL);
       }
       s_bRCLinkDetected = true;
    }
 
-   if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_RUBY )
+   if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_Anhydrate )
    {
       if ( uVehicleIdDest == g_pCurrentModel->uVehicleId )
-         process_received_ruby_message_from_controller(iRadioInterface, pData);
+         process_received_Anhydrate_message_from_controller(iRadioInterface, pData);
       return;
    }
 
@@ -360,21 +360,21 @@ void process_received_single_radio_packet(int iRadioInterface, u8* pData, int da
          }
       }
       //log_line("Received a command: packet type: %d, module: %d, length: %d", pPH->packet_type, pPH->packet_flags & PACKET_FLAGS_MASK_MODULE, pPH->total_length);
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, pData, dataLength);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, pData, dataLength);
       return;
    }
 
    if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_TELEMETRY )
    {
       //log_line("Received an uplink telemetry packet: packet type: %d, module: %d, length: %d", pPH->packet_type, pPH->packet_flags & PACKET_FLAGS_MASK_MODULE, pPH->total_length);
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, pData, dataLength);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, pData, dataLength);
       return;
    }
 
    if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_RC )
    {
       if ( g_bReceivedPairingRequest && g_pCurrentModel->rc_params.rc_enabled )
-         ruby_ipc_channel_send_message(s_fIPCRouterToRC, pData, dataLength);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, pData, dataLength);
       return;
    }
 
@@ -384,3 +384,4 @@ void process_received_single_radio_packet(int iRadioInterface, u8* pData, int da
          process_data_tx_video_command(iRadioInterface, pData);
    }
 }
+

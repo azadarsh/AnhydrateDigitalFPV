@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -212,3 +212,4 @@ int dpp(u8* pData, int len)
    }
    return 1;
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -388,7 +388,7 @@ void* _thread_majestic_log_entry(void *argument)
    char szComm[256];
    sprintf(szComm, "echo \"----------------------------------------------\" >> %s", CONFIG_FILE_FULLPATH_MAJESTIC_LOG);
    hw_execute_bash_command_raw_silent(szComm, NULL);
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "echo \"Ruby: %s\" >> %s", szLog, CONFIG_FILE_FULLPATH_MAJESTIC_LOG);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "echo \"Anhydrate: %s\" >> %s", szLog, CONFIG_FILE_FULLPATH_MAJESTIC_LOG);
    hw_execute_bash_command_raw_silent(szComm, NULL);
    free(szLog);
    return NULL;
@@ -404,7 +404,7 @@ void hardware_camera_maj_add_log(const char* szLog, bool bAsync)
       char szComm[256];
       sprintf(szComm, "echo \"----------------------------------------------\" >> %s", CONFIG_FILE_FULLPATH_MAJESTIC_LOG);
       hw_execute_bash_command_raw_silent(szComm, NULL);
-      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "echo \"Ruby: %s\" >> %s", szLog, CONFIG_FILE_FULLPATH_MAJESTIC_LOG);
+      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "echo \"Anhydrate: %s\" >> %s", szLog, CONFIG_FILE_FULLPATH_MAJESTIC_LOG);
       hw_execute_bash_command_raw_silent(szComm, NULL);
       return;
    }
@@ -458,9 +458,9 @@ bool hardware_camera_maj_start_capture_program(bool bEnableLog)
       hw_execute_bash_command_raw("ps -ae | grep majestic | grep -v \"grep\"", szOutput);
       log_line("[HwCamMajestic] Found majestic PID(s): (%s)", szOutput);
       removeTrailingNewLines(szOutput);
-      hw_execute_bash_command_raw("ps -ae | grep ruby_rt_vehicle | grep -v \"grep\"", szOutput);
+      hw_execute_bash_command_raw("ps -ae | grep Anhydrate_rt_vehicle | grep -v \"grep\"", szOutput);
       removeTrailingNewLines(szOutput);
-      log_line("[HwCamMajestic] Found ruby PID(s): (%s)", szOutput);
+      log_line("[HwCamMajestic] Found Anhydrate PID(s): (%s)", szOutput);
       hardware_sleep_ms(500);
    }
    return false;
@@ -911,7 +911,7 @@ void hardware_camera_maj_set_calibration_file(int iCameraType, int iCalibrationF
       strcat(szFileName, szCalibrationFile);
       if ( NULL == strstr(szFileName, ".bin") )
          strcat(szFileName, ".bin");
-      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s%s /etc/sensors/%s", FOLDER_RUBY_TEMP, szFileName, szFileName);
+      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s%s /etc/sensors/%s", FOLDER_Anhydrate_TEMP, szFileName, szFileName);
       hw_execute_bash_command(szComm, NULL);
       hw_execute_bash_command("sync", NULL);
       snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cli -s .isp.sensorConfig /etc/sensors/%s", szFileName);
@@ -1298,3 +1298,4 @@ u32  hardware_camera_maj_get_last_audio_change_time()
 {
    return s_uMajesticLastChangeAudioTime;
 }
+

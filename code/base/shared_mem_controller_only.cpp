@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -156,3 +156,4 @@ void shared_mem_ctrl_ping_stats_info_close(shared_mem_ctrl_ping_stats* pAddress)
       munmap(pAddress, sizeof(shared_mem_ctrl_ping_stats));
    //shm_unlink(szName);
 }
+

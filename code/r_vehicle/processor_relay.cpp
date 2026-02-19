@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -33,7 +33,7 @@
 #include "../base/base.h"
 #include "../base/config.h"
 #include "../base/models_list.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/radio_stats.h"
 #include "../common/string_utils.h"
 #include "../common/relay_utils.h"
@@ -41,7 +41,7 @@
 #include "../radio/radio_rx.h"
 #include "../utils/utils_vehicle.h"
 #include "processor_relay.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 #include "radio_links.h"
 #include "shared_vars.h"
 #include "timers.h"
@@ -56,16 +56,16 @@ type_uplink_rx_info_stats* s_pRelayRxInfoStats = NULL;
 
 u8 s_uLastLocalRadioLinkUsedForPingToRelayedVehicle = 0;
 
-u32 s_uLastTimeReceivedRubyTelemetryFromRelayedVehicle = 0;
+u32 s_uLastTimeReceivedAnhydrateTelemetryFromRelayedVehicle = 0;
 
-u32 relay_get_time_last_received_ruby_telemetry_from_relayed_vehicle()
+u32 relay_get_time_last_received_Anhydrate_telemetry_from_relayed_vehicle()
 {
-   return s_uLastTimeReceivedRubyTelemetryFromRelayedVehicle;
+   return s_uLastTimeReceivedAnhydrateTelemetryFromRelayedVehicle;
 }
 
-void _process_received_ruby_telemetry_from_relayed_vehicle(u8* pPacket, int iLenght)
+void _process_received_Anhydrate_telemetry_from_relayed_vehicle(u8* pPacket, int iLenght)
 {
-   s_uLastTimeReceivedRubyTelemetryFromRelayedVehicle = g_TimeNow;
+   s_uLastTimeReceivedAnhydrateTelemetryFromRelayedVehicle = g_TimeNow;
 }
 
 void relay_init_and_set_rx_info_stats(type_uplink_rx_info_stats* pUplinkStats)
@@ -79,7 +79,7 @@ void relay_process_received_single_radio_packet_from_controller_to_relayed_vehic
 {
    t_packet_header* pPH = (t_packet_header*)pBufferData;
         
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK )
       s_uLastLocalRadioLinkUsedForPingToRelayedVehicle = (u8) g_pCurrentModel->radioInterfacesParams.interface_link_id[iRadioInterfaceIndex];
 
    relay_send_single_packet_to_relayed_vehicle(pBufferData, iBufferLength);
@@ -139,7 +139,7 @@ void relay_process_received_radio_packet_from_relayed_vehicle(int iRadioLink, in
 
    bool bPacketContainsDataToForward = false;
 
-   if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_RUBY )
+   if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_Anhydrate )
       bPacketContainsDataToForward = true;
 
    if ( g_pCurrentModel->relay_params.uRelayCapabilitiesFlags & RELAY_CAPABILITY_TRANSPORT_VIDEO )
@@ -158,20 +158,20 @@ void relay_process_received_radio_packet_from_relayed_vehicle(int iRadioLink, in
       bPacketContainsDataToForward = true;
   
    
-   // Ruby telemetry and FC telemetry is always forwarded on the relay link
+   // Anhydrate telemetry and FC telemetry is always forwarded on the relay link
    if ( (uPacketFlags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_TELEMETRY )
-   if ( (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED) ||
-        (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT) ||
+   if ( (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED) ||
+        (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT) ||
         (uPacketType == PACKET_TYPE_FC_TELEMETRY) ||
         (uPacketType == PACKET_TYPE_FC_TELEMETRY_EXTENDED) )
    {
-      if ( (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED) ||
-           (uPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT) )
-         _process_received_ruby_telemetry_from_relayed_vehicle(pBufferData, iTotalLength);
+      if ( (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED) ||
+           (uPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT) )
+         _process_received_Anhydrate_telemetry_from_relayed_vehicle(pBufferData, iTotalLength);
       bPacketContainsDataToForward = true;
    }
 
-   if ( uPacketType == PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
        memcpy(pBufferData+sizeof(t_packet_header)+2*sizeof(u8)+sizeof(u32), &s_uLastLocalRadioLinkUsedForPingToRelayedVehicle, sizeof(u8));
 
    if ( ! bPacketContainsDataToForward )
@@ -238,13 +238,13 @@ void relay_on_relay_params_changed()
    log_line("[Relay] Notify other processes to reload model (relay params changed)");
    t_packet_header PH;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_MODEL_CHANGED, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY | (MODEL_CHANGED_GENERIC<<8);
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate | (MODEL_CHANGED_GENERIC<<8);
    PH.total_length = sizeof(t_packet_header);
 
-   ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
-   ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
    if ( g_pCurrentModel->rc_params.rc_enabled )
-      ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
          
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -298,7 +298,7 @@ void relay_send_packet_to_controller(u8* pBufferData, int iBufferLength)
       uSourceVehicleId = pPH->vehicle_id_src;
       uStreamId = (pPH->stream_packet_idx)>>PACKET_FLAGS_MASK_SHIFT_STREAM_INDEX;
       
-      if ( uPacketType == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION )
+      if ( uPacketType == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION )
          bContainsPairConfirmation = true;
 
       if ( (uStreamId < 0) || (uStreamId >= MAX_RADIO_STREAMS) )

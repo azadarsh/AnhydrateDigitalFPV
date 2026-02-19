@@ -17,3 +17,4 @@ class PopupRadioInterface: public Popup
       float m_fHeightGraph;
       int m_iMaxMeasuredTxPowerMw;
 };
+

@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
 
 
-   int iPID = hw_process_exists("ruby_central");
+   int iPID = hw_process_exists("Anhydrate_central");
    if ( iPID > 0 )
       log_line("Proc exists: %d", iPID);
    else
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
    hw_execute_process("find *.txt", 0, szOutput32, sizeof(szOutput32)/sizeof(szOutput32[0]));
    log_line("Output: [%s]", szOutput32);
 
-   hw_execute_process("find /home/pi/ruby/*.txt", 0, szOutput256, sizeof(szOutput256)/sizeof(szOutput256[0]));
+   hw_execute_process("find /home/pi/Anhydrate/*.txt", 0, szOutput256, sizeof(szOutput256)/sizeof(szOutput256[0]));
    log_line("Output: [%s]", szOutput256);
 
    hw_execute_process("blabla txt", 0, szOutput256, sizeof(szOutput256)/sizeof(szOutput256[0]));
@@ -94,3 +94,4 @@ int main(int argc, char *argv[])
    log_line("Finished all.");
    exit(0);
 }
+

@@ -14,7 +14,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define RUBY_PIPES_EXTRA_FLAGS O_NONBLOCK
+#define Anhydrate_PIPES_EXTRA_FLAGS O_NONBLOCK
 
 bool bQuit = false;
 
@@ -177,3 +177,4 @@ int main(int argc, char *argv[])
    log_line("\nEnded\n");
    exit(0);
 }
+

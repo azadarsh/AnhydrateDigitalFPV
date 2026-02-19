@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -68,13 +68,13 @@ int radio_packet_check_crc(u8* pBuffer, int length)
    return 1;
 }
 
-void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v3(t_packet_header_ruby_telemetry_extended_v6* pV6, t_packet_header_ruby_telemetry_extended_v3* pV3)
+void radio_populate_Anhydrate_telemetry_v6_from_Anhydrate_telemetry_v3(t_packet_header_Anhydrate_telemetry_extended_v6* pV6, t_packet_header_Anhydrate_telemetry_extended_v3* pV3)
 {
    if ( (NULL == pV6) || (NULL == pV3) )
       return;
 
-   pV6->uRubyFlags = pV3->uRubyFlags;
-   pV6->rubyVersion = pV3->rubyVersion;
+   pV6->uAnhydrateFlags = pV3->uAnhydrateFlags;
+   pV6->AnhydrateVersion = pV3->AnhydrateVersion;
    pV6->uVehicleId = pV3->uVehicleId;
    pV6->vehicle_type = pV3->vehicle_type;
    memcpy(pV6->vehicle_name, pV3->vehicle_name, MAX_VEHICLE_NAME_LENGTH);
@@ -106,20 +106,20 @@ void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v3(t_packet_header_rub
    pV6->uplink_mavlink_rc_rssi = pV3->uplink_mavlink_rc_rssi;
    pV6->uplink_mavlink_rx_rssi = pV3->uplink_mavlink_rx_rssi;
 
-   pV6->uExtraRubyFlags = pV3->extraFlags;
+   pV6->uExtraAnhydrateFlags = pV3->extraFlags;
    pV6->extraSize = pV3->extraSize;
 
    for( int i=0; i<MAX_RADIO_INTERFACES; i++ )
       pV6->iTxPowers[i] = 0;
 }
 
-void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v4(t_packet_header_ruby_telemetry_extended_v6* pV6, t_packet_header_ruby_telemetry_extended_v4* pV4)
+void radio_populate_Anhydrate_telemetry_v6_from_Anhydrate_telemetry_v4(t_packet_header_Anhydrate_telemetry_extended_v6* pV6, t_packet_header_Anhydrate_telemetry_extended_v4* pV4)
 {
    if ( (NULL == pV6) || (NULL == pV4) )
       return;
 
-   pV6->uRubyFlags = pV4->uRubyFlags;
-   pV6->rubyVersion = pV4->rubyVersion;
+   pV6->uAnhydrateFlags = pV4->uAnhydrateFlags;
+   pV6->AnhydrateVersion = pV4->AnhydrateVersion;
    pV6->uVehicleId = pV4->uVehicleId;
    pV6->vehicle_type = pV4->vehicle_type;
    memcpy(pV6->vehicle_name, pV4->vehicle_name, MAX_VEHICLE_NAME_LENGTH);
@@ -152,7 +152,7 @@ void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v4(t_packet_header_rub
    pV6->uplink_mavlink_rc_rssi = pV4->uplink_mavlink_rc_rssi;
    pV6->uplink_mavlink_rx_rssi = pV4->uplink_mavlink_rx_rssi;
 
-   pV6->uExtraRubyFlags = pV4->uExtraRubyFlags;
+   pV6->uExtraAnhydrateFlags = pV4->uExtraAnhydrateFlags;
    pV6->extraSize = pV4->extraSize;
 
    for( int i=0; i<MAX_RADIO_INTERFACES; i++ )
@@ -160,13 +160,13 @@ void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v4(t_packet_header_rub
 }
 
 
-void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v5(t_packet_header_ruby_telemetry_extended_v6* pV6, t_packet_header_ruby_telemetry_extended_v5* pV5)
+void radio_populate_Anhydrate_telemetry_v6_from_Anhydrate_telemetry_v5(t_packet_header_Anhydrate_telemetry_extended_v6* pV6, t_packet_header_Anhydrate_telemetry_extended_v5* pV5)
 {
    if ( (NULL == pV6) || (NULL == pV5) )
       return;
 
-   pV6->uRubyFlags = pV5->uRubyFlags;
-   pV6->rubyVersion = pV5->rubyVersion;
+   pV6->uAnhydrateFlags = pV5->uAnhydrateFlags;
+   pV6->AnhydrateVersion = pV5->AnhydrateVersion;
    pV6->uVehicleId = pV5->uVehicleId;
    pV6->vehicle_type = pV5->vehicle_type;
    memcpy(pV6->vehicle_name, pV5->vehicle_name, MAX_VEHICLE_NAME_LENGTH);
@@ -200,7 +200,7 @@ void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v5(t_packet_header_rub
    pV6->uplink_mavlink_rc_rssi = pV5->uplink_mavlink_rc_rssi;
    pV6->uplink_mavlink_rx_rssi = pV5->uplink_mavlink_rx_rssi;
 
-   pV6->uExtraRubyFlags = pV5->uExtraRubyFlags;
+   pV6->uExtraAnhydrateFlags = pV5->uExtraAnhydrateFlags;
    pV6->extraSize = pV5->extraSize;
 }
 
@@ -218,15 +218,15 @@ void radio_packets_log_sizes()
    log_always(szBuff);
    sprintf(szBuff, "[Radio] Size of radio t_packet_header_video_segment_important: %d bytes", (int)sizeof(t_packet_header_video_segment_important));
    log_always(szBuff);
-   sprintf(szBuff, "[Radio] Size of radio t_packet_header_ruby_telemetry_short: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_short));
+   sprintf(szBuff, "[Radio] Size of radio t_packet_header_Anhydrate_telemetry_short: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_short));
    log_always(szBuff);
-   sprintf(szBuff, "[Radio] Size of radio t_packet_header_ruby_telemetry_extended_v4: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_v4));
+   sprintf(szBuff, "[Radio] Size of radio t_packet_header_Anhydrate_telemetry_extended_v4: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4));
    log_always(szBuff);
-   sprintf(szBuff, "[Radio] Size of radio t_packet_header_ruby_telemetry_extended_v5: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_v5));
+   sprintf(szBuff, "[Radio] Size of radio t_packet_header_Anhydrate_telemetry_extended_v5: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5));
    log_always(szBuff);
-   sprintf(szBuff, "[Radio] Size of radio t_packet_header_ruby_telemetry_extended_extra_info: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_extra_info));
+   sprintf(szBuff, "[Radio] Size of radio t_packet_header_Anhydrate_telemetry_extended_extra_info: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info));
    log_always(szBuff);
-   sprintf(szBuff, "[Radio] Size of radio t_packet_header_ruby_telemetry_extended_extra_info_retransmissions: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+   sprintf(szBuff, "[Radio] Size of radio t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
    log_always(szBuff);
    sprintf(szBuff, "[Radio] Size of radio t_packet_header_fc_telemetry: %d bytes", (int)sizeof(t_packet_header_fc_telemetry));
    log_always(szBuff);
@@ -234,3 +234,4 @@ void radio_packets_log_sizes()
    log_always(szBuff);
    */
 }
+

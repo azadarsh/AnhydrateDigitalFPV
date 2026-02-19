@@ -304,3 +304,4 @@ static inline void mavlink_msg_protocol_version_decode(const mavlink_message_t* 
     memcpy(protocol_version, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

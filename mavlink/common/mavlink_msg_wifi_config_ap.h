@@ -237,3 +237,4 @@ static inline void mavlink_msg_wifi_config_ap_decode(const mavlink_message_t* ms
     memcpy(wifi_config_ap, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

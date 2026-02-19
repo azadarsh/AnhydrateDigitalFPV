@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -102,7 +102,7 @@ u32 parse_ltm_read_u32()
    return t;
 }
 
-bool _parse_ltm_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_ruby_telemetry_extended_v6* pPHRTE, u8 vehicleType)
+bool _parse_ltm_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE, u8 vehicleType)
 {
    s_LTMPayloadReadIndex = 0;
    u8 tmp8;
@@ -210,10 +210,10 @@ bool _parse_ltm_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_ru
 
       if ( NULL != pPHRTE )
       {
-         if ( ! (pPHRTE->uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI) )
+         if ( ! (pPHRTE->uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI) )
          {
             log_line("Received RC RSSI from FC through LTM, value: %d", pdpfct->rc_rssi);
-            pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI;
+            pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI;
          }
          pPHRTE->uplink_mavlink_rc_rssi = pdpfct->rc_rssi;
       }
@@ -279,7 +279,7 @@ bool _parse_ltm_message(t_packet_header_fc_telemetry* pdpfct, t_packet_header_ru
 
 
 
-bool parse_telemetry_from_fc_ltm( u8* buffer, int length, t_packet_header_fc_telemetry* pphfct, t_packet_header_ruby_telemetry_extended_v6* pPHRTE, u8 vehicleType)
+bool parse_telemetry_from_fc_ltm( u8* buffer, int length, t_packet_header_fc_telemetry* pphfct, t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE, u8 vehicleType)
 {
    bool ret = false;
    u8 c;
@@ -357,3 +357,4 @@ bool parse_telemetry_from_fc_ltm( u8* buffer, int length, t_packet_header_fc_tel
    }
    return ret;
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -446,3 +446,4 @@ void adaptive_video_on_message_from_controller(u32 uRequestId, u8 uFlags, u32 uV
       }
    }
 }
+

@@ -8,3 +8,4 @@ void core_plugin_util_log_line(const char* szLine);
 #ifdef __cplusplus
 }  
 #endif 
+

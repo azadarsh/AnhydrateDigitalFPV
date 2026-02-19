@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -34,7 +34,7 @@
 #include "../base/hardware_radio.h"
 #include "../base/hardware_radio_sik.h"
 #include "../base/hardware_radio_serial.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/radio_utils.h"
 #include "../common/string_utils.h"
 #include "../common/radio_stats.h"
@@ -670,13 +670,13 @@ bool radio_links_restart(bool bAsync)
       log_line("[RadioLinks] Notify other processes to reload model");
       t_packet_header PH;
       radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_MODEL_CHANGED, STREAM_ID_DATA);
-      PH.vehicle_id_src = PACKET_COMPONENT_RUBY | (MODEL_CHANGED_GENERIC<<8);
+      PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate | (MODEL_CHANGED_GENERIC<<8);
       PH.total_length = sizeof(t_packet_header);
 
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
       if ( g_pCurrentModel->rc_params.rc_enabled )
-         ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
                
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -687,3 +687,4 @@ bool radio_links_restart(bool bAsync)
 
    return true;
 }
+

@@ -278,3 +278,4 @@ static inline void mavlink_msg_file_transfer_protocol_decode(const mavlink_messa
     memcpy(file_transfer_protocol, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

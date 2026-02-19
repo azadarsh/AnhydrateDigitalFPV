@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -28,6 +28,8 @@
     ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    Code contribution by: Jessica Severin
 */
 
 #include "../base/base.h"
@@ -38,7 +40,7 @@
 #include "../common/favorites.h"
 #include "quickactions.h"
 #include "colors.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 #include "events.h"
 #include "pairing.h"
 #include "handle_commands.h"
@@ -62,7 +64,7 @@ bool quickActionCheckVehicle(const char* szText)
    bool bHasVehicle = false;
    if ( pairing_isStarted() && (NULL != g_pCurrentModel) )
    if ( link_is_vehicle_online_now(g_pCurrentModel->uVehicleId) )
-   if ( link_has_received_main_vehicle_ruby_telemetry() )
+   if ( link_has_received_main_vehicle_Anhydrate_telemetry() )
       bHasVehicle = true;
 
    if ( bHasVehicle )
@@ -101,7 +103,7 @@ void executeQuickActionRecord()
 
    if ( g_bIsVideoRecording )
    {
-      ruby_stop_recording();
+      Anhydrate_stop_recording();
    }
    else
    {
@@ -112,7 +114,7 @@ void executeQuickActionRecord()
          popups_add_topmost(p);
       }
       else
-         ruby_start_recording();
+         Anhydrate_start_recording();
    }
 }
 
@@ -320,7 +322,7 @@ void executeQuickActionSwitchFavoriteVehicle()
    setControllerCurrentModel(g_pCurrentModel->uVehicleId);
    saveControllerModel(g_pCurrentModel);
 
-   ruby_set_active_model_id(g_pCurrentModel->uVehicleId);
+   Anhydrate_set_active_model_id(g_pCurrentModel->uVehicleId);
    
    onMainVehicleChanged(false);
 
@@ -434,7 +436,7 @@ void executeQuickActionToggleRCEnabled()
 {
    if ( (NULL != g_pCurrentModel) && g_pCurrentModel->is_spectator )
    {
-      warnings_add(0, "Can't enable RC while in spectator mode.");
+      warnings_add(0, L("Can't enable RC while in spectator mode."));
       return;
    }
    if ( ! quickActionCheckVehicle("enable/disable the RC link output") )
@@ -456,7 +458,7 @@ void executeQuickActionCameraProfileSwitch()
 {
    if ( g_pCurrentModel->is_spectator )
    {
-      warnings_add(0, "Can't switch camera profile for spectator vehicles.");
+      warnings_add(0, L("Can't switch camera profile for spectator vehicles."));
       return;
    }
    if ( handle_commands_is_command_in_progress() )
@@ -497,4 +499,5 @@ void executeQuickActionOSDSize()
    osd_apply_preferences();
    return;
 }
+
 

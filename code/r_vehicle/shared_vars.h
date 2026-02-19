@@ -81,7 +81,7 @@ extern bool g_bOSDPluginsNeedTelemetryStreams;
 
 extern u32 g_uControllerId;
 
-extern t_packet_header_ruby_telemetry_extended_extra_info_retransmissions g_PHTE_Retransmissions;
+extern t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions g_PHTE_Retransmissions;
 extern t_packet_header_vehicle_tx_history g_PHVehicleTxStats;
 extern shared_mem_dev_video_bitrate_history g_SM_DevVideoBitrateHistory;
 
@@ -97,4 +97,5 @@ extern int g_iGetSiKConfigAsyncRadioInterfaceIndex;
 extern u8 g_uGetSiKConfigAsyncVehicleLinkIndex;
 
 extern bool g_bLongTaskStarted;
+
 

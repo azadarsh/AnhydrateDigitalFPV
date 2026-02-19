@@ -18,3 +18,4 @@ void video_source_csi_send_control_message(u8 parameter, u16 value1, u16 value2)
 bool video_source_csi_periodic_health_checks();
 
 void video_source_csi_update_camera_params(Model* pModel, int iCameraIndex);
+

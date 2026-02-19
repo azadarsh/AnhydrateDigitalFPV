@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -126,7 +126,7 @@ void MenuVehicleGeneral::populate()
    m_pItemEditName->setMaxLength(MAX_VEHICLE_NAME_LENGTH-1);
    addMenuItem(m_pItemEditName);
 
-   m_pItemsSelect[0] = new MenuItemSelect(L("Vehicle Type"), L("Changes the vehicle type Ruby is using. Has impact on things like OSD elements, telemetry parsing."));
+   m_pItemsSelect[0] = new MenuItemSelect(L("Vehicle Type"), L("Changes the vehicle type Anhydrate is using. Has impact on things like OSD elements, telemetry parsing."));
    m_pItemsSelect[0]->addSelection(L("Generic"));
    m_pItemsSelect[0]->addSelection(L("Drone"));
    m_pItemsSelect[0]->addSelection(L("Airplane"));

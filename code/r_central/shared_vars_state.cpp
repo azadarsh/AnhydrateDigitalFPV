@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -47,7 +47,7 @@ int g_iCurrentActiveVehicleRuntimeInfoIndex = 0;
 bool g_bSearching = false;
 bool g_bSearchFoundVehicle = false;
 int g_iSearchFrequency = 0;
-int g_iSearchFirmwareType = MODEL_FIRMWARE_TYPE_RUBY;
+int g_iSearchFirmwareType = MODEL_FIRMWARE_TYPE_Anhydrate;
 
 int g_iSearchSiKAirDataRate = -1;
 int g_iSearchSiKECC = -1;
@@ -107,30 +107,30 @@ void reset_vehicle_runtime_info(t_structure_vehicle_info* pInfo)
    pInfo->uVehicleId = 0;
    pInfo->pModel = NULL;
 
-   // Reset Ruby telemetry info
+   // Reset Anhydrate telemetry info
 
-   pInfo->bGotRubyTelemetryInfo = false;
-   pInfo->bGotRubyTelemetryInfoShort = false;
-   pInfo->bGotRubyTelemetryExtraInfo = false;
-   pInfo->bGotRubyTelemetryExtraInfoRetransmissions = false;
+   pInfo->bGotAnhydrateTelemetryInfo = false;
+   pInfo->bGotAnhydrateTelemetryInfoShort = false;
+   pInfo->bGotAnhydrateTelemetryExtraInfo = false;
+   pInfo->bGotAnhydrateTelemetryExtraInfoRetransmissions = false;
    pInfo->bGotStatsVehicleRxCards = false;
    
-   pInfo->bRubyTelemetryLost = false;
-   pInfo->iFrequencyRubyTelemetryFull = 0;
-   pInfo->iFrequencyRubyTelemetryShort = 0;
-   pInfo->uTimeLastRecvRubyTelemetry = 0;
-   pInfo->uTimeLastRecvRubyTelemetryExtended = 0;
-   pInfo->uTimeLastRecvRubyTelemetryShort = 0;
-   pInfo->uTimeLastRecvAnyRubyTelemetry = 0;
+   pInfo->bAnhydrateTelemetryLost = false;
+   pInfo->iFrequencyAnhydrateTelemetryFull = 0;
+   pInfo->iFrequencyAnhydrateTelemetryShort = 0;
+   pInfo->uTimeLastRecvAnhydrateTelemetry = 0;
+   pInfo->uTimeLastRecvAnhydrateTelemetryExtended = 0;
+   pInfo->uTimeLastRecvAnhydrateTelemetryShort = 0;
+   pInfo->uTimeLastRecvAnyAnhydrateTelemetry = 0;
    
    pInfo->uTimeLastRecvVehicleRxStats = 0;
 
    reset_counters(&(pInfo->vehicleDebugRouterCounters));
 
-   memset( &(pInfo->headerRubyTelemetryExtended), 0, sizeof(t_packet_header_ruby_telemetry_extended_v6));
-   memset( &(pInfo->headerRubyTelemetryExtraInfo), 0, sizeof(t_packet_header_ruby_telemetry_extended_extra_info));
-   memset( &(pInfo->headerRubyTelemetryExtraInfoRetransmissions), 0, sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
-   memset( &(pInfo->headerRubyTelemetryShort), 0, sizeof(t_packet_header_ruby_telemetry_short));
+   memset( &(pInfo->headerAnhydrateTelemetryExtended), 0, sizeof(t_packet_header_Anhydrate_telemetry_extended_v6));
+   memset( &(pInfo->headerAnhydrateTelemetryExtraInfo), 0, sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info));
+   memset( &(pInfo->headerAnhydrateTelemetryExtraInfoRetransmissions), 0, sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
+   memset( &(pInfo->headerAnhydrateTelemetryShort), 0, sizeof(t_packet_header_Anhydrate_telemetry_short));
    for( int i=0; i<MAX_RADIO_INTERFACES; i++ )
       memset( &(pInfo->SMVehicleRxStats[i]), 0, sizeof(shared_mem_radio_stats_radio_interface));
    
@@ -169,8 +169,8 @@ void reset_vehicle_runtime_info(t_structure_vehicle_info* pInfo)
    pInfo->uTimeLastReceivedModelSettings = MAX_U32;
    pInfo->uTmpLastThrottledFlags = 0;
 
-   pInfo->tmp_iCountRubyTelemetryPacketsFull = 0;
-   pInfo->tmp_iCountRubyTelemetryPacketsShort = 0;
+   pInfo->tmp_iCountAnhydrateTelemetryPacketsFull = 0;
+   pInfo->tmp_iCountAnhydrateTelemetryPacketsShort = 0;
    pInfo->tmp_uTimeLastTelemetryFrequencyComputeTime = 0;
 }
 
@@ -179,8 +179,8 @@ void reset_vehicle_telemetry_runtime_info(t_structure_vehicle_info* pInfo)
    if ( NULL == pInfo )
       return;
 
-   pInfo->bGotRubyTelemetryInfo = false;
-   pInfo->bGotRubyTelemetryInfoShort = false;
+   pInfo->bGotAnhydrateTelemetryInfo = false;
+   pInfo->bGotAnhydrateTelemetryInfoShort = false;
 
    pInfo->bGotFCTelemetry = false;
    pInfo->bGotFCTelemetryFull = false;
@@ -200,8 +200,8 @@ void reset_vehicle_telemetry_runtime_info(t_structure_vehicle_info* pInfo)
    memset( &(pInfo->headerFCTelemetryExtra), 0, sizeof(t_packet_header_fc_extra));
    memset( &(pInfo->headerFCTelemetryRCChannels), 0, sizeof(t_packet_header_fc_rc_channels));
 
-   pInfo->headerRubyTelemetryExtended.uRubyFlags &= ~(FLAG_RUBY_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA);
-   pInfo->headerRubyTelemetryShort.uRubyFlags &= ~(FLAG_RUBY_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA);
+   pInfo->headerAnhydrateTelemetryExtended.uAnhydrateFlags &= ~(FLAG_Anhydrate_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA);
+   pInfo->headerAnhydrateTelemetryShort.uAnhydrateFlags &= ~(FLAG_Anhydrate_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA);
 
    pInfo->uTimeLastMessageFromFC = 0;
    pInfo->szLastMessageFromFC[0] = 0;
@@ -262,13 +262,13 @@ t_structure_vehicle_info* get_vehicle_runtime_info_for_vehicle_id(u32 uVehicleId
    return NULL;
 }
 
-t_packet_header_ruby_telemetry_extended_v6* get_received_relayed_vehicle_telemetry_info()
+t_packet_header_Anhydrate_telemetry_extended_v6* get_received_relayed_vehicle_telemetry_info()
 {
    for( int i=0; i<MAX_CONCURENT_VEHICLES; i++ )
    {
       if ( NULL != g_pCurrentModel )
       if ( g_VehiclesRuntimeInfo[i].uVehicleId == g_pCurrentModel->relay_params.uRelayedVehicleId )
-         return &(g_VehiclesRuntimeInfo[i].headerRubyTelemetryExtended);
+         return &(g_VehiclesRuntimeInfo[i].headerAnhydrateTelemetryExtended);
    }
    return NULL;
 }
@@ -299,7 +299,7 @@ void log_current_runtime_vehicles_info()
       }
       log_line("* Current vehicles runtime info: vehicle[%d]: VID: %u %s, %s, Model: %p, model stored VID: %u, sw version: b-%d, %s",
          i, g_VehiclesRuntimeInfo[i].uVehicleId, 
-         (g_VehiclesRuntimeInfo[i].bGotRubyTelemetryInfo)?"has Ruby-Tel":"no Ruby-Tel",
+         (g_VehiclesRuntimeInfo[i].bGotAnhydrateTelemetryInfo)?"has Anhydrate-Tel":"no Anhydrate-Tel",
          (g_VehiclesRuntimeInfo[i].bGotFCTelemetry)?"has FC-Tel":"no FC-Tel",
          g_VehiclesRuntimeInfo[i].pModel,
          (g_VehiclesRuntimeInfo[i].pModel != NULL)?(g_VehiclesRuntimeInfo[i].pModel->uVehicleId):0,
@@ -317,7 +317,7 @@ void log_current_runtime_vehicles_info()
 
       log_line("* Current search vehicle runtime info: VID: %u %s, %s, Model: %p, model stored VID: %u, %s",
          g_SearchVehicleRuntimeInfo.uVehicleId, 
-         (g_SearchVehicleRuntimeInfo.bGotRubyTelemetryInfo)?"RT":"no RT",
+         (g_SearchVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo)?"RT":"no RT",
          (g_SearchVehicleRuntimeInfo.bGotFCTelemetry)?"FCT":"no FCT",
          g_SearchVehicleRuntimeInfo.pModel,
          (g_SearchVehicleRuntimeInfo.pModel != NULL)?(g_SearchVehicleRuntimeInfo.pModel->uVehicleId):0,
@@ -335,7 +335,7 @@ void log_current_runtime_vehicles_info()
 
       log_line("* Current unexpected vehicle runtime info: VID: %u %s, %s, Model: %p, model stored VID: %u, %s",
          g_UnexpectedVehicleRuntimeInfo.uVehicleId, 
-         (g_UnexpectedVehicleRuntimeInfo.bGotRubyTelemetryInfo)?"RT":"no RT",
+         (g_UnexpectedVehicleRuntimeInfo.bGotAnhydrateTelemetryInfo)?"RT":"no RT",
          (g_UnexpectedVehicleRuntimeInfo.bGotFCTelemetry)?"FCT":"no FCT",
          g_UnexpectedVehicleRuntimeInfo.pModel,
          (g_UnexpectedVehicleRuntimeInfo.pModel != NULL)?(g_UnexpectedVehicleRuntimeInfo.pModel->uVehicleId):0,
@@ -363,18 +363,18 @@ bool vehicle_runtime_has_received_fc_telemetry(u32 uVehicleId)
 
    bool bHasTelemetryFromFC = false;
 
-   if ( pRuntimeInfo->bGotRubyTelemetryInfo )
-   if ( pRuntimeInfo->headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA )
+   if ( pRuntimeInfo->bGotAnhydrateTelemetryInfo )
+   if ( pRuntimeInfo->headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA )
       bHasTelemetryFromFC = true;
 
-   if ( pRuntimeInfo->bGotRubyTelemetryInfoShort )
-   if ( pRuntimeInfo->headerRubyTelemetryShort.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA )
+   if ( pRuntimeInfo->bGotAnhydrateTelemetryInfoShort )
+   if ( pRuntimeInfo->headerAnhydrateTelemetryShort.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA )
       bHasTelemetryFromFC = true;
 
    return bHasTelemetryFromFC;
 }
 
-u32 vehicle_runtime_get_time_last_received_ruby_telemetry(u32 uVehicleId)
+u32 vehicle_runtime_get_time_last_received_Anhydrate_telemetry(u32 uVehicleId)
 {
    if ( (0 == uVehicleId) || (MAX_U32 == uVehicleId) )
       return 0;
@@ -383,9 +383,9 @@ u32 vehicle_runtime_get_time_last_received_ruby_telemetry(u32 uVehicleId)
    if ( (NULL == pRuntimeInfo) || (NULL == pRuntimeInfo->pModel) )
       return 0;
 
-   if ( ! pRuntimeInfo->bGotRubyTelemetryInfo )
+   if ( ! pRuntimeInfo->bGotAnhydrateTelemetryInfo )
       return 0;
-   return pRuntimeInfo->uTimeLastRecvRubyTelemetry;
+   return pRuntimeInfo->uTimeLastRecvAnhydrateTelemetry;
 }
 
 void vehicle_runtime_reset_has_received_fc_telemetry_info(u32 uVehicleId)

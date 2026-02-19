@@ -32,3 +32,4 @@ class MenuItemEdit: public MenuItem
       int m_MaxLength;
       bool m_bOnlyLetters;
 };
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -132,5 +132,6 @@ void update_atheros_card_datarate(Model* pModel, int iInterfaceIndex, int iDataR
    radio_tx_resume_radio_interface(iInterfaceIndex);
    radio_rx_resume_interface(iInterfaceIndex);
 }
+
 
 

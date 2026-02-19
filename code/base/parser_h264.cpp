@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -320,3 +320,4 @@ bool parser_h264_is_signaling_nal(u8 uNALId)
       return true;
    return false;
 }
+

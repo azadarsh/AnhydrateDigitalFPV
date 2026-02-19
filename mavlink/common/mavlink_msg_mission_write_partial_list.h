@@ -311,3 +311,4 @@ static inline void mavlink_msg_mission_write_partial_list_decode(const mavlink_m
     memcpy(mission_write_partial_list, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

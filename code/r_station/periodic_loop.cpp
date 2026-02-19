@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -38,7 +38,7 @@
 #include "../base/commands.h"
 #include "../base/models.h"
 #include "../base/models_list.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/hardware_files.h"
 #include "../base/hardware_procs.h"
 #include "../common/radio_stats.h"
@@ -49,7 +49,7 @@
 #include "shared_vars.h"
 #include "shared_vars_state.h"
 #include "timers.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "radio_links.h"
 #include "radio_links_sik.h"
 #include "adaptive_video.h"
@@ -217,7 +217,7 @@ void _check_send_pairing_requests()
          continue;
       if ( pModel->is_spectator )
          continue;
-      if ( pModel->getVehicleFirmwareType() != MODEL_FIRMWARE_TYPE_RUBY )
+      if ( pModel->getVehicleFirmwareType() != MODEL_FIRMWARE_TYPE_Anhydrate )
          continue;
 
       bool bExpectedVehicle = false;
@@ -242,7 +242,7 @@ void _check_send_pairing_requests()
       log_line("Send pairing request to VID: %u", pModel->uVehicleId);
 
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_PAIRING_REQUEST, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_PAIRING_REQUEST, STREAM_ID_DATA);
       PH.vehicle_id_src = g_uControllerId;
       PH.vehicle_id_dest = pModel->uVehicleId;
       PH.total_length = sizeof(t_packet_header) + 3*sizeof(u32);
@@ -289,7 +289,7 @@ int _must_inject_ping_now()
    if ( g_bSearching || (NULL == g_pCurrentModel) || g_pCurrentModel->is_spectator || g_pCurrentModel->b_mustSyncFromVehicle )
       return 0;
 
-   if ( g_pCurrentModel->getVehicleFirmwareType() != MODEL_FIRMWARE_TYPE_RUBY )
+   if ( g_pCurrentModel->getVehicleFirmwareType() != MODEL_FIRMWARE_TYPE_Anhydrate )
       return 0;
 
    if ( g_pCurrentModel->radioLinksParams.uGlobalRadioLinksFlags & MODEL_RADIOLINKS_FLAGS_DOWNLINK_ONLY )
@@ -354,7 +354,7 @@ bool _check_queue_ping()
    }
 
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_PING_CLOCK, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_PING_CLOCK, STREAM_ID_DATA);
    PH.packet_flags |= PACKET_FLAGS_BIT_HIGH_PRIORITY;
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = uDestinationVehicleId;
@@ -713,7 +713,7 @@ void router_periodic_loop()
          memcpy(packet+sizeof(t_packet_header) + sizeof(u8), &uCommandId, sizeof(u8));
          memcpy(packet+sizeof(t_packet_header) + 2*sizeof(u8), szBuff, strlen(szBuff)+1);
          radio_packet_compute_crc(packet, PH.total_length);
-         if ( ! ruby_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
+         if ( ! Anhydrate_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
             log_ipc_send_central_error(packet, PH.total_length);
          else
             log_line("Send back to central Sik current config for vehicle radio link %d", (int)g_uGetSiKConfigAsyncVehicleLinkIndex+1);

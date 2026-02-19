@@ -19,3 +19,4 @@ float osd_render_stats_local_radio_links( float xPos, float yPos, const char* sz
 float osd_render_stats_radio_rx_type_history_get_height(bool bVehicle);
 float osd_render_stats_radio_rx_type_history_get_width(bool bVehicle);
 float osd_render_stats_radio_rx_type_history( float xPos, float yPos, bool bVehicle);
+

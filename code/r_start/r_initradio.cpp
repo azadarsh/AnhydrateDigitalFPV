@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -66,7 +66,7 @@ int init_Radios()
    log_line("Configuring radios: START.");
 
    char szFile[MAX_FILE_PATH_SIZE];
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_RADIOS_CONFIGURED);
    if( access( szFile, R_OK ) != -1 )
    {
@@ -198,7 +198,7 @@ int r_initradio(int argc, char *argv[])
    if ( argc >= 2 )
       giDataRateMbAtheros = atoi(argv[argc-1]);
 
-   log_init("RubyRadioInit");
+   log_init("AnhydrateRadioInit");
    log_arguments(argc, argv);
 
    hardware_detectBoardAndSystemType();
@@ -227,6 +227,6 @@ int r_initradio(int argc, char *argv[])
    
    init_Radios();
 
-   log_line("Ruby Init Radio process completed.");
+   log_line("Anhydrate Init Radio process completed.");
    return (0);
 }

@@ -279,3 +279,4 @@ static inline void mavlink_msg_debug_float_array_decode(const mavlink_message_t*
     memcpy(debug_float_array, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

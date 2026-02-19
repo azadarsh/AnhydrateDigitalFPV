@@ -43,3 +43,4 @@ float plugin_osd_convertTemperature(float c, int iTargetMeasureUnit)
 }  
 #endif 
 
+

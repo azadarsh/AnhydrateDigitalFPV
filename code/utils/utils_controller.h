@@ -17,3 +17,4 @@ int controller_count_asignable_radio_interfaces_to_vehicle_radio_link(Model* pMo
 int tx_powers_get_max_usable_power_mw_for_controller();
 
 bool modelvideoLinkProfileIsOnlyVideoKeyframeChanged(type_video_link_profile* pOldProfile, type_video_link_profile* pNewProfile);
+

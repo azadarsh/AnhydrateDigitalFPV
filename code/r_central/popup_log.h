@@ -28,3 +28,4 @@ void popup_log_add_entry(const char* szLine, const char* szParam);
 void popup_log_set_show_flag(int flag);
 void popup_log_vehicle_remove();
 void popup_log_add_vehicle_entry(const char* szLine);
+

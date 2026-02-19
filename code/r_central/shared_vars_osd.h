@@ -8,3 +8,4 @@ extern u32   g_uOSDDbmLastCaptureTime[MAX_RADIO_INTERFACES];
 void shared_vars_osd_reset_before_pairing();
 
 void shared_vars_osd_update();
+

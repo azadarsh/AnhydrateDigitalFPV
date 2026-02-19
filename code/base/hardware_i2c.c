@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -194,7 +194,7 @@ void hardware_i2c_enumerate_busses(int iConsoleLog)
    log_line("[Hardware]: Found %d I2C busses.", s_iHardwareI2CBusCount);
 
    if ( 1 == iConsoleLog )
-      printf("Ruby: Found %d I2C busses. Enumerating I2C devices...\n", s_iHardwareI2CBusCount);
+      printf("Anhydrate: Found %d I2C busses. Enumerating I2C devices...\n", s_iHardwareI2CBusCount);
 
    int countDevicesTotal = 0;
 
@@ -258,7 +258,7 @@ void hardware_i2c_enumerate_busses(int iConsoleLog)
                if ( 1 == iConsoleLog )
                if ( hardware_is_known_i2c_device((u8)l) )
                {
-                  printf("Ruby: Found I2C device on bus I2C-%d at address 0x%02X, device type: %s\n", s_HardwareI2CBusInfo[i].nBusNumber, (int)l, szDeviceName2);
+                  printf("Anhydrate: Found I2C device on bus I2C-%d at address 0x%02X, device type: %s\n", s_HardwareI2CBusInfo[i].nBusNumber, (int)l, szDeviceName2);
                   fflush(stdout);
                }
                if ( hardware_is_known_i2c_device((u8)l) )
@@ -301,7 +301,7 @@ void hardware_i2c_enumerate_busses(int iConsoleLog)
 #endif
    log_line("[Hardware]: Found a total of %d I2C devices on all busses.", countDevicesTotal);
    if ( 1 == iConsoleLog )
-      printf("Ruby: Found a total of %d I2C devices.\n", countDevicesTotal);
+      printf("Anhydrate: Found a total of %d I2C devices.\n", countDevicesTotal);
 }
 
 int hardware_i2c_get_found_count_known_devices()
@@ -422,7 +422,7 @@ void hardware_i2c_get_device_name(u8 deviceAddress, char* szOutput)
 
    if ( (deviceAddress >= I2C_DEVICE_MIN_ADDRESS_RANGE) &&
         (deviceAddress <= I2C_DEVICE_MAX_ADDRESS_RANGE) )
-      strcpy(szOutput, I2C_DEVICE_NAME_RUBY_ADDON);
+      strcpy(szOutput, I2C_DEVICE_NAME_Anhydrate_ADDON);
    #endif
 }
 
@@ -743,7 +743,7 @@ t_i2c_device_settings* hardware_i2c_add_device_settings(u8 i2cAddress)
 
       if ( (i2cAddress >= I2C_DEVICE_MIN_ADDRESS_RANGE) && (i2cAddress <= I2C_DEVICE_MAX_ADDRESS_RANGE) )
       {
-         s_listI2CDevicesSettings[s_iCountI2CDevicesSettings].nDeviceType = I2C_DEVICE_TYPE_RUBY_ADDON;
+         s_listI2CDevicesSettings[s_iCountI2CDevicesSettings].nDeviceType = I2C_DEVICE_TYPE_Anhydrate_ADDON;
          s_listI2CDevicesSettings[s_iCountI2CDevicesSettings].bEnabled = 1;
       }
       for( int k=0; k<MAX_I2C_DEVICE_SETTINGS; k++ )
@@ -832,10 +832,10 @@ int _hardware_i2c_check_and_update_extender_device_settings(u8 i2cAddress)
       return 0;
    }
 
-   if ( pDeviceInfo->nDeviceType != I2C_DEVICE_TYPE_RUBY_ADDON )
+   if ( pDeviceInfo->nDeviceType != I2C_DEVICE_TYPE_Anhydrate_ADDON )
    {
-      log_line("[Hardware]: Set I2C device id 0x%02X as an external Ruby addon/extender device", i2cAddress);
-      pDeviceInfo->nDeviceType = I2C_DEVICE_TYPE_RUBY_ADDON;
+      log_line("[Hardware]: Set I2C device id 0x%02X as an external Anhydrate addon/extender device", i2cAddress);
+      pDeviceInfo->nDeviceType = I2C_DEVICE_TYPE_Anhydrate_ADDON;
       iUpdatedI2CSettings = 1;
    }
 
@@ -1036,7 +1036,7 @@ int hardware_i2c_has_external_extenders()
       hardware_i2c_load_device_settings();
 
    for( int i=0; i<s_iCountI2CDevicesSettings; i++ )
-      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON )
+      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON )
          return 1;
    #endif
    return 0;
@@ -1052,7 +1052,7 @@ int hardware_i2c_has_external_extenders_rotary_encoders()
       hardware_i2c_load_device_settings();
 
    for( int i=0; i<s_iCountI2CDevicesSettings; i++ )
-      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON )
+      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON )
       {
          if ( s_listI2CDevicesSettings[i].uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY )
             return 1;
@@ -1073,7 +1073,7 @@ int hardware_i2c_has_external_extenders_buttons()
       hardware_i2c_load_device_settings();
 
    for( int i=0; i<s_iCountI2CDevicesSettings; i++ )
-      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON )
+      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON )
       {
          if ( s_listI2CDevicesSettings[i].uCapabilitiesFlags & I2C_CAPABILITY_FLAG_BUTTONS )
             return 1;
@@ -1093,7 +1093,7 @@ int hardware_i2c_has_external_extenders_rcin()
 
    for( int i=0; i<s_iCountI2CDevicesSettings; i++ )
    {
-      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON )
+      if ( s_listI2CDevicesSettings[i].nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON )
       {
          if ( s_listI2CDevicesSettings[i].uCapabilitiesFlags & I2C_CAPABILITY_FLAG_RC_INPUT )
             return s_listI2CDevicesSettings[i].nI2CAddress;
@@ -1120,3 +1120,4 @@ int hardware_i2c_has_oled_screen()
    #endif
    return 0; 
 }
+

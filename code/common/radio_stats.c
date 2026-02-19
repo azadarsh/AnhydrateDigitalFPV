@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga  petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1457,3 +1457,4 @@ u32 radio_stats_get_time_last_received_packet_on_stream(shared_mem_radio_stats* 
 
    return pSMRS->radio_streams[iVehicleIndex][uStreamIndex].timeLastRxPacket;
 }
+

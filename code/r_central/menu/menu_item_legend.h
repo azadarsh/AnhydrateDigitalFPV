@@ -21,3 +21,4 @@ class MenuItemLegend: public MenuItem
       float m_fMarginX;
       float m_fMaxWidth;
 };
+

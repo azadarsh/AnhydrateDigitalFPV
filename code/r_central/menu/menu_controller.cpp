@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -192,7 +192,7 @@ void MenuController::onReturnFromChild(int iChildMenuId, int returnValue)
    {
       m_bShownHDMIChangeNotif = true;
       MenuConfirmation* pMC = new MenuConfirmation("HDMI Output Configuration Changed","You updated the HDMI output configuration.", 11);
-      pMC->addTopLine("If the new resolution is not supported by your display, Ruby will reboot again with the old display configuration.");
+      pMC->addTopLine("If the new resolution is not supported by your display, Anhydrate will reboot again with the old display configuration.");
       pMC->addTopLine("Do you want to reboot now for the new changes to take effect?");
       pMC->m_yPos = 0.3;
       add_menu_to_stack(pMC);
@@ -339,3 +339,4 @@ void MenuController::onSelectItem()
       return;
    }
 }
+

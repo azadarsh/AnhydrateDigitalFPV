@@ -1,0 +1,100 @@
+[1mdiff --git a/code/base/base.c b/code/base/base.c[m
+[1mindex fe4a468..7604153 100644[m
+[1m--- a/code/base/base.c[m
+[1m+++ b/code/base/base.c[m
+[36m@@ -1,5 +1,5 @@[m
+ /*[m
+[31m-    Ruby Licence[m
+[32m+[m[32m    Anhydrate Licence[m
+     Copyright (c) 2020-2025 Petru Soroaga[m
+     All rights reserved.[m
+ [m
+[36m@@ -218,7 +218,7 @@[m [mvoid _init_timestamp_for_process()[m
+    {[m
+       log_line_forced_to_file("Failed to access boot timestamp file [%s] for PID %d", szFile, getpid());[m
+       struct timespec t;[m
+[31m-      clock_gettime(RUBY_HW_CLOCK_ID, &t);[m
+[32m+[m[32m      clock_gettime(Anhydrate_HW_CLOCK_ID, &t);[m
+       sStartTimeStamp_micros = t.tv_sec*1000LL*1000LL + t.tv_nsec/1000LL;[m
+       sStartTimeStamp_ms = t.tv_sec*1000LL + t.tv_nsec/1000LL/1000LL;[m
+       //struct timeval t;[m
+[36m@@ -240,7 +240,7 @@[m [mvoid _init_timestamp_for_process()[m
+          #ifdef HW_PLATFORM_RASPBERRY[m
+          system("sudo mount -o remount,rw /");[m
+          struct timespec to_sleep = { 0, (long int)(50*1000*1000) };[m
+[31m-         clock_nanosleep(RUBY_HW_CLOCK_ID, 0, &to_sleep, NULL);[m
+[32m+[m[32m         clock_nanosleep(Anhydrate_HW_CLOCK_ID, 0, &to_sleep, NULL);[m
+          #endif[m
+          count++;[m
+       }[m
+[36m@@ -263,19 +263,19 @@[m [mvoid hardware_sleep_sec(u32 uSeconds)[m
+ void hardware_sleep_ms(u32 miliSeconds)[m
+ {[m
+    struct timespec to_sleep = { 0, (long int)(miliSeconds*1000*1000) };[m
+[31m-   clock_nanosleep(RUBY_HW_CLOCK_ID, 0, &to_sleep, NULL);[m
+[32m+[m[32m   clock_nanosleep(Anhydrate_HW_CLOCK_ID, 0, &to_sleep, NULL);[m
+ }[m
+ [m
+ void hardware_sleep_micros(u32 microSeconds)[m
+ {[m
+    struct timespec to_sleep = { 0, (long int)(microSeconds*1000) };[m
+[31m-   clock_nanosleep(RUBY_HW_CLOCK_ID, 0, &to_sleep, NULL);[m
+[32m+[m[32m   clock_nanosleep(Anhydrate_HW_CLOCK_ID, 0, &to_sleep, NULL);[m
+ }[m
+ [m
+ u32 get_current_timestamp_micros()[m
+ {[m
+    struct timespec t;[m
+[31m-   clock_gettime(RUBY_HW_CLOCK_ID, &t);[m
+[32m+[m[32m   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);[m
+    long long lt = t.tv_sec*1000LL*1000LL + t.tv_nsec/1000LL;[m
+    //struct timeval t;[m
+    //gettimeofday(&t, NULL);[m
+[36m@@ -286,7 +286,7 @@[m [mu32 get_current_timestamp_micros()[m
+ u32 get_current_timestamp_ms()[m
+ {[m
+    struct timespec t;[m
+[31m-   clock_gettime(RUBY_HW_CLOCK_ID, &t);[m
+[32m+[m[32m   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);[m
+    long long lt = t.tv_sec*1000LL + t.tv_nsec/1000LL/1000LL;[m
+    //struct timeval t;[m
+    //gettimeofday(&t, NULL);[m
+[36m@@ -297,7 +297,7 @@[m [mu32 get_current_timestamp_ms()[m
+ u32 get_current_timestamp_ms_tens()[m
+ {[m
+    struct timespec t;[m
+[31m-   clock_gettime(RUBY_HW_CLOCK_ID, &t);[m
+[32m+[m[32m   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);[m
+    long long lt = t.tv_sec*10000LL + t.tv_nsec/1000LL/100LL;[m
+    //struct timeval t;[m
+    //gettimeofday(&t, NULL);[m
+[36m@@ -565,8 +565,8 @@[m [mvoid log_init(const char* component_name)[m
+    sprintf(szLogLine, "Starting (PID: %d, parent PID: %d)...", (int)pid, (int)ppid);[m
+    log_line_forced_to_file(szLogLine);[m
+    struct timespec ts;[m
+[31m-   clock_getres(RUBY_HW_CLOCK_ID, &ts);[m
+[31m-   log_line_forced_to_file("Current clock (id %d) resolution: %d sec, %d nanosec", RUBY_HW_CLOCK_ID, ts.tv_sec, ts.tv_nsec);[m
+[32m+[m[32m   clock_getres(Anhydrate_HW_CLOCK_ID, &ts);[m
+[32m+[m[32m   log_line_forced_to_file("Current clock (id %d) resolution: %d sec, %d nanosec", Anhydrate_HW_CLOCK_ID, ts.tv_sec, ts.tv_nsec);[m
+ }[m
+ [m
+ void log_arguments(int argc, char *argv[])[m
+[36m@@ -1610,11 +1610,11 @@[m [mkey_t generate_msgqueue_key(int iMsgQueueId)[m
+ {[m
+    char szFile[MAX_FILE_PATH_SIZE];[m
+    strcpy(szFile, FOLDER_BINARIES);[m
+[31m-   strcat(szFile, "ruby_logger");[m
+[32m+[m[32m   strcat(szFile, "Anhydrate_logger");[m
+    if ( access(szFile, R_OK) == -1 )[m
+    {[m
+       if ( access(szFile, R_OK) != -1 )[m
+[31m-         strcpy(szFile, "/tmp/ruby_start");[m
+[32m+[m[32m         strcpy(szFile, "/tmp/Anhydrate_start");[m
+       else if ( access("/tmp/debug", R_OK) != -1 )[m
+          strcpy(szFile, "/tmp/debug");[m
+    }[m
+[36m@@ -1669,3 +1669,4 @@[m [mint is_semaphore_signaled_clear_logok(sem_t* pSemaphore, const char* szSemName,[m
+    }[m
+    return 0;[m
+ }[m
+[41m+[m

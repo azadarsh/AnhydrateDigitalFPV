@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
          uLastPingSentTime = g_TimeNow;
          uPingId++;
          t_packet_header PH;
-         PH.packet_flags = PACKET_COMPONENT_RUBY;
-         PH.packet_type =  PACKET_TYPE_RUBY_PING_CLOCK;
+         PH.packet_flags = PACKET_COMPONENT_Anhydrate;
+         PH.packet_type =  PACKET_TYPE_Anhydrate_PING_CLOCK;
          PH.vehicle_id_src = 0;
          PH.vehicle_id_dest = 0;
          PH.total_length = sizeof(t_packet_header) + 4*sizeof(u8);
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
             
             //okPacket = packet_process_and_check(i, pBuffer, length, NULL, &bCRCOk);
 
-            if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+            if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
             {
               u32 pingId = 0;
               u32 vehicleTime = 0;
@@ -167,15 +167,15 @@ int main(int argc, char *argv[])
               }
             }
 
-            if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK )
+            if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK )
             {
                u32 pingId = 0;
                u32 timeNow = get_current_timestamp_ms();
                memcpy( &pingId, pBuffer + sizeof(t_packet_header), sizeof(u32));
                //log_line("Received PING, counter: %d", pingId);
                t_packet_header PH;
-               PH.packet_flags = PACKET_COMPONENT_RUBY;
-               PH.packet_type =  PACKET_TYPE_RUBY_PING_CLOCK_REPLY;
+               PH.packet_flags = PACKET_COMPONENT_Anhydrate;
+               PH.packet_type =  PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY;
                PH.vehicle_id_src = 0;
                PH.vehicle_id_dest = 0;
                PH.total_length = sizeof(t_packet_header) + sizeof(u32) + sizeof(u32);
@@ -199,3 +199,4 @@ int main(int argc, char *argv[])
    log_line("\nFinised test.\n");
    return (0);
 }
+

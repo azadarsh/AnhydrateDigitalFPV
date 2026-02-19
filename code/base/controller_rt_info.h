@@ -3,8 +3,8 @@
 #include "config.h"
 #include "hardware_radio.h"
 
-#define SHARED_MEM_CONTROLLER_RUNTIME_INFO "/SYSTEM_RUBY_CONTROLLER_RT_INFO"
-#define SHARED_MEM_CONTROLLER_DEBUG_VIDEO_RUNTIME_INFO "/SYSTEM_RUBY_CONTROLLER_DEBUG_VIDEO_RT_INFO"
+#define SHARED_MEM_CONTROLLER_RUNTIME_INFO "/SYSTEM_Anhydrate_CONTROLLER_RT_INFO"
+#define SHARED_MEM_CONTROLLER_DEBUG_VIDEO_RUNTIME_INFO "/SYSTEM_Anhydrate_CONTROLLER_DEBUG_VIDEO_RT_INFO"
 
 #define CTRL_RT_INFO_FLAG_VIDEO_PROF_SWITCHED_LOWER ((u32)(((u32)0x01)<<1))
 #define CTRL_RT_INFO_FLAG_VIDEO_PROF_SWITCHED_HIGHER ((u32)(((u32)0x01)<<2))
@@ -152,3 +152,4 @@ int controller_rt_info_check_advance_index(controller_runtime_info* pRTInfo, u32
 #ifdef __cplusplus
 }  
 #endif 
+

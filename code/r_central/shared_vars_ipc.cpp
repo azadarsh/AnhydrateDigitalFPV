@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -89,3 +89,4 @@ t_shared_mem_i2c_current* g_pSMVoltage = NULL;
 t_shared_mem_i2c_current g_SMVoltage;
 
 t_shared_mem_i2c_rotary_encoder_buttons_events* g_pSMRotaryEncoderButtonsEvents = NULL;
+

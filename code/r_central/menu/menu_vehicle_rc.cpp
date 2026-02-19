@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -46,9 +46,9 @@
 #include "menu_vehicle_rc_input.h"
 #include "../osd/osd_common.h"
 
-const char* s_szRCInfo1 = "Note: Ruby is always the primary RC link.";
-const char* s_szRCInfo2 = "* If you have a secondary backup regular RC link, it's recomended to set Ruby RC Failsafe to \"No Values\" and disable GCS failsafe in Mission Planner or QGround Control.";
-const char* s_szRCInfo3 = "* If you don't have a secondary backup regular RC link, it's recomended to set Ruby RC Failsafe to \"No Values\" and enable GCS failsafe in Mission Planner or QGround Control.";
+const char* s_szRCInfo1 = "Note: Anhydrate is always the primary RC link.";
+const char* s_szRCInfo2 = "* If you have a secondary backup regular RC link, it's recomended to set Anhydrate RC Failsafe to \"No Values\" and disable GCS failsafe in Mission Planner or QGround Control.";
+const char* s_szRCInfo3 = "* If you don't have a secondary backup regular RC link, it's recomended to set Anhydrate RC Failsafe to \"No Values\" and enable GCS failsafe in Mission Planner or QGround Control.";
 
 
 MenuVehicleRC::MenuVehicleRC(void)
@@ -72,7 +72,7 @@ MenuVehicleRC::MenuVehicleRC(void)
    m_bWaitingForInput = false;
    m_pPopupAssignment = NULL;
 
-   m_pItemsSelect[0] = new MenuItemSelect("Remote Control", "Enables or disables the remote control functionality. If enabled, Ruby is the Primary RC link to the vehicle.");
+   m_pItemsSelect[0] = new MenuItemSelect("Remote Control", "Enables or disables the remote control functionality. If enabled, Anhydrate is the Primary RC link to the vehicle.");
    m_pItemsSelect[0]->addSelection("Disabled");
    m_pItemsSelect[0]->addSelection("Enabled");
    m_pItemsSelect[0]->setIsEditable();

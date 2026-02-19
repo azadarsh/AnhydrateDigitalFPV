@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -218,7 +218,7 @@ void _init_timestamp_for_process()
    {
       log_line_forced_to_file("Failed to access boot timestamp file [%s] for PID %d", szFile, getpid());
       struct timespec t;
-      clock_gettime(RUBY_HW_CLOCK_ID, &t);
+      clock_gettime(Anhydrate_HW_CLOCK_ID, &t);
       sStartTimeStamp_micros = t.tv_sec*1000LL*1000LL + t.tv_nsec/1000LL;
       sStartTimeStamp_ms = t.tv_sec*1000LL + t.tv_nsec/1000LL/1000LL;
       //struct timeval t;
@@ -240,7 +240,7 @@ void _init_timestamp_for_process()
          #ifdef HW_PLATFORM_RASPBERRY
          system("sudo mount -o remount,rw /");
          struct timespec to_sleep = { 0, (long int)(50*1000*1000) };
-         clock_nanosleep(RUBY_HW_CLOCK_ID, 0, &to_sleep, NULL);
+         clock_nanosleep(Anhydrate_HW_CLOCK_ID, 0, &to_sleep, NULL);
          #endif
          count++;
       }
@@ -263,19 +263,19 @@ void hardware_sleep_sec(u32 uSeconds)
 void hardware_sleep_ms(u32 miliSeconds)
 {
    struct timespec to_sleep = { 0, (long int)(miliSeconds*1000*1000) };
-   clock_nanosleep(RUBY_HW_CLOCK_ID, 0, &to_sleep, NULL);
+   clock_nanosleep(Anhydrate_HW_CLOCK_ID, 0, &to_sleep, NULL);
 }
 
 void hardware_sleep_micros(u32 microSeconds)
 {
    struct timespec to_sleep = { 0, (long int)(microSeconds*1000) };
-   clock_nanosleep(RUBY_HW_CLOCK_ID, 0, &to_sleep, NULL);
+   clock_nanosleep(Anhydrate_HW_CLOCK_ID, 0, &to_sleep, NULL);
 }
 
 u32 get_current_timestamp_micros()
 {
    struct timespec t;
-   clock_gettime(RUBY_HW_CLOCK_ID, &t);
+   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);
    long long lt = t.tv_sec*1000LL*1000LL + t.tv_nsec/1000LL;
    //struct timeval t;
    //gettimeofday(&t, NULL);
@@ -286,7 +286,7 @@ u32 get_current_timestamp_micros()
 u32 get_current_timestamp_ms()
 {
    struct timespec t;
-   clock_gettime(RUBY_HW_CLOCK_ID, &t);
+   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);
    long long lt = t.tv_sec*1000LL + t.tv_nsec/1000LL/1000LL;
    //struct timeval t;
    //gettimeofday(&t, NULL);
@@ -297,7 +297,7 @@ u32 get_current_timestamp_ms()
 u32 get_current_timestamp_ms_tens()
 {
    struct timespec t;
-   clock_gettime(RUBY_HW_CLOCK_ID, &t);
+   clock_gettime(Anhydrate_HW_CLOCK_ID, &t);
    long long lt = t.tv_sec*10000LL + t.tv_nsec/1000LL/100LL;
    //struct timeval t;
    //gettimeofday(&t, NULL);
@@ -565,8 +565,8 @@ void log_init(const char* component_name)
    sprintf(szLogLine, "Starting (PID: %d, parent PID: %d)...", (int)pid, (int)ppid);
    log_line_forced_to_file(szLogLine);
    struct timespec ts;
-   clock_getres(RUBY_HW_CLOCK_ID, &ts);
-   log_line_forced_to_file("Current clock (id %d) resolution: %d sec, %d nanosec", RUBY_HW_CLOCK_ID, ts.tv_sec, ts.tv_nsec);
+   clock_getres(Anhydrate_HW_CLOCK_ID, &ts);
+   log_line_forced_to_file("Current clock (id %d) resolution: %d sec, %d nanosec", Anhydrate_HW_CLOCK_ID, ts.tv_sec, ts.tv_nsec);
 }
 
 void log_arguments(int argc, char *argv[])
@@ -1610,11 +1610,11 @@ key_t generate_msgqueue_key(int iMsgQueueId)
 {
    char szFile[MAX_FILE_PATH_SIZE];
    strcpy(szFile, FOLDER_BINARIES);
-   strcat(szFile, "ruby_logger");
+   strcat(szFile, "Anhydrate_logger");
    if ( access(szFile, R_OK) == -1 )
    {
       if ( access(szFile, R_OK) != -1 )
-         strcpy(szFile, "/tmp/ruby_start");
+         strcpy(szFile, "/tmp/Anhydrate_start");
       else if ( access("/tmp/debug", R_OK) != -1 )
          strcpy(szFile, "/tmp/debug");
    }
@@ -1669,3 +1669,4 @@ int is_semaphore_signaled_clear_logok(sem_t* pSemaphore, const char* szSemName, 
    }
    return 0;
 }
+

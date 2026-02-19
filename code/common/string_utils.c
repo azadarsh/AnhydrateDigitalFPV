@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -321,16 +321,16 @@ char* str_get_packet_type(int iPacketType)
       case PACKET_TYPE_EMBEDED_SHORT_PACKET: strcpy(s_szPacketType, "PACKET_TYPE_EMBEDED_SHORT_PACKET"); break;
       case PACKET_TYPE_EMBEDED_FULL_PACKET: strcpy(s_szPacketType, "PACKET_TYPE_EMBEDED_FULL_PACKET"); break;
       
-      case PACKET_TYPE_RUBY_PING_CLOCK:          strcpy(s_szPacketType, "PACKET_TYPE_RUBY_PING_CLOCK"); break;
-      case PACKET_TYPE_RUBY_PING_CLOCK_REPLY:    strcpy(s_szPacketType, "PACKET_TYPE_RUBY_PING_CLOCK_REPLY"); break;
-      case PACKET_TYPE_RUBY_RADIO_REINITIALIZED: strcpy(s_szPacketType, "PACKET_TYPE_RUBY_RADIO_REINITIALIZED"); break;
-      case PACKET_TYPE_RUBY_MODEL_SETTINGS:      strcpy(s_szPacketType, "PACKET_TYPE_RUBY_MODEL_SETTINGS"); break;
-      case PACKET_TYPE_RUBY_PAIRING_REQUEST:     strcpy(s_szPacketType, "PACKET_TYPE_RUBY_PAIRING_REQUEST"); break;
-      case PACKET_TYPE_RUBY_PAIRING_CONFIRMATION: strcpy(s_szPacketType, "PACKET_TYPE_RUBY_PAIRING_CONFIRMATION"); break;
-      case PACKET_TYPE_RUBY_RADIO_CONFIG_UPDATED: strcpy(s_szPacketType, "PACKET_TYPE_RUBY_RADIO_CONFIG_UPDATED"); break;
-      case PACKET_TYPE_RUBY_LOG_FILE_SEGMENT:    strcpy(s_szPacketType, "PACKET_TYPE_RUBY_LOG_FILE_SEGMENT"); break;
-      case PACKET_TYPE_RUBY_MESSAGE:             strcpy(s_szPacketType, "PACKET_TYPE_RUBY_MESSAGE"); break;
-      case PACKET_TYPE_RUBY_ALARM:               strcpy(s_szPacketType, "PACKET_TYPE_RUBY_ALARM"); break;
+      case PACKET_TYPE_Anhydrate_PING_CLOCK:          strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_PING_CLOCK"); break;
+      case PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY:    strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY"); break;
+      case PACKET_TYPE_Anhydrate_RADIO_REINITIALIZED: strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_RADIO_REINITIALIZED"); break;
+      case PACKET_TYPE_Anhydrate_MODEL_SETTINGS:      strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_MODEL_SETTINGS"); break;
+      case PACKET_TYPE_Anhydrate_PAIRING_REQUEST:     strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_PAIRING_REQUEST"); break;
+      case PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION: strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION"); break;
+      case PACKET_TYPE_Anhydrate_RADIO_CONFIG_UPDATED: strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_RADIO_CONFIG_UPDATED"); break;
+      case PACKET_TYPE_Anhydrate_LOG_FILE_SEGMENT:    strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_LOG_FILE_SEGMENT"); break;
+      case PACKET_TYPE_Anhydrate_MESSAGE:             strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_MESSAGE"); break;
+      case PACKET_TYPE_Anhydrate_ALARM:               strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_ALARM"); break;
       case PACKET_TYPE_VIDEO_DATA:               strcpy(s_szPacketType, "PACKET_TYPE_VIDEO_DATA"); break;
       case PACKET_TYPE_AUDIO_SEGMENT:            strcpy(s_szPacketType, "PACKET_TYPE_AUDIO_SEGMENT"); break;
       case PACKET_TYPE_VIDEO_REQ_MULTIPLE_PACKETS:   strcpy(s_szPacketType, "PACKET_TYPE_VIDEO_REQ_MULTIPLE_PACKETS"); break;
@@ -345,21 +345,21 @@ char* str_get_packet_type(int iPacketType)
       case PACKET_TYPE_TEST_RADIO_LINK:          strcpy(s_szPacketType, "PACKET_TYPE_TEST_RADIO_LINK"); break;
       // Telemetry
 
-      case PACKET_TYPE_RUBY_TELEMETRY_SHORT:      strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_SHORT"); break;
-      case PACKET_TYPE_RUBY_TELEMETRY_EXTENDED:   strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_EXTENDED"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_SHORT:      strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_SHORT"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED:   strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED"); break;
       case PACKET_TYPE_FC_TELEMETRY:              strcpy(s_szPacketType, "PACKET_TYPE_FC_TELEMETRY"); break;
       case PACKET_TYPE_FC_TELEMETRY_EXTENDED:     strcpy(s_szPacketType, "PACKET_TYPE_FC_TELEMETRY_EXTENDED"); break;
       case PACKET_TYPE_FC_RC_CHANNELS:            strcpy(s_szPacketType, "PACKET_TYPE_FC_RC_CHANNELS"); break;
       case PACKET_TYPE_RC_TELEMETRY:              strcpy(s_szPacketType, "PACKET_TYPE_RC_TELEMETRY"); break;
-      case PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY:     strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY"); break;
-      case PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS: strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS"); break;
-      case PACKET_TYPE_RUBY_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY: strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY:     strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS: strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY: strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY"); break;
       case PACKET_TYPE_TELEMETRY_RAW_DOWNLOAD:    strcpy(s_szPacketType, "PACKET_TYPE_TELEMETRY_RAW_DOWNLOAD"); break;
       case PACKET_TYPE_TELEMETRY_RAW_UPLOAD:      strcpy(s_szPacketType, "PACKET_TYPE_TELEMETRY_RAW_UPLOAD"); break;
       case PACKET_TYPE_AUX_DATA_LINK_UPLOAD:      strcpy(s_szPacketType, "PACKET_TYPE_AUX_DATA_LINK_UPLOAD"); break;
       case PACKET_TYPE_AUX_DATA_LINK_DOWNLOAD:    strcpy(s_szPacketType, "PACKET_TYPE_AUX_DATA_LINK_DOWNLOAD"); break;
-      case PACKET_TYPE_RUBY_TELEMETRY_VIDEO_INFO_STATS:  strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_VIDEO_INFO_STATS"); break;
-      case PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY: strcpy(s_szPacketType, "PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_INFO_STATS:  strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_INFO_STATS"); break;
+      case PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY: strcpy(s_szPacketType, "PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY"); break;
       case PACKET_TYPE_TELEMETRY_MSP:             strcpy(s_szPacketType, "PACKET_TYPE_TELEMETRY_MSP"); break;
       case PACKET_TYPE_VEHICLE_RECORDING: strcpy(s_szPacketType, "PACKET_TYPE_VEHICLE_RECORDING"); break;
       case PACKET_TYPE_NEGOCIATE_RADIO_LINKS: strcpy(s_szPacketType, "PACKET_TYPE_NEGOCIATE_RADIO_LINKS"); break;       
@@ -430,8 +430,8 @@ char* str_get_packet_history_symbol(int iPacketType, int iRepeatCount)
       s_szOSDRenderRxHistoryPacketSymbol[0] = ' ';
       return s_szOSDRenderRxHistoryPacketSymbol;
    }
-   if ( iPacketType == PACKET_TYPE_RUBY_PING_CLOCK ||
-        iPacketType == PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( iPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK ||
+        iPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'P';
 
    if ( iPacketType == PACKET_TYPE_COMMAND ||
@@ -449,16 +449,16 @@ char* str_get_packet_history_symbol(int iPacketType, int iRepeatCount)
         iPacketType == PACKET_TYPE_AUX_DATA_LINK_DOWNLOAD )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'D';
 
-   if ( iPacketType == PACKET_TYPE_RUBY_TELEMETRY_SHORT ||
-        iPacketType == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED )
+   if ( iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT ||
+        iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'R';
 
    if ( iPacketType == PACKET_TYPE_RC_TELEMETRY ||
-        iPacketType == PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY ||
-        iPacketType == PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS ||
-        iPacketType == PACKET_TYPE_RUBY_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY ||
-        iPacketType == PACKET_TYPE_RUBY_TELEMETRY_VIDEO_INFO_STATS ||
-        iPacketType == PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY )
+        iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY ||
+        iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS ||
+        iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY ||
+        iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_INFO_STATS ||
+        iPacketType == PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'r';
 
    if ( iPacketType == PACKET_TYPE_FC_TELEMETRY ||
@@ -471,13 +471,13 @@ char* str_get_packet_history_symbol(int iPacketType, int iRepeatCount)
         iPacketType == PACKET_TYPE_VIDEO_ADAPTIVE_VIDEO_PARAMS_ACK )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'S';
 
-   if ( iPacketType == PACKET_TYPE_RUBY_MODEL_SETTINGS )
+   if ( iPacketType == PACKET_TYPE_Anhydrate_MODEL_SETTINGS )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'M';
 
-   if ( iPacketType == PACKET_TYPE_RUBY_RADIO_CONFIG_UPDATED )
+   if ( iPacketType == PACKET_TYPE_Anhydrate_RADIO_CONFIG_UPDATED )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'U';
 
-   if ( iPacketType == PACKET_TYPE_RUBY_ALARM )
+   if ( iPacketType == PACKET_TYPE_Anhydrate_ALARM )
       s_szOSDRenderRxHistoryPacketSymbol[0] = 'a';
 
    return s_szOSDRenderRxHistoryPacketSymbol;
@@ -1634,8 +1634,8 @@ char* str_get_component_id(int iComponentId)
       strcpy(s_szComponentIdString, "PACKET_COMPONENT_COMMANDS");
    else if ( iComponentId == PACKET_COMPONENT_RC )
       strcpy(s_szComponentIdString, "PACKET_COMPONENT_RC");
-   else if ( iComponentId == PACKET_COMPONENT_RUBY )
-      strcpy(s_szComponentIdString, "PACKET_COMPONENT_RUBY");
+   else if ( iComponentId == PACKET_COMPONENT_Anhydrate )
+      strcpy(s_szComponentIdString, "PACKET_COMPONENT_Anhydrate");
    else if ( iComponentId == PACKET_COMPONENT_AUDIO )
       strcpy(s_szComponentIdString, "PACKET_COMPONENT_AUDIO");
    else
@@ -1753,8 +1753,8 @@ char* str_format_firmware_type(u32 uFirmwareType)
    static char s_szFormatFirmwareType[32];
    s_szFormatFirmwareType[0] = 0;
  
-   if ( uFirmwareType == MODEL_FIRMWARE_TYPE_RUBY )
-      strcpy(s_szFormatFirmwareType, "Ruby");
+   if ( uFirmwareType == MODEL_FIRMWARE_TYPE_Anhydrate )
+      strcpy(s_szFormatFirmwareType, "Anhydrate");
    else
       strcpy(s_szFormatFirmwareType, "Unknown");
    return s_szFormatFirmwareType;  

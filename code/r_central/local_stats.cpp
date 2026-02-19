@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -115,7 +115,7 @@ void local_stats_update_loop()
 
    if ( ! g_bIsRouterReady )
       return;
-   if ( ! link_has_received_main_vehicle_ruby_telemetry() )
+   if ( ! link_has_received_main_vehicle_Anhydrate_telemetry() )
       return;
 
 
@@ -264,3 +264,4 @@ void save_temp_local_stats()
    fclose(fd);
    log_line("Saved temp local stats for reboot or watchdog.");
 }
+

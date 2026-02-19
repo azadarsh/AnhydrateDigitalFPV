@@ -461,3 +461,4 @@ static inline void mavlink_msg_hil_controls_decode(const mavlink_message_t* msg,
     memcpy(hil_controls, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

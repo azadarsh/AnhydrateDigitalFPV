@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -517,3 +517,4 @@ float osd_render_stats_dev_adaptive_video_info(float xPos, float yPos, float fWi
 
    return osd_render_stats_dev_adaptive_video_get_height();
 }
+

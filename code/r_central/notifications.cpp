@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -229,3 +229,4 @@ void notification_remove_start_pairing()
      s_pPopupNotificationPairing = NULL;
   }
 }
+

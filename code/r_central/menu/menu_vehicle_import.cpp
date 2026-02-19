@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -55,7 +55,7 @@ MenuVehicleImport::~MenuVehicleImport()
 {
    hardware_unmount_usb();
    sync();
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    for( int i=0; i<m_TempFilesCount; i++ )
       free(m_szTempFiles[i]);
    m_TempFilesCount = 0;
@@ -159,9 +159,9 @@ void MenuVehicleImport::onSelectItem()
       saveControllerModel(pModel);
       menu_discard_all();
       hardware_unmount_usb();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       sync();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       return;
    }
 
@@ -193,9 +193,9 @@ void MenuVehicleImport::onSelectItem()
    {
       menu_discard_all();
       hardware_unmount_usb();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       sync();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
    }
 }
 
@@ -216,9 +216,9 @@ void MenuVehicleImport::buildSettingsFileList()
    {
       while ((dir = readdir(d)) != NULL)
       {
-         if ( strlen(dir->d_name) < strlen("ruby_model") )
+         if ( strlen(dir->d_name) < strlen("Anhydrate_model") )
             continue;
-         if ( strncmp(dir->d_name, "ruby_model", strlen("ruby_model")) != 0 )
+         if ( strncmp(dir->d_name, "Anhydrate_model", strlen("Anhydrate_model")) != 0 )
             continue;
          if ( dir->d_name[strlen(dir->d_name)-3] != 't' )
             continue;
@@ -249,3 +249,4 @@ void MenuVehicleImport::addMessage(const char* szMessage)
    pm->addTopLine(szMessage);
    add_menu_to_stack(pm);
 }
+

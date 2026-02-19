@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -42,7 +42,7 @@
 #include "colors.h"
 #include "fonts.h"
 #include "process_router_messages.h"
-#include "ruby_central.h"
+#include "Anhydrate_central.h"
 
 static u32 s_uTimestampVideoPlaybackLastLoopMs = 0;
 static u32 s_uTimeLastVideoPlayerProcessCheck = 0;

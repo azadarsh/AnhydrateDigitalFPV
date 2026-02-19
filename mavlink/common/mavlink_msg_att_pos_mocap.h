@@ -329,3 +329,4 @@ static inline void mavlink_msg_att_pos_mocap_decode(const mavlink_message_t* msg
     memcpy(att_pos_mocap, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

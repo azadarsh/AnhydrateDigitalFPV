@@ -96,7 +96,7 @@
 //#define DEFAULT_FC_TELEMETRY_SERIAL_SPEED 115200
 //#endif
 
-#define DEFAULT_TELEMETRY_SEND_RATE 4 // Times per second. How often the Ruby/FC telemetry gets sent from vehicle to controller
+#define DEFAULT_TELEMETRY_SEND_RATE 4 // Times per second. How often the Anhydrate/FC telemetry gets sent from vehicle to controller
 
 #define RAW_TELEMETRY_MAX_BUFFER 512  // bytes
 #define RAW_TELEMETRY_SEND_TIMEOUT 200 // miliseconds. how much to wait until to send whatever is in a telemetry serial buffer to the radio
@@ -137,8 +137,8 @@ void save_simple_config_fileI(const char* fileName, int value);
 int load_simple_config_fileI(const char* fileName, int defaultValue);
 
 FILE* try_open_base_version_file(char* szOutputFile);
-void get_Ruby_BaseVersion(int* pMajor, int* pMinor);
-void get_Ruby_UpdatedVersion(int* pMajor, int* pMinor);
+void get_Anhydrate_BaseVersion(int* pMajor, int* pMinor);
+void get_Anhydrate_UpdatedVersion(int* pMajor, int* pMinor);
 
 #ifdef __cplusplus
 }  

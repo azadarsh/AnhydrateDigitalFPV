@@ -24,3 +24,4 @@ class MenuItemVehicle: public MenuItem
       int m_iVehicleIndex;
       bool m_bIsSpectator;
 };
+

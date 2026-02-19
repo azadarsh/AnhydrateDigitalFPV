@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -34,7 +34,7 @@
 #include "../base/encr.h"
 #include "../base/models_list.h"
 #include "../base/shared_mem.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/commands.h"
 #include "../base/hardware_procs.h"
 #include "../base/hardware_camera.h"
@@ -58,7 +58,7 @@
 #include "packets_utils.h"
 #include "shared_vars.h"
 #include "timers.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 #include "../utils/utils_vehicle.h"
 #include "launchers_vehicle.h"
 #include "radio_links.h"
@@ -269,7 +269,7 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
       strcat(szFile, FILE_CONFIG_CURRENT_VEHICLE_MODEL);
       if ( ! g_pCurrentModel->loadFromFile(szFile, false) )
          log_error_and_alarm("Can't load current model vehicle.");
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
       return;
    }
 
@@ -281,7 +281,7 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
       if ( ! g_pCurrentModel->loadFromFile(szFile, false) )
          log_error_and_alarm("Can't load current model vehicle.");
       hardware_serial_reload_ports_settings();
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       return;
@@ -343,9 +343,9 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
       log_line("New developer flags: %s", str_get_developer_flags(g_pCurrentModel->uDeveloperFlags));
       checkDeveloperFlagsChanges(uOldDevFlags, g_pCurrentModel->uDeveloperFlags);
 
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
       if ( g_pCurrentModel->rc_params.rc_enabled )
-         ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
       return;
    }
    
@@ -477,10 +477,10 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
          }
       }
 
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
       if ( g_pCurrentModel->rc_params.rc_enabled )
-         ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
       return;
    }
 
@@ -590,10 +590,10 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
          g_pProcessStats->lastIPCIncomingTime = g_TimeNow;
       }
 
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
       if ( g_pCurrentModel->rc_params.rc_enabled )
-         ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
       
       send_alarm_to_controller(ALARM_ID_GENERIC, ALARM_ID_GENERIC_TYPE_SWAPPED_RADIO_INTERFACES, 0, 10);
       return;
@@ -737,10 +737,10 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
          send_alarm_to_controller(ALARM_ID_GENERIC_STATUS_UPDATE, ALARM_FLAG_GENERIC_STATUS_RECONFIGURING_RADIO_INTERFACE, 0, 10);
 
          char szCommand[128];
-         sprintf(szCommand, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
+         sprintf(szCommand, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
          hw_execute_bash_command(szCommand, NULL);
 
-         sprintf(szCommand, "./ruby_sik_config none 0 -power %d &", g_pCurrentModel->radioInterfacesParams.interface_raw_power[iSikRadioIndexToUpdate]);
+         sprintf(szCommand, "./Anhydrate_sik_config none 0 -power %d &", g_pCurrentModel->radioInterfacesParams.interface_raw_power[iSikRadioIndexToUpdate]);
          hw_execute_bash_command(szCommand, NULL);
          return;
       }
@@ -855,7 +855,7 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
       if ( oldRCParams.rc_enabled && (! g_pCurrentModel->rc_params.rc_enabled) )
       {
          vehicle_stop_rx_rc();
-         ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
          return;
       }
 
@@ -863,13 +863,13 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
       if ( (! oldRCParams.rc_enabled) && g_pCurrentModel->rc_params.rc_enabled )
       {
          vehicle_launch_rx_rc(g_pCurrentModel);
-         ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
          return;       
       }
 
       if ( g_pCurrentModel->rc_params.rc_enabled )
-         ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
 
       return;
    }
@@ -895,15 +895,15 @@ void _process_local_notification_model_changed(t_packet_header* pPH, int changeT
    {
       if ( fromComponentId == PACKET_COMPONENT_COMMANDS )
       {
-         ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
          if ( g_pCurrentModel->rc_params.rc_enabled )
-            ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
+            Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
       }
       if ( fromComponentId == PACKET_COMPONENT_TELEMETRY )
       {
-         ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
          if ( g_pCurrentModel->rc_params.rc_enabled )
-            ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
+            Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)pPH, pPH->total_length);
       }
    }
 
@@ -928,11 +928,11 @@ void process_local_control_packet(t_packet_header* pPH)
       
       t_packet_header PH;
       radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_VEHICLE_SEND_MODEL_SETTINGS, STREAM_ID_DATA);
-      PH.vehicle_id_src = PACKET_COMPONENT_RUBY;
+      PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header);
 
-      ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
 
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -1002,9 +1002,9 @@ void process_local_control_packet(t_packet_header* pPH)
          PH.vehicle_id_src = PACKET_COMPONENT_COMMANDS | (MODEL_CHANGED_CAMERA_CALIBRATION_FILE<<8);
          PH.total_length = sizeof(t_packet_header);
 
-         ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
          if ( g_pCurrentModel->rc_params.rc_enabled )
-            ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
+            Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
 
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -1032,9 +1032,9 @@ void process_local_control_packet(t_packet_header* pPH)
          PH.vehicle_id_src = PACKET_COMPONENT_COMMANDS | (MODEL_CHANGED_CAMERA_CALIBRATION_FILE<<8);
          PH.total_length = sizeof(t_packet_header);
 
-         ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
          if ( g_pCurrentModel->rc_params.rc_enabled )
-            ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
+            Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
 
          if ( NULL != g_pProcessStats )
             g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -1092,10 +1092,10 @@ void process_local_control_packet(t_packet_header* pPH)
       send_alarm_to_controller(ALARM_ID_GENERIC_STATUS_UPDATE, ALARM_FLAG_GENERIC_STATUS_RECONFIGURING_RADIO_INTERFACE, 0, 10);
 
       char szCommand[128];
-      sprintf(szCommand, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
+      sprintf(szCommand, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
       hw_execute_bash_command(szCommand, NULL);
 
-      sprintf(szCommand, "./ruby_sik_config %s %d -serialspeed %d &", pRadioHWInfo->szDriver, iBaudRate, (int)pSerialPort->lPortSpeed);
+      sprintf(szCommand, "./Anhydrate_sik_config %s %d -serialspeed %d &", pRadioHWInfo->szDriver, iBaudRate, (int)pSerialPort->lPortSpeed);
       hw_execute_bash_command(szCommand, NULL);
       return;
    }
@@ -1177,7 +1177,7 @@ void process_local_control_packet(t_packet_header* pPH)
       {
          log_line("Received reboot request from RX Commands. Sending it to telemetry.");
          adaptive_video_save_state();
-         ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
          g_uTimeRequestedReboot = g_TimeNow;
       }
       else
@@ -1192,7 +1192,7 @@ void process_local_control_packet(t_packet_header* pPH)
       log_line("Router received message to update camera params.");
       process_camera_params_changed((u8*)pPH, pPH->total_length);
       
-      ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)pPH, pPH->total_length);
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
       return;
@@ -1203,7 +1203,7 @@ void process_local_control_packet(t_packet_header* pPH)
       memcpy((u8*)(&(g_pCurrentModel->m_Stats)),(u8*)(((u8*)pPH) + sizeof(t_packet_header)), sizeof(type_vehicle_stats_info));
       // Signal other components about the vehicle stats
       if ( pPH->vehicle_id_src == PACKET_COMPONENT_TELEMETRY )
-         ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)pPH, pPH->total_length);
 
       if ( NULL != g_pProcessStats )
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -1216,5 +1216,6 @@ void process_local_control_packet(t_packet_header* pPH)
 
    }
 }
+
 
 

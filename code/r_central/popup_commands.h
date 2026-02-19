@@ -7,3 +7,4 @@ class PopupCommands: public PopupLog
       PopupCommands();
       virtual ~PopupCommands();
 };
+

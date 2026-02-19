@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -253,3 +253,4 @@ int hardware_radio_serial_write_packet(int iHWRadioInterfaceIndex, u8* pData, in
 
    return 1;
 }
+

@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
    printf("Datarate: %d;\n", 12);
 
    t_packet_header PH;
-   PH.packet_flags = PACKET_COMPONENT_RUBY;
+   PH.packet_flags = PACKET_COMPONENT_Anhydrate;
    PH.vehicle_id_src = 0;
    PH.vehicle_id_dest = PH.vehicle_id_src;
    PH.total_length = sizeof(t_packet_header) + strlen(szMsg)+1;
@@ -72,3 +72,4 @@ int main(int argc, char *argv[])
    printf("\nSent %d bytes on port: %d\n", PH.total_length, port);
    return (0);
 }
+

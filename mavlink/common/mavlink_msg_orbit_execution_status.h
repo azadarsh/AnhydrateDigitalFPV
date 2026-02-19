@@ -336,3 +336,4 @@ static inline void mavlink_msg_orbit_execution_status_decode(const mavlink_messa
     memcpy(orbit_execution_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

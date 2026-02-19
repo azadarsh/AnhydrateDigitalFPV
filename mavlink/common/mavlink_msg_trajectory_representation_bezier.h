@@ -357,3 +357,4 @@ static inline void mavlink_msg_trajectory_representation_bezier_decode(const mav
     memcpy(trajectory_representation_bezier, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -398,7 +398,7 @@ float osd_show_flight_mode(float x, float y)
    g_pRenderEngine->drawRect(x, y, w, osd_getBarHeight() );
 
    ControllerSettings* pCS = get_ControllerSettings();
-   if ( pCS->iDeveloperMode && ((g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].pModel != NULL) && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnyRubyTelemetry > g_TimeNow-70)) )
+   if ( pCS->iDeveloperMode && ((g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].pModel != NULL) && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnyAnhydrateTelemetry > g_TimeNow-70)) )
       g_pRenderEngine->setColors(get_Color_Dev());
    else
       osd_set_colors();
@@ -439,8 +439,8 @@ float osd_show_video_link_mbs(float xPos, float yPos, bool bLeft)
 
    u32 uVideoBitrate = 0;
    u32 totalMaxVideo_bps = 0;
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-      uVideoBitrate = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_video_bitrate_bps;
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+      uVideoBitrate = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_video_bitrate_bps;
    if ( g_bIsRouterReady )
    {
       for( int i=0; i<MAX_CONCURENT_VEHICLES; i++ )
@@ -456,10 +456,10 @@ float osd_show_video_link_mbs(float xPos, float yPos, bool bLeft)
 
    strcpy(szSuffix, "Mbps");
 
-   if ( ! g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
+   if ( ! g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
       sprintf(szBuff,"%.1f", totalMaxVideo_bps/1000.0/1000.0);
    else
-      //sprintf(szBuff, "%.1f (%.1f)", totalMaxVideo_bps/1000.0/1000.0, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_video_bitrate_bps/1000.0/1000.0);
+      //sprintf(szBuff, "%.1f (%.1f)", totalMaxVideo_bps/1000.0/1000.0, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_video_bitrate_bps/1000.0/1000.0);
       //sprintf(szBuff, "%.1f", uVideoBitrate/1000.0/1000.0);
       sprintf(szBuff,"%.1f", totalMaxVideo_bps/1000.0/1000.0);
 
@@ -672,15 +672,15 @@ float osd_show_txpowers(float xPos)
       bool bPITMode = false;
 
       t_structure_vehicle_info* pVRTInfo = get_vehicle_runtime_info_for_vehicle_id(pActiveModel->uVehicleId);
-      if ( (NULL != pVRTInfo) && pVRTInfo->bGotRubyTelemetryInfo && (pVRTInfo->headerRubyTelemetryExtended.uExtraRubyFlags & FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE) )
+      if ( (NULL != pVRTInfo) && pVRTInfo->bGotAnhydrateTelemetryInfo && (pVRTInfo->headerAnhydrateTelemetryExtended.uExtraAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE) )
          bPITMode = true;
-      if ( (NULL != pVRTInfo) && pVRTInfo->bGotRubyTelemetryInfo && (pVRTInfo->headerRubyTelemetryExtended.uExtraRubyFlags & FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT) )
+      if ( (NULL != pVRTInfo) && pVRTInfo->bGotAnhydrateTelemetryInfo && (pVRTInfo->headerAnhydrateTelemetryExtended.uExtraAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT) )
          bPITMode = true;
 
       strcpy(szTxPower, "0 mW");
       if ( g_pCurrentModel->radioLinksParams.link_capabilities_flags[iVehicleRadioLink] & RADIO_HW_CAPABILITY_FLAG_DISABLED )
          strcpy(szTxPower, "- mW");
-      else if ( pVRTInfo->headerRubyTelemetryExtended.iTxPowers[iVehicleRadioLink] == 0 )
+      else if ( pVRTInfo->headerAnhydrateTelemetryExtended.iTxPowers[iVehicleRadioLink] == 0 )
       {
          strcpy(szTxPower, "N/A mW");
          bYellow = true;
@@ -703,7 +703,7 @@ float osd_show_txpowers(float xPos)
          */
          char szPowerPref[16];
          szPowerPref[0] = 0;
-         int iPowerMw = pVRTInfo->headerRubyTelemetryExtended.iTxPowers[iVehicleRadioLink];
+         int iPowerMw = pVRTInfo->headerAnhydrateTelemetryExtended.iTxPowers[iVehicleRadioLink];
          if ( iPowerMw < 0 )
          {
             iPowerMw = -iPowerMw;
@@ -758,9 +758,9 @@ float osd_show_throttle(float xPos, float yPos, bool bLeft)
    else
       strcpy(szBuff, "0%");
 
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryExtraInfo )
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryExtraInfo )
    {
-      u16 uThrottleInput = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfo.uThrottleInput;
+      u16 uThrottleInput = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfo.uThrottleInput;
       if ( uThrottleInput > 2500 )
          uThrottleInput = 2500;
       char szTmp[32];
@@ -788,7 +788,7 @@ float osd_show_throttle(float xPos, float yPos, bool bLeft)
 float _osd_show_rc_rssi(float xPos, float yPos, float fScale)
 {
    char szBuff[32];
-   bool bHasRubyRC = false;
+   bool bHasAnhydrateRC = false;
    
    Model* pActiveModel = osd_get_current_data_source_vehicle_model();
    int iRuntimeIndex = osd_get_current_data_source_vehicle_index();
@@ -796,7 +796,7 @@ float _osd_show_rc_rssi(float xPos, float yPos, float fScale)
       return 0.0;
 
    if ( pActiveModel->rc_params.rc_enabled && (!pActiveModel->is_spectator) )
-      bHasRubyRC = true;
+      bHasAnhydrateRC = true;
  
    osd_set_colors();
 
@@ -804,18 +804,18 @@ float _osd_show_rc_rssi(float xPos, float yPos, float fScale)
    float y = yPos;
 
    strcpy(szBuff, "RC RSSI: N/A");
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
    {
       int val = 0;
-      if ( bHasRubyRC )
-         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_rc_rssi;
-      else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI )
-         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_mavlink_rc_rssi;
+      if ( bHasAnhydrateRC )
+         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_rc_rssi;
+      else if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI )
+         val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_mavlink_rc_rssi;
       
-      //if ( ! bHasRubyRC )
+      //if ( ! bHasAnhydrateRC )
       //if ( val == 0 || val == 255 )
-      //if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uRubyFlags & FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RX_RSSI )
-      //   val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.uplink_mavlink_rx_rssi;
+      //if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RX_RSSI )
+      //   val = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.uplink_mavlink_rx_rssi;
 
       if ( val != 255 )
       {
@@ -917,19 +917,19 @@ float osd_show_cpus(float xPos, float yPos, float fScale )
 
    if ( s_bDebugOSDShowAll || (g_pCurrentModel->osd_params.osd_flags[osd_get_current_layout_index()] & OSD_FLAG_SHOW_CPU_INFO ) )
    {
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
       {
          bool bF = false;
          if ( (NULL != pActiveModel) && (pActiveModel->osd_params.uFlags & OSD_BIT_FLAGS_SHOW_TEMPS_F) )
             bF = true;
          if ( bF )
-            sprintf(szBuff, "%d F",  (int)osd_convertTemperature((float)(g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.temperatureC), true));
+            sprintf(szBuff, "%d F",  (int)osd_convertTemperature((float)(g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.temperatureC), true));
          else
-            sprintf(szBuff, "%d C",  (int)osd_convertTemperature((float)(g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.temperatureC), false));
-         if ( (NULL != pActiveModel) && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.temperatureC >= ((pActiveModel->hwCapabilities.uHWFlags & 0xFF00)>>8)-5) )
+            sprintf(szBuff, "%d C",  (int)osd_convertTemperature((float)(g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.temperatureC), false));
+         if ( (NULL != pActiveModel) && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.temperatureC >= ((pActiveModel->hwCapabilities.uHWFlags & 0xFF00)>>8)-5) )
          if ( (g_TimeNow/500)%2 )
             g_pRenderEngine->setColors(get_Color_IconWarning());
-         if ( (NULL != pActiveModel) && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.temperatureC >= ((pActiveModel->hwCapabilities.uHWFlags & 0xFF00)>>8)) )
+         if ( (NULL != pActiveModel) && (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.temperatureC >= ((pActiveModel->hwCapabilities.uHWFlags & 0xFF00)>>8)) )
          if ( (g_TimeNow/500)%2 )
             g_pRenderEngine->setColors(get_Color_IconError());
       }
@@ -950,8 +950,8 @@ float osd_show_cpus(float xPos, float yPos, float fScale )
 
       osd_set_colors();
 
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-         sprintf(szBuff, "%d Mhz",  (int)((float)g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.cpu_mhz));// * 0.953)); // 1024 scalling
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+         sprintf(szBuff, "%d Mhz",  (int)((float)g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.cpu_mhz));// * 0.953)); // 1024 scalling
       else
          sprintf(szBuff, "- Mhz");
       xPos -= osd_show_value_left(xPos, yPos, szBuff, g_idFontOSDSmall);
@@ -962,8 +962,8 @@ float osd_show_cpus(float xPos, float yPos, float fScale )
          yPos += height_text;
          xPos = x0;
       }
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-         sprintf(szBuff, "%d %%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.cpu_load);
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+         sprintf(szBuff, "%d %%", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.cpu_load);
       else
          strcpy(szBuff, "- %%");
 

@@ -261,3 +261,4 @@ static inline void mavlink_msg_mission_set_current_decode(const mavlink_message_
     memcpy(mission_set_current, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

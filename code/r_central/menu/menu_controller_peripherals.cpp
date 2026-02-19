@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -41,7 +41,7 @@
 #include "../launchers_controller.h"
 #include "menu_device_i2c.h"
 
-#include "../../public/ruby_core_plugin.h"
+#include "../../public/Anhydrate_core_plugin.h"
 
 
 #include "../process_router_messages.h"
@@ -625,3 +625,4 @@ void MenuControllerPeripherals::onSelectItem()
       devIndex++;
    }
 }
+

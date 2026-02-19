@@ -138,9 +138,9 @@ void *_thread_oled_render_async(void *argument)
         // ssd1306_oled_draw_string(100, 2, timestamp_str, length, 1, false, SSD1306_FONT_12);
         // length = snprintf(timestamp_str, sizeof(timestamp_str), "%d %%", test_count);
         // ssd1306_oled_draw_string(27, 27, timestamp_str, length, 1, true, SSD1306_FONT_12);
-        // ssd1306_oled_draw_string(54, 2, "Ruby FPV", 8, 1, false, SSD1306_FONT_12);
-        // ssd1306_oled_draw_string(54, 13, "Ruby FPV", 8, 1, false, SSD1306_FONT_16);
-        // ssd1306_oled_draw_string(54, 27, "Ruby FPV", 8, 1, false, SSD1306_FONT_24);
+        // ssd1306_oled_draw_string(54, 2, "Anhydrate FPV", 8, 1, false, SSD1306_FONT_12);
+        // ssd1306_oled_draw_string(54, 13, "Anhydrate FPV", 8, 1, false, SSD1306_FONT_16);
+        // ssd1306_oled_draw_string(54, 27, "Anhydrate FPV", 8, 1, false, SSD1306_FONT_24);
         // test_count++;
         /////////////////////////////////////////////////////////////////
         ssd1306_oled_display();

@@ -41,7 +41,7 @@
 #define MODEL_TYPE_RELAY 7
 #define MODEL_TYPE_LAST 8
 
-#define MODEL_FIRMWARE_TYPE_RUBY 0
+#define MODEL_FIRMWARE_TYPE_Anhydrate 0
 
 // Encryption flags for models
 
@@ -185,3 +185,4 @@
 #define RADIO_INTERFACES_FLAGS_PIT_MODE_ENABLE_TEMP (((u32)1)<<3)
 
 #define MODEL_RUNTIME_RADIO_CAPAB_FLAG_COMPUTED ((u32)1)
+

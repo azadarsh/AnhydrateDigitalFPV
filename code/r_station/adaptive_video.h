@@ -13,3 +13,4 @@ void adaptive_video_enable_test_mode(bool bEnableTestMode);
 
 void adaptive_video_received_vehicle_msg_ack(u32 uRequestId, u32 uVehicleId, int iInterfaceIndex);
 void adaptive_video_periodic_loop(bool bForceSyncNow);
+

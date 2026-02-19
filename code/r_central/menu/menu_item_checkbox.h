@@ -23,3 +23,4 @@ class MenuItemCheckbox: public MenuItem
    protected:
       bool m_bChecked;
 };
+

@@ -436,3 +436,4 @@ static inline void mavlink_msg_estimator_status_decode(const mavlink_message_t* 
     memcpy(estimator_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

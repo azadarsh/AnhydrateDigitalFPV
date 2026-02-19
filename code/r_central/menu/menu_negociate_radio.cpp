@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -871,7 +871,7 @@ float MenuNegociateRadio::_getMinComputedQualityForDatarate(int iDatarate, int* 
 void MenuNegociateRadio::_send_keep_alive_to_vehicle()
 {
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
    PH.packet_flags |= PACKET_FLAGS_BIT_HIGH_PRIORITY;
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
@@ -895,7 +895,7 @@ void MenuNegociateRadio::_send_keep_alive_to_vehicle()
 void MenuNegociateRadio::_send_start_test_to_vehicle(int iTestIndex)
 {
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header) + 3*sizeof(u8) + sizeof(u32) + 2*sizeof(int);
@@ -938,7 +938,7 @@ void MenuNegociateRadio::_send_end_all_tests_to_vehicle(bool bCanceled)
    send_pause_adaptive_to_router(4000);
 
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
    PH.packet_flags |= PACKET_FLAGS_BIT_HIGH_PRIORITY;
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
@@ -987,7 +987,7 @@ void MenuNegociateRadio::_send_apply_settings_to_vehicle()
    send_pause_adaptive_to_router(6000);
 
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header) + 3*sizeof(u8) + sizeof(u32) + 2*sizeof(int) + sizeof(type_radio_runtime_capabilities_parameters);
@@ -2229,3 +2229,4 @@ void MenuNegociateRadio::onSelectItem()
       _onCancel();
    }
 }
+

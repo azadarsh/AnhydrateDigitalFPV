@@ -152,7 +152,7 @@ typedef struct
 // param: 0/1 to restart vehicle processes
 // params: model's type_processes_priorities structure
 
-#define COMMAND_ID_SET_ENCRYPTION_PARAMS 54 // (added ruby 5.1)
+#define COMMAND_ID_SET_ENCRYPTION_PARAMS 54 // (added Anhydrate 5.1)
 // byte 0: flags, byte 1: pass key lenght; byte 2..N: pass key
 
 #define COMMAND_ID_SET_TELEMETRY_TYPE_AND_PORT 55
@@ -296,3 +296,4 @@ typedef struct
 
 //------------------------------------------------------
 const char* commands_get_description(u8 command_type);
+

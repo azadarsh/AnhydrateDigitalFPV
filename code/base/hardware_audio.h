@@ -11,3 +11,4 @@ int hardware_audio_play_file(const char* szFile);
 int hardware_audio_play_file_async(const char* szFile);
 void hardware_audio_stop_async_play();
 
+

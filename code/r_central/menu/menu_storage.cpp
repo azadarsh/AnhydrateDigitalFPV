@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -115,7 +115,7 @@ void MenuStorage::onShow()
       m_MemFree = lf;
    }
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    buildFilesListPictures();
    buildFilesListVideo();
 
@@ -416,7 +416,7 @@ void MenuStorage::onReturnFromChild(int iChildMenuId, int returnValue)
    {
       if ( g_bIsVideoRecording )
       {
-         ruby_stop_recording();
+         Anhydrate_stop_recording();
          m_uMustRefreshTime = g_TimeNow + 5000;
       }
       return;
@@ -473,7 +473,7 @@ void MenuStorage::buildFilesListPictures()
       {
          if ( strlen(dir->d_name) < 4 )
             continue;
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
 
          bool match = false;
          if ( strncmp(dir->d_name, FILE_FORMAT_SCREENSHOT, 6) == 0 )
@@ -514,7 +514,7 @@ void MenuStorage::buildFilesListVideo()
          if ( strlen(dir->d_name) < 4 )
             continue;
 
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
 
          bool match = false;
          if ( dir->d_name[strlen(dir->d_name)-4] == 'i' )
@@ -591,7 +591,7 @@ void MenuStorage::movePictures(bool bDelete)
    buildFilesListPictures();
 
    strcpy(szFile, FOLDER_USB_MOUNT);
-   strcat(szFile, "Ruby");
+   strcat(szFile, "Anhydrate");
    snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mkdir -p %s", szFile );
    hw_execute_bash_command(szCommand, NULL);
 
@@ -599,8 +599,8 @@ void MenuStorage::movePictures(bool bDelete)
    {
       g_TimeNow = get_current_timestamp_ms();
       g_TimeNowMicros = get_current_timestamp_micros();
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(get_current_timestamp_ms());
 
       strcpy(szSrcFile, FOLDER_MEDIA);
@@ -608,13 +608,13 @@ void MenuStorage::movePictures(bool bDelete)
       if ( -1 == access(szSrcFile, R_OK) )
          continue;
 
-      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "rm -rf %s/Ruby/%s", FOLDER_USB_MOUNT, m_szPicturesFiles[i]);
+      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "rm -rf %s/Anhydrate/%s", FOLDER_USB_MOUNT, m_szPicturesFiles[i]);
       hw_execute_bash_command(szCommand, NULL);
 
       if ( bDelete )
-         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv %s %s/Ruby/%s", szSrcFile, FOLDER_USB_MOUNT, m_szPicturesFiles[i]);
+         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv %s %s/Anhydrate/%s", szSrcFile, FOLDER_USB_MOUNT, m_szPicturesFiles[i]);
       else
-         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "cp %s %s/Ruby/%s", szSrcFile, FOLDER_USB_MOUNT, m_szPicturesFiles[i]);
+         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "cp %s %s/Anhydrate/%s", szSrcFile, FOLDER_USB_MOUNT, m_szPicturesFiles[i]);
       hw_execute_bash_command(szCommand, NULL);
    }
 }
@@ -646,7 +646,7 @@ bool MenuStorage::moveVideos(bool bDelete)
    bool bHadErrors = false;
 
    strcpy(szFile, FOLDER_USB_MOUNT);
-   strcat(szFile, "Ruby");
+   strcat(szFile, "Anhydrate");
    snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mkdir -p %s", szFile );
    hw_execute_bash_command(szCommand, NULL);
 
@@ -657,8 +657,8 @@ bool MenuStorage::moveVideos(bool bDelete)
 
       g_TimeNow = get_current_timestamp_ms();
       g_TimeNowMicros = get_current_timestamp_micros();
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(get_current_timestamp_ms());
 
       snprintf(szFile, sizeof(szFile)/sizeof(szFile[0]), "%s%s", FOLDER_MEDIA, m_szVideoInfoFiles[i]);
@@ -686,7 +686,7 @@ bool MenuStorage::moveVideos(bool bDelete)
       log_line("Video file (%s) size: %d kb, free space: %d kb", szFile, lSizeVideo/1000, iFreeSpaceKb);
       if ( iFreeSpaceKb < ((lSizeVideo/1000)*5)/3 )
       {
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "Not enough free space to process video file %s; %d Mb free.", szSrcFile, (int)iFreeSpaceKb/1000);
          m_pPopupProgress->addLine(szCommand);
          bHadErrors = true;
@@ -695,9 +695,9 @@ bool MenuStorage::moveVideos(bool bDelete)
 
       strcpy(szOutFile, szSrcFile);
       hardware_file_replace_extension(szOutFile, "mp4");
-      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "rm -rf %sRuby/%s", FOLDER_USB_MOUNT, szOutFile);
+      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "rm -rf %sAnhydrate/%s", FOLDER_USB_MOUNT, szOutFile);
       hw_execute_bash_command(szCommand, NULL);
-      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "rm -rf %s%s", FOLDER_RUBY_TEMP, szOutFile);
+      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "rm -rf %s%s", FOLDER_Anhydrate_TEMP, szOutFile);
       hw_execute_bash_command(szCommand, NULL);
 
       char szFileOSDIn[MAX_FILE_PATH_SIZE];
@@ -708,20 +708,20 @@ bool MenuStorage::moveVideos(bool bDelete)
       hardware_file_replace_extension(szFileOSDIn, "osd");
       hardware_file_replace_extension(szFileOSDOut, "osd");
       if ( bDelete )
-         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv -f %s%s %sRuby/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
+         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv -f %s%s %sAnhydrate/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
       else
-         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "cp -rf %s%s %sRuby/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
+         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "cp -rf %s%s %sAnhydrate/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
       hw_execute_bash_command(szCommand, NULL);
 
       hardware_file_replace_extension(szFileOSDIn, "srt");
       hardware_file_replace_extension(szFileOSDOut, "srt");
       if ( bDelete )
-         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv -f %s%s %sRuby/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
+         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv -f %s%s %sAnhydrate/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
       else
-         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "cp -rf %s%s %sRuby/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
+         snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "cp -rf %s%s %sAnhydrate/%s 2>/dev/null", FOLDER_MEDIA, szFileOSDIn, FOLDER_USB_MOUNT, szFileOSDOut);
       hw_execute_bash_command(szCommand, NULL);
 
-      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "./ruby_video_proc %s%s %s%s &", FOLDER_MEDIA, m_szVideoInfoFiles[i], FOLDER_RUBY_TEMP, szOutFile);
+      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "./Anhydrate_video_proc %s%s %s%s &", FOLDER_MEDIA, m_szVideoInfoFiles[i], FOLDER_Anhydrate_TEMP, szOutFile);
       hw_execute_bash_command(szCommand, NULL);
       
       g_TimeNow = get_current_timestamp_ms();
@@ -734,8 +734,8 @@ bool MenuStorage::moveVideos(bool bDelete)
       {
          hardware_sleep_ms(200);
          g_TimeNow = get_current_timestamp_ms();
-         ruby_signal_alive();
-         ruby_processing_loop(true);
+         Anhydrate_signal_alive();
+         Anhydrate_processing_loop(true);
          render_all(get_current_timestamp_ms());
       }
 
@@ -744,10 +744,10 @@ bool MenuStorage::moveVideos(bool bDelete)
       {
          hardware_sleep_ms(300);
          g_TimeNow = get_current_timestamp_ms();
-         ruby_signal_alive();
-         ruby_processing_loop(true);
+         Anhydrate_signal_alive();
+         Anhydrate_processing_loop(true);
          render_all(get_current_timestamp_ms());
-         if ( hw_process_exists("ruby_video_proc") )
+         if ( hw_process_exists("Anhydrate_video_proc") )
             log_line("Waiting for video processing to finish...");
          else
             break;
@@ -756,10 +756,10 @@ bool MenuStorage::moveVideos(bool bDelete)
       log_line("Finished processing video %s", m_szVideoInfoFiles[i]);
       hardware_sleep_ms(100);
       
-      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv -f %s%s %sRuby/%s", FOLDER_RUBY_TEMP, szOutFile, FOLDER_USB_MOUNT, szOutFile);
+      snprintf(szCommand, sizeof(szCommand)/sizeof(szCommand[0]), "mv -f %s%s %sAnhydrate/%s", FOLDER_Anhydrate_TEMP, szOutFile, FOLDER_USB_MOUNT, szOutFile);
       hw_execute_bash_command(szCommand, NULL);
       
-      snprintf(szFile, sizeof(szFile)/sizeof(szFile[0]), "%sRuby/%s", FOLDER_USB_MOUNT, szOutFile);
+      snprintf(szFile, sizeof(szFile)/sizeof(szFile[0]), "%sAnhydrate/%s", FOLDER_USB_MOUNT, szOutFile);
       if ( access(szFile, R_OK) == -1 )
          log_softerror_and_alarm("Failed to access the output video file [%s]. Not written to USB stick", szFile);
       else
@@ -785,8 +785,8 @@ bool MenuStorage::moveVideos(bool bDelete)
 
       g_TimeNow = get_current_timestamp_ms();
       g_TimeNowMicros = get_current_timestamp_micros();
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(get_current_timestamp_ms());
 
       hardware_sleep_ms(200);
@@ -813,9 +813,9 @@ bool MenuStorage::moveVideos(bool bDelete)
       }
    }
 
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    sync();
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    hardware_sleep_ms(100);
    return bHadErrors;
 }
@@ -831,25 +831,25 @@ bool MenuStorage::flowCopyMoveFiles(bool bDeleteToo)
    m_pPopupProgress->setCentered();
    popups_add_topmost(m_pPopupProgress);
 
-   ruby_signal_alive();
-   ruby_processing_loop(true);
+   Anhydrate_signal_alive();
+   Anhydrate_processing_loop(true);
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    sprintf(szCommand, "mkdir -p %s", FOLDER_USB_MOUNT);
    hw_execute_bash_command(szCommand, NULL);
    sprintf(szCommand, "chmod -R 777 %s", FOLDER_USB_MOUNT);
    hw_execute_bash_command(szCommand, NULL);
 
-   ruby_pause_watchdog("copy media files");
+   Anhydrate_pause_watchdog("copy media files");
 
    int iMountRes = hardware_try_mount_usb();
    if ( 1 != iMountRes )
    {
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       if ( 0 == iMountRes )
          m_pPopupProgress->setTitle("No USB memory stick available.");
       else
@@ -860,23 +860,23 @@ bool MenuStorage::flowCopyMoveFiles(bool bDeleteToo)
             m_pPopupProgress->setTitle("USB memory stick available. Try again.");
       }
 
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
 
       if ( 1 != iMountRes )
       {
-         ruby_resume_watchdog("copy media failed");
-         ruby_signal_alive();
+         Anhydrate_resume_watchdog("copy media failed");
+         Anhydrate_signal_alive();
          m_pPopupProgress->setTimeout(5);
          return false;
       }
    }
-   ruby_signal_alive();
-   ruby_processing_loop(true);
+   Anhydrate_signal_alive();
+   Anhydrate_processing_loop(true);
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    movePictures(bDeleteToo);
    bool bHadErrors = moveVideos(bDeleteToo);
@@ -888,10 +888,10 @@ bool MenuStorage::flowCopyMoveFiles(bool bDeleteToo)
    strncpy(szUSBDeviceName, hardware_get_mounted_usb_name(), 127);
 
    hardware_unmount_usb();
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    sync();
-   ruby_signal_alive();
-   ruby_resume_watchdog("copy media finished");
+   Anhydrate_signal_alive();
+   Anhydrate_resume_watchdog("copy media finished");
    invalidate();
    sprintf(szBuff, "Done. It's safe now to remove the USB memory stick [%s].", szUSBDeviceName);
    m_pPopupProgress->setTitle(szBuff);
@@ -1053,9 +1053,10 @@ void MenuStorage::playVideoFile(int iMenuItemIndex)
       }
       pairing_stop();
       m_bWasPairingStarted = true;
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
    }
    */
 
    log_line("Started video playback of info file: (%s%s)", FOLDER_MEDIA, szFile);
 }
+

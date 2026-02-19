@@ -511,3 +511,4 @@ static inline void mavlink_msg_command_int_decode(const mavlink_message_t* msg, 
     memcpy(command_int, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -18,7 +18,7 @@ typedef unsigned char u8;
 // 1. * Master sends a command to slave (2...N bytes, depending on command type). First byte of all commands is the command start flag;
 // 2. * Slave responds with the right answer based on the command (1...N bytes, depending on command response type);
 // 3. * Repeat the steps above;
-// That means: slave device (Ruby extension device) just waits on I2C for commands from master (Ruby main controller) and responds to those commands as needed.
+// That means: slave device (Anhydrate extension device) just waits on I2C for commands from master (Anhydrate main controller) and responds to those commands as needed.
 // Note!!! All commands and responses have 1 extra byte at the end as the CRC
 // Use the example function at the end of file to compute the CRC
 // Note!!! Always check the CRC value when you get something. Ignore the commands with bad CRC. There can always be noise or bad I2C devices on the I2C bus.
@@ -28,17 +28,17 @@ typedef unsigned char u8;
 #define I2C_DEVICE_MIN_ADDRESS_RANGE 0x60
 #define I2C_DEVICE_MAX_ADDRESS_RANGE 0x6F
 
-// Note: the address [I2C_DEVICE_MAX_ADDRESS_RANGE-2] is used by the Ruby Pico Extender. If you use one, your plugin should use a different address.
+// Note: the address [I2C_DEVICE_MAX_ADDRESS_RANGE-2] is used by the Anhydrate Pico Extender. If you use one, your plugin should use a different address.
 
 #define I2C_PROTOCOL_STRING_LENGTH 24
 
-// Capabilities flags supported by the slave Ruby device; these capabilities will be queried by the Ruby controller and will be reported back to Ruby controller using the I2C interface;
+// Capabilities flags supported by the slave Anhydrate device; these capabilities will be queried by the Anhydrate controller and will be reported back to Anhydrate controller using the I2C interface;
 
-#define I2C_CAPABILITY_FLAG_SPI       ((u16)(((u16)0x01)<<1))    // Set if the slave device does support SPI communication with the Ruby controller (if not, only I2C is used)
-#define I2C_CAPABILITY_FLAG_BUTTONS   ((u16)(((u16)0x01)<<2))    // Set if the slave device has buttons (for UI navigation in Ruby);
+#define I2C_CAPABILITY_FLAG_SPI       ((u16)(((u16)0x01)<<1))    // Set if the slave device does support SPI communication with the Anhydrate controller (if not, only I2C is used)
+#define I2C_CAPABILITY_FLAG_BUTTONS   ((u16)(((u16)0x01)<<2))    // Set if the slave device has buttons (for UI navigation in Anhydrate);
 #define I2C_CAPABILITY_FLAG_ROTARY    ((u16)(((u16)0x01)<<3))    // Set if the slave device has rotary encoder (for UI navigation/Camera control);
 #define I2C_CAPABILITY_FLAG_ROTARY2    ((u16)(((u16)0x01)<<4))    // Set if the slave device has the secondary rotary encoder (for UI navigation/Camera control);
-#define I2C_CAPABILITY_FLAG_LEDS      ((u16)(((u16)0x01)<<5))    // Set if the slave device has LEDs to be controlled by the Ruby controller;
+#define I2C_CAPABILITY_FLAG_LEDS      ((u16)(((u16)0x01)<<5))    // Set if the slave device has LEDs to be controlled by the Anhydrate controller;
 #define I2C_CAPABILITY_FLAG_RC_INPUT  ((u16)(((u16)0x01)<<6))    // Set if the slave device has RC input hardware;
 #define I2C_CAPABILITY_FLAG_RC_OUTPUT ((u16)(((u16)0x01)<<7))       // Set if the slave device should output RC frames to the FC;
 #define I2C_CAPABILITY_FLAG_FLIGHT_CONTROL ((u16)(((u16)0x01)<<8))  // Set if the slave device wants to send flight commands to the vehicle;
@@ -178,7 +178,7 @@ typedef unsigned char u8;
 // Ask the slave device if they want to change the video quality
 // Master sends: 1 byte: command id;
 // Slave responds: 1 byte:
-// bit 0: 0 - no (video quality is auto, decided by Ruby), 0-100 sets a custom video quality (0=lowest quality)
+// bit 0: 0 - no (video quality is auto, decided by Anhydrate), 0-100 sets a custom video quality (0=lowest quality)
 
 
 #define I2C_COMMAND_ID_PLAY_SOUND_ALARM  0x60

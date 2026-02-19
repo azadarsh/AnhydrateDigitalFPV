@@ -36,3 +36,4 @@ class MenuItemSlider: public MenuItem
       bool m_HalfStepsEnabled;
       char m_szSufix[32];
 };
+

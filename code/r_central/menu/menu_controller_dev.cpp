@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -167,7 +167,7 @@ void MenuControllerDev::addItems()
    m_IndexWaitFullFrame = addMenuItem(m_pItemsSelect[4]);
 
    m_IndexResetDev = addMenuItem(new MenuItem("Reset Developer Settings", "Resets all the developer settings to the factory default values."));
-   m_IndexExit = addMenuItem(new MenuItem("Exit to shell", "Closes Ruby and exits to linux shell."));
+   m_IndexExit = addMenuItem(new MenuItem("Exit to shell", "Closes Anhydrate and exits to linux shell."));
 
    for( int i=0; i<m_ItemsCount; i++ )
       m_pMenuItems[i]->setTextColor(get_Color_Dev());
@@ -329,7 +329,7 @@ void MenuControllerDev::onSelectItem()
       log_line("Streamer output mode was changed to: %d", g_pControllerSettings->iStreamerOutputMode);
       save_ControllerSettings();
       pairing_stop();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       pairing_start_normal();
       return;
    }
@@ -369,4 +369,5 @@ void MenuControllerDev::onSelectItem()
       g_bQuit = true;
    }
 }
+
 

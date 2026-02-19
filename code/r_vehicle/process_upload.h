@@ -8,3 +8,4 @@ bool process_sw_upload_is_started();
 bool process_sw_upload_is_rebooting();
 void process_sw_upload_check_timeout(u32 uTimeNow);
 bool process_sw_did_finish_successfully();
+

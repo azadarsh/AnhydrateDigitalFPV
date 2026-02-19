@@ -278,3 +278,4 @@ static inline void mavlink_msg_param_ext_request_read_decode(const mavlink_messa
     memcpy(param_ext_request_read, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

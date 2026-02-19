@@ -555,3 +555,4 @@ static inline void mavlink_msg_odometry_decode(const mavlink_message_t* msg, mav
     memcpy(odometry, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

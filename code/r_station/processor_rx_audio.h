@@ -11,3 +11,4 @@ bool is_audio_processing_started();
 
 void process_received_audio_packet(u8* pPacketBuffer);
 void periodic_loop_audio();
+

@@ -8,3 +8,4 @@ void radio_links_flag_update_sik_interface(int iInterfaceIndex);
 void radio_links_flag_reinit_sik_interface(int iInterfaceIndex);
 int radio_links_check_reinit_sik_interfaces();
 
+

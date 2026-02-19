@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -43,7 +43,7 @@
 #include "../base/hardware.h"
 #include "../base/hardware_audio.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/string_utils.h"
 #include "../common/radio_stats.h"
 #include "../common/models_connect_frequencies.h"
@@ -57,7 +57,7 @@
 
 #include "shared_vars.h"
 #include "radio_links.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "processor_rx_audio.h"
 #include "processor_rx_video.h"
 #include "rx_video_output.h"
@@ -223,10 +223,10 @@ void _compute_set_tx_power_settings_for_sik()
    g_SiKRadiosState.uTimeStartConfiguring = g_TimeNow;
       
    char szCommand[128];
-   sprintf(szCommand, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
+   sprintf(szCommand, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
    hw_execute_bash_command(szCommand, NULL);
 
-   sprintf(szCommand, "./ruby_sik_config none 0 -power %d &", iSikNewPower);
+   sprintf(szCommand, "./Anhydrate_sik_config none 0 -power %d &", iSikNewPower);
    hw_execute_bash_command(szCommand, NULL);
 
    // Do not need to notify other components. Just return.
@@ -614,9 +614,9 @@ void _process_local_notification_model_changed(t_packet_header* pPH, u8 uChangeT
    if ( bNotify )
    {
       if ( -1 != g_fIPCToTelemetry )
-         ruby_ipc_channel_send_message(g_fIPCToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToTelemetry, (u8*)pPH, pPH->total_length);
       if ( -1 != g_fIPCToRC )
-         ruby_ipc_channel_send_message(g_fIPCToRC, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToRC, (u8*)pPH, pPH->total_length);
    }
 }
 
@@ -808,7 +808,7 @@ void process_local_control_packet(u8* pPacketBuffer)
          memcpy(packet+sizeof(t_packet_header) + sizeof(u8), &uCommandId, sizeof(u8));
          memcpy(packet+sizeof(t_packet_header) + 2*sizeof(u8), szBuff, strlen(szBuff)+1);
          radio_packet_compute_crc(packet, PH.total_length);
-         if ( ! ruby_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
+         if ( ! Anhydrate_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
             log_ipc_send_central_error(packet, PH.total_length);
          return;
       }
@@ -850,7 +850,7 @@ void process_local_control_packet(u8* pPacketBuffer)
       memcpy(packet+sizeof(t_packet_header) + sizeof(u8), &uCommandId, sizeof(u8));
       memcpy(packet+sizeof(t_packet_header) + 2*sizeof(u8), szBuff, strlen(szBuff)+1);
       radio_packet_compute_crc(packet, PH.total_length);
-      if ( ! ruby_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
+      if ( ! Anhydrate_ipc_channel_send_message(g_fIPCToCentral, packet, PH.total_length) )
          log_ipc_send_central_error(packet, PH.total_length);
 
       return;
@@ -924,7 +924,7 @@ void process_local_control_packet(u8* pPacketBuffer)
          g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
 
       log_line("Switching to vehicle radio link %d %s. Sending response to central.", iVehicleRadioLinkId+1, (pPH->vehicle_id_dest == 1)?"succeeded":"failed");
-      if ( ! ruby_ipc_channel_send_message(g_fIPCToCentral, (u8*)pPH, pPH->total_length) )
+      if ( ! Anhydrate_ipc_channel_send_message(g_fIPCToCentral, (u8*)pPH, pPH->total_length) )
          log_ipc_send_central_error((u8*)pPH, pPH->total_length);
       else
          log_line("Sent response to central.");
@@ -1059,10 +1059,10 @@ void process_local_control_packet(u8* pPacketBuffer)
             send_alarm_to_central(ALARM_ID_GENERIC_STATUS_UPDATE, ALARM_FLAG_GENERIC_STATUS_RECONFIGURING_RADIO_INTERFACE, 0);
 
             char szCommand[128];
-            sprintf(szCommand, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
+            sprintf(szCommand, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
             hw_execute_bash_command(szCommand, NULL);
 
-            sprintf(szCommand, "./ruby_sik_config %s %d -serialspeed %d &", pPort->szPortDeviceName, (int)oldSerialPorts[i].lPortSpeed, (int)pPort->lPortSpeed);
+            sprintf(szCommand, "./Anhydrate_sik_config %s %d -serialspeed %d &", pPort->szPortDeviceName, (int)oldSerialPorts[i].lPortSpeed, (int)pPort->lPortSpeed);
             hw_execute_bash_command(szCommand, NULL);
          }
       }
@@ -1098,9 +1098,9 @@ void process_local_control_packet(u8* pPacketBuffer)
       if ( pPH->vehicle_id_src == PACKET_COMPONENT_LOCAL_CONTROL )
       {
          if ( -1 != g_fIPCToTelemetry )
-            ruby_ipc_channel_send_message(g_fIPCToTelemetry, (u8*)pPH, pPH->total_length);
+            Anhydrate_ipc_channel_send_message(g_fIPCToTelemetry, (u8*)pPH, pPH->total_length);
          if ( -1 != g_fIPCToRC )
-            ruby_ipc_channel_send_message(g_fIPCToRC, (u8*)pPH, pPH->total_length);
+            Anhydrate_ipc_channel_send_message(g_fIPCToRC, (u8*)pPH, pPH->total_length);
       }
 
       g_TimeNow = get_current_timestamp_ms();
@@ -1113,9 +1113,9 @@ void process_local_control_packet(u8* pPacketBuffer)
         pPH->packet_type == PACKET_TYPE_LOCAL_CONTROL_UPDATE_FINISHED )
    {
       if ( -1 != g_fIPCToTelemetry )
-         ruby_ipc_channel_send_message(g_fIPCToTelemetry, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToTelemetry, (u8*)pPH, pPH->total_length);
       if ( -1 != g_fIPCToRC )
-         ruby_ipc_channel_send_message(g_fIPCToRC, (u8*)pPH, pPH->total_length);
+         Anhydrate_ipc_channel_send_message(g_fIPCToRC, (u8*)pPH, pPH->total_length);
 
       if ( pPH->packet_type == PACKET_TYPE_LOCAL_CONTROL_UPDATE_STARTED )
          g_bUpdateInProgress = true;
@@ -1125,3 +1125,4 @@ void process_local_control_packet(u8* pPacketBuffer)
       return;
    }
 }
+

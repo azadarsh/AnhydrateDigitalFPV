@@ -76,3 +76,4 @@ extern int g_iVehicleCorePluginsCount;
 
 extern bool g_bMustNegociateRadioLinksFlag;
 extern bool g_bAskedForNegociateRadioLink;
+

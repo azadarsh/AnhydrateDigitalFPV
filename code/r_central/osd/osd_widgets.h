@@ -52,3 +52,4 @@ void osd_widgets_on_new_vehicle_added_to_controller(u32 uVehicleId);
 
 void osd_widgets_on_main_vehicle_changed(u32 uCurrentVehicleId);
 void osd_widgets_render(u32 uCurrentVehicleId, int iOSDScreen);
+

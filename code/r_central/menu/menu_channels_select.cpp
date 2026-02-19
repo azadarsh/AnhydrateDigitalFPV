@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -43,7 +43,7 @@
 
 #include "../shared_vars.h"
 #include "../pairing.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 
 u32 s_uChannelsSelect433Band = 0;
 u32 s_uChannelsSelect868Band = 0;
@@ -281,3 +281,4 @@ void MenuChannelsSelect::onSelectItem()
       valuesToUI();
    }
 }
+

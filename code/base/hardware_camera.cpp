@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -129,7 +129,7 @@ u32 _hardware_detect_camera_type()
 
    char szBuff[256];
    char szFile[MAX_FILE_PATH_SIZE];
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_CONFIG_CAMERA_TYPE);
    FILE* fd = fopen(szFile, "r");
    if ( NULL != fd )

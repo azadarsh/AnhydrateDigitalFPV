@@ -236,3 +236,4 @@ static inline void mavlink_msg_log_request_end_decode(const mavlink_message_t* m
     memcpy(log_request_end, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

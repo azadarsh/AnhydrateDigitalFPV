@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -290,58 +290,58 @@ void* _thread_audio_buffering_playback(void *argument)
 
 void _open_audio_pipes()
 {
-   log_line("[AudioRx] Opening audio pipe player write endpoint: %s", FIFO_RUBY_AUDIO1);
+   log_line("[AudioRx] Opening audio pipe player write endpoint: %s", FIFO_Anhydrate_AUDIO1);
    int iRetries = 20;
    while ( (s_fPipeAudioPlayerOutput <= 0) && (iRetries > 0) )
    {
       iRetries--;
-      //s_fPipeAudioPlayerOutput = open(FIFO_RUBY_AUDIO1, O_WRONLY);
-      s_fPipeAudioPlayerOutput = open(FIFO_RUBY_AUDIO1, O_WRONLY | O_NONBLOCK);
+      //s_fPipeAudioPlayerOutput = open(FIFO_Anhydrate_AUDIO1, O_WRONLY);
+      s_fPipeAudioPlayerOutput = open(FIFO_Anhydrate_AUDIO1, O_WRONLY | O_NONBLOCK);
       if ( s_fPipeAudioPlayerOutput > 0 )
          break;
-      log_softerror_and_alarm("[AudioRx] Failed to open audio pipe player write endpoint: %s, retry...", FIFO_RUBY_AUDIO1);
+      log_softerror_and_alarm("[AudioRx] Failed to open audio pipe player write endpoint: %s, retry...", FIFO_Anhydrate_AUDIO1);
       hardware_sleep_ms(20);
    }
    if ( s_fPipeAudioPlayerOutput > 0 )
-      log_line("[AudioRx] Opened successfully audio pipe player write endpoint: %s", FIFO_RUBY_AUDIO1);
+      log_line("[AudioRx] Opened successfully audio pipe player write endpoint: %s", FIFO_Anhydrate_AUDIO1);
    else
    {
-      log_error_and_alarm("[AudioRx] Failed to open audio pipe player write endpoint: %s", FIFO_RUBY_AUDIO1);
+      log_error_and_alarm("[AudioRx] Failed to open audio pipe player write endpoint: %s", FIFO_Anhydrate_AUDIO1);
       return;
    }
    log_line("[AudioRx] Player pipe FIFO default size: %d bytes", fcntl(s_fPipeAudioPlayerOutput, F_GETPIPE_SZ));
    
-   s_fPipeAudioPlayerQueueRead = open(FIFO_RUBY_AUDIO_QUEUE, O_CREAT | O_RDONLY | O_NONBLOCK);
+   s_fPipeAudioPlayerQueueRead = open(FIFO_Anhydrate_AUDIO_QUEUE, O_CREAT | O_RDONLY | O_NONBLOCK);
    if ( s_fPipeAudioPlayerQueueRead <= 0 )
    {
-      log_error_and_alarm("[AudioRx] Failed to open audio pipe queue read endpoint: %s",FIFO_RUBY_AUDIO_QUEUE);
+      log_error_and_alarm("[AudioRx] Failed to open audio pipe queue read endpoint: %s",FIFO_Anhydrate_AUDIO_QUEUE);
       return;
    }
-   log_line("[AudioRx] Opened successfully audio pipe queue read endpoint: %s", FIFO_RUBY_AUDIO_QUEUE);
+   log_line("[AudioRx] Opened successfully audio pipe queue read endpoint: %s", FIFO_Anhydrate_AUDIO_QUEUE);
 
-   s_fPipeAudioPlayerQueueWrite = open(FIFO_RUBY_AUDIO_QUEUE, O_CREAT | O_WRONLY | O_NONBLOCK);
+   s_fPipeAudioPlayerQueueWrite = open(FIFO_Anhydrate_AUDIO_QUEUE, O_CREAT | O_WRONLY | O_NONBLOCK);
    if ( s_fPipeAudioPlayerQueueWrite <= 0 )
    {
-      log_error_and_alarm("[AudioRx] Failed to open audio pipe queue write endpoint: %s",FIFO_RUBY_AUDIO_QUEUE);
+      log_error_and_alarm("[AudioRx] Failed to open audio pipe queue write endpoint: %s",FIFO_Anhydrate_AUDIO_QUEUE);
       return;
    }
-   log_line("[AudioRx] Opened successfully audio pipe queue write endpoint: %s", FIFO_RUBY_AUDIO_QUEUE);
+   log_line("[AudioRx] Opened successfully audio pipe queue write endpoint: %s", FIFO_Anhydrate_AUDIO_QUEUE);
 
-   s_fPipeAudioBufferRead = open(FIFO_RUBY_AUDIO_BUFF, O_CREAT | O_RDONLY | O_NONBLOCK);
+   s_fPipeAudioBufferRead = open(FIFO_Anhydrate_AUDIO_BUFF, O_CREAT | O_RDONLY | O_NONBLOCK);
    if ( s_fPipeAudioBufferRead <= 0 )
    {
-      log_error_and_alarm("[AudioRx] Failed to open audio pipe buffer read endpoint: %s",FIFO_RUBY_AUDIO_BUFF);
+      log_error_and_alarm("[AudioRx] Failed to open audio pipe buffer read endpoint: %s",FIFO_Anhydrate_AUDIO_BUFF);
       return;
    }
-   log_line("[AudioRx] Opened successfully audio pipe buffer read endpoint: %s", FIFO_RUBY_AUDIO_BUFF);
+   log_line("[AudioRx] Opened successfully audio pipe buffer read endpoint: %s", FIFO_Anhydrate_AUDIO_BUFF);
 
-   s_fPipeAudioBufferWrite = open(FIFO_RUBY_AUDIO_BUFF, O_CREAT | O_WRONLY | O_NONBLOCK);
+   s_fPipeAudioBufferWrite = open(FIFO_Anhydrate_AUDIO_BUFF, O_CREAT | O_WRONLY | O_NONBLOCK);
    if ( s_fPipeAudioBufferWrite <= 0 )
    {
-      log_error_and_alarm("[AudioRx] Failed to open audio pipe buffer write endpoint: %s",FIFO_RUBY_AUDIO_BUFF);
+      log_error_and_alarm("[AudioRx] Failed to open audio pipe buffer write endpoint: %s",FIFO_Anhydrate_AUDIO_BUFF);
       return;
    }
-   log_line("[AudioRx] Opened successfully audio pipe buffer write endpoint: %s", FIFO_RUBY_AUDIO_BUFF);
+   log_line("[AudioRx] Opened successfully audio pipe buffer write endpoint: %s", FIFO_Anhydrate_AUDIO_BUFF);
 
    log_line("[AudioRx] Player queue FIFO default size: %d bytes", fcntl(s_fPipeAudioPlayerQueueWrite, F_GETPIPE_SZ));
    fcntl(s_fPipeAudioPlayerQueueWrite, F_SETPIPE_SZ, 250000);
@@ -441,19 +441,19 @@ void start_audio_player_and_pipe()
    log_line("[AudioRx] Starting audio streaming and player...");
 
    char szComm[128];
-   //sprintf(szComm, "aplay -q --disable-resample -N -R 10000 -c 1 --rate 44100 --format S16_LE %s 2>/dev/null &", FIFO_RUBY_AUDIO1);
-   sprintf(szComm, "aplay -q -N -R 10000 -c 1 --rate 44100 --format S16_LE %s", FIFO_RUBY_AUDIO1);
+   //sprintf(szComm, "aplay -q --disable-resample -N -R 10000 -c 1 --rate 44100 --format S16_LE %s 2>/dev/null &", FIFO_Anhydrate_AUDIO1);
+   sprintf(szComm, "aplay -q -N -R 10000 -c 1 --rate 44100 --format S16_LE %s", FIFO_Anhydrate_AUDIO1);
    if ( g_pCurrentModel->isRunningOnOpenIPCHardware() )
-      sprintf(szComm, "aplay -q -N -R 10000 -c 1 --rate 8000 --format S16_BE %s", FIFO_RUBY_AUDIO1);
+      sprintf(szComm, "aplay -q -N -R 10000 -c 1 --rate 8000 --format S16_BE %s", FIFO_Anhydrate_AUDIO1);
    #if defined(HW_PLATFORM_RADXA)
    char szDevice[64];
    szDevice[0] = 0;
    if ( (hardware_getBoardType() & BOARD_TYPE_MASK) == BOARD_TYPE_RADXA_3C )
       strcpy(szDevice, "-D hw:CARD=rockchiphdmi0 ");
 
-   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "aplay -q %s-N -R 10000 -c 1 --rate 44100 --format S16_LE %s", szDevice, FIFO_RUBY_AUDIO1);
+   snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "aplay -q %s-N -R 10000 -c 1 --rate 44100 --format S16_LE %s", szDevice, FIFO_Anhydrate_AUDIO1);
    if ( g_pCurrentModel->isRunningOnOpenIPCHardware() )
-      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "aplay -q %s-N -R 10000 -c 1 --rate 8000 --format S16_BE %s", szDevice, FIFO_RUBY_AUDIO1);
+      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "aplay -q %s-N -R 10000 -c 1 --rate 8000 --format S16_BE %s", szDevice, FIFO_Anhydrate_AUDIO1);
    #endif
    hw_execute_bash_command_nonblock(szComm, NULL);
    hardware_sleep_ms(20);

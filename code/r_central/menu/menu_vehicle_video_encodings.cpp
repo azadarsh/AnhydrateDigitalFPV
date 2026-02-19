@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -462,7 +462,7 @@ void MenuVehicleVideoEncodings::valuesToUI()
       if ( ! g_pCurrentModel->isVideoLinkFixedOneWay() )
       if ( g_pCurrentModel->video_link_profiles[iVideoProfile].uProfileEncodingFlags & VIDEO_PROFILE_ENCODING_FLAG_ENABLE_ADAPTIVE_VIDEO_KEYFRAME )
       {
-         m_pMenuItemVideoKeyframeWarning->setTitle(L("Adaptive keyframe is turned on. Keyframe interval will be dynamically adjusted by Ruby. If you want to use a fixed keyframe, turn off Adaptive Keyframe from Bidirectional settings menu or set the video link as One Way."));
+         m_pMenuItemVideoKeyframeWarning->setTitle(L("Adaptive keyframe is turned on. Keyframe interval will be dynamically adjusted by Anhydrate. If you want to use a fixed keyframe, turn off Adaptive Keyframe from Bidirectional settings menu or set the video link as One Way."));
          m_pMenuItemVideoKeyframeWarning->setHidden(false);
       }
    }
@@ -1065,3 +1065,4 @@ void MenuVehicleVideoEncodings::onSelectItem()
       add_menu_to_stack(pMenuEnc);
    }
 }
+

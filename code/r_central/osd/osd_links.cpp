@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -165,10 +165,10 @@ float _osd_show_link_bars(float xPos, float yPos, u32 uLastRxTime, float fQualit
 
    bool bPITMode = false;
    if ( ! bIsUplink )
-   if ( pVRTInfo->bGotRubyTelemetryInfo && (pVRTInfo->headerRubyTelemetryExtended.uExtraRubyFlags & FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE) )
+   if ( pVRTInfo->bGotAnhydrateTelemetryInfo && (pVRTInfo->headerAnhydrateTelemetryExtended.uExtraAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE) )
       bPITMode = true;
    if ( ! bIsUplink )
-   if ( pVRTInfo->bGotRubyTelemetryInfo && (pVRTInfo->headerRubyTelemetryExtended.uExtraRubyFlags & FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT) )
+   if ( pVRTInfo->bGotAnhydrateTelemetryInfo && (pVRTInfo->headerAnhydrateTelemetryExtended.uExtraAnhydrateFlags & FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT) )
       bPITMode = true;
 
    bool bNegociatedRadio = true;
@@ -571,12 +571,12 @@ float _osd_show_radio_link_new(float xPos, float yPos, int iLocalRadioLinkId, in
          break;
       }
 
-      nRxQuality = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_link_quality[iVehicleInterfaceIndex];
-      dbm = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_rssi_dbm[iVehicleInterfaceIndex]-200;
-      if ( g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex] != 0xFF )
-         iSNR = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex];
+      nRxQuality = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_link_quality[iVehicleInterfaceIndex];
+      dbm = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_rssi_dbm[iVehicleInterfaceIndex]-200;
+      if ( g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex] != 0xFF )
+         iSNR = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex];
 
-      iDataRateUplinkBPS = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.last_recv_datarate_bps[iVehicleInterfaceIndex];
+      iDataRateUplinkBPS = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.last_recv_datarate_bps[iVehicleInterfaceIndex];
       if ( pModelToUse->radioLinkIsSiKRadio(iVehicleRadioLinkId) )
          iDataRateUplinkBPS = pModelToUse->radioLinksParams.downlink_datarate_data_bps[iVehicleLinkIndex];
 
@@ -697,13 +697,13 @@ float _osd_show_radio_link_new(float xPos, float yPos, int iLocalRadioLinkId, in
 
          if ( -1 == iVehicleInterfaceIndex )
             return 0.0;
-         nRxQuality = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_link_quality[iVehicleInterfaceIndex];
-         dbm = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_rssi_dbm[iVehicleInterfaceIndex]-200;
-         if ( g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex] != 0xFF )
-            iSNR = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex];
+         nRxQuality = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_link_quality[iVehicleInterfaceIndex];
+         dbm = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_rssi_dbm[iVehicleInterfaceIndex]-200;
+         if ( g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex] != 0xFF )
+            iSNR = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.uplink_rssi_snr[iVehicleInterfaceIndex];
 
-         iRecvDataRateVideo = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.last_recv_datarate_bps[iVehicleInterfaceIndex];
-         iRecvDataRateData = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerRubyTelemetryExtended.last_recv_datarate_bps[iVehicleInterfaceIndex];
+         iRecvDataRateVideo = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.last_recv_datarate_bps[iVehicleInterfaceIndex];
+         iRecvDataRateData = g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].headerAnhydrateTelemetryExtended.last_recv_datarate_bps[iVehicleInterfaceIndex];
          uLastRxTime = g_TimeNow - (g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].SMVehicleRxStats[iVehicleRadioLinkId].timeNow - g_VehiclesRuntimeInfo[iVehicleRuntimeInfo].SMVehicleRxStats[iVehicleRadioLinkId].timeLastRxPacket);
 
          if ( pModelToUse->radioLinkIsSiKRadio(iVehicleRadioLinkId) )
@@ -1113,3 +1113,4 @@ float osd_show_relay_radio_link_new(float xPos, float yPos, int iVehicleRadioLin
    osd_set_colors();
    return fRet;
 }
+

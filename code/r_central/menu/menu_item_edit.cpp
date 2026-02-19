@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -293,3 +293,4 @@ void MenuItemEdit::Render(float xPos, float yPos, bool bSelected, float fWidthSe
    }
    g_pRenderEngine->setColors(get_Color_MenuText());
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -36,7 +36,7 @@
 #include "telemetry_msp.h"
 #include "shared_vars.h"
 #include "timers.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/parse_fc_telemetry.h"
 #include "../radio/radiopackets2.h"
 #include "../common/string_utils.h"
@@ -196,7 +196,7 @@ void _send_raw_telemetry_packet_to_controller()
    
    if ( g_bRouterReady && (!g_bLongTaskStarted) && (! isRadioLinksInitInProgress()) )
    {
-      int result = ruby_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
+      int result = Anhydrate_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
       if ( result != PH.total_length )
          log_softerror_and_alarm("[Telem] Failed to send data to router. Sent result: %d", result );
       #ifdef LOG_RAW_TELEMETRY

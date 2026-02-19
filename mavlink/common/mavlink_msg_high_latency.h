@@ -786,3 +786,4 @@ static inline void mavlink_msg_high_latency_decode(const mavlink_message_t* msg,
     memcpy(high_latency, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

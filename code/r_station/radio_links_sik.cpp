@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -41,7 +41,7 @@
 #include "../common/radio_stats.h"
 #include "../radio/radio_rx.h"
 #include "../radio/radio_tx.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 
 void radio_links_close_and_mark_sik_interfaces_to_reopen()
 {
@@ -256,7 +256,7 @@ int radio_links_check_reinit_sik_interfaces()
    if ( g_SiKRadiosState.bConfiguringToolInProgress && (g_SiKRadiosState.uTimeStartConfiguring != 0) )
    if ( g_TimeNow >= g_SiKRadiosState.uTimeStartConfiguring+500 )
    {
-      if ( hw_process_exists("ruby_sik_config") )
+      if ( hw_process_exists("Anhydrate_sik_config") )
       {
          g_SiKRadiosState.uTimeStartConfiguring = g_TimeNow - 400;
       }
@@ -264,7 +264,7 @@ int radio_links_check_reinit_sik_interfaces()
       {
          int iResult = -1;
          char szFile[128];
-         strcpy(szFile, FOLDER_RUBY_TEMP);
+         strcpy(szFile, FOLDER_Anhydrate_TEMP);
          strcat(szFile, FILE_TEMP_SIK_CONFIG_FINISHED);
          FILE* fd = fopen(szFile, "rb");
          if ( NULL != fd )
@@ -274,7 +274,7 @@ int radio_links_check_reinit_sik_interfaces()
             fclose(fd);
          }
          log_line("SiK radio configuration tool completed. Result: %d.", iResult);
-         sprintf(szFile, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
+         sprintf(szFile, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_SIK_CONFIG_FINISHED);
          hw_execute_bash_command(szFile, NULL);
          g_SiKRadiosState.bConfiguringToolInProgress = false;
          radio_links_reopen_marked_sik_interfaces();
@@ -316,3 +316,4 @@ int radio_links_check_reinit_sik_interfaces()
    g_SiKRadiosState.iThreadRetryCounter++;
    return 1;
 }
+

@@ -278,3 +278,4 @@ static inline void mavlink_msg_setup_signing_decode(const mavlink_message_t* msg
     memcpy(setup_signing, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

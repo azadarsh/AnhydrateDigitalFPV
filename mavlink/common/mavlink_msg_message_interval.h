@@ -236,3 +236,4 @@ static inline void mavlink_msg_message_interval_decode(const mavlink_message_t* 
     memcpy(message_interval, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

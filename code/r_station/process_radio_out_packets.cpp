@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -34,12 +34,12 @@
 #include "../base/hardware.h"
 #include "../base/radio_utils.h"
 #include "../base/commands.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/radio_stats.h"
 #include "../radio/radiolink.h"
 #include "../radio/radio_duplicate_det.h"
 #include "../radio/radio_tx.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "shared_vars.h"
 #include "timers.h"
 

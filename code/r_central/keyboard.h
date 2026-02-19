@@ -25,3 +25,4 @@ int keyboard_has_long_press_flag();
 u32 keyboard_get_triggered_input_events();
 void keyboard_clear_triggered_back_event();
 u32 keyboard_add_triggered_gpio_input_events();
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -172,7 +172,7 @@ void MenuPreferencesUI::addItems()
       m_IndexColorPickerAHI = addMenuItem(new MenuItem(L("Instruments color"), L("Change color of the instruments/gauges."))); 
 
       if ( (NULL != g_pCurrentModel) && (g_pCurrentModel->telemetry_params.fc_telemetry_type == TELEMETRY_TYPE_MSP) )
-         m_pItemsSelect[10] = new MenuItemSelect(L("Ruby OSD font"), L("Changes the OSD font used for Ruby OSD elements."));  
+         m_pItemsSelect[10] = new MenuItemSelect(L("Anhydrate OSD font"), L("Changes the OSD font used for Anhydrate OSD elements."));  
       else
          m_pItemsSelect[10] = new MenuItemSelect(L("OSD font"), L("Changes the OSD font."));  
 
@@ -190,7 +190,7 @@ void MenuPreferencesUI::addItems()
       m_IndexOSDFont = addMenuItem(m_pItemsSelect[10]);
 
       if ( (NULL != g_pCurrentModel) && (g_pCurrentModel->telemetry_params.fc_telemetry_type == TELEMETRY_TYPE_MSP) )
-         m_pItemsSelect[5] = new MenuItemSelect(L("Ruby OSD font style"), L("Changes the OSD font style used for Ruby OSD elements."));  
+         m_pItemsSelect[5] = new MenuItemSelect(L("Anhydrate OSD font style"), L("Changes the OSD font style used for Anhydrate OSD elements."));  
       else
          m_pItemsSelect[5] = new MenuItemSelect(L("OSD font style"), L("Changes the OSD font style."));  
       m_pItemsSelect[5]->addSelection(L("Regular"));
@@ -690,3 +690,4 @@ void MenuPreferencesUI::onSelectItem()
    }
    save_Preferences();
 }
+

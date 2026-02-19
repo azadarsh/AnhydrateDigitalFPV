@@ -63,3 +63,4 @@ class ParserH264
 
 
 bool parser_h264_is_signaling_nal(u8 uNALId);
+

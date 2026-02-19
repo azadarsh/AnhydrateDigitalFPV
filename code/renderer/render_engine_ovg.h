@@ -60,3 +60,4 @@ class RenderEngineOVG: public RenderEngine
       u32 m_CurrentImageId;
       int m_iCountImages;
 };
+

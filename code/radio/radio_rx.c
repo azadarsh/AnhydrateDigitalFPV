@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -695,7 +695,7 @@ int _radio_rx_parse_received_wifi_radio_data(int iInterfaceIndex, int iMaxReads)
       u32 uVehicleId = pPH->vehicle_id_src;
 
       if ( s_iRadioRxDevMode )
-      if ( uPacketType == PACKET_TYPE_RUBY_PING_CLOCK )
+      if ( uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK )
       {
          s_uLastRadioPingSentTime = get_current_timestamp_ms();
          s_uLastRadioPingId = *(pPacketBuffer +sizeof(t_packet_header));
@@ -1212,8 +1212,8 @@ int _radio_rx_init_queues()
    s_RadioRxState.queue_reg_priority.iStatsMaxPacketsInQueue = 0;
    s_RadioRxState.queue_reg_priority.iStatsMaxPacketsInQueueLastMinute = 0;
 
-   sem_unlink(RUBY_SEM_RX_RADIO_HIGH_PRIORITY);
-   sem_unlink(RUBY_SEM_RX_RADIO_REG_PRIORITY);
+   sem_unlink(Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY);
+   sem_unlink(Anhydrate_SEM_RX_RADIO_REG_PRIORITY);
 
    pthread_mutexattr_t mutexAttr;
    if ( 0 != pthread_mutexattr_init(&mutexAttr) )
@@ -1235,25 +1235,25 @@ int _radio_rx_init_queues()
    if ( 0 != pthread_mutexattr_destroy(&mutexAttr) )
       log_error_and_alarm("[RadioRx] Failed to cleanup radio rx queues mutex attributes");
 
-   s_RadioRxState.queue_high_priority.pSemaphoreWrite = sem_open(RUBY_SEM_RX_RADIO_HIGH_PRIORITY, O_CREAT | O_RDWR, S_IWUSR | S_IRUSR, 0);
+   s_RadioRxState.queue_high_priority.pSemaphoreWrite = sem_open(Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY, O_CREAT | O_RDWR, S_IWUSR | S_IRUSR, 0);
    if ( (NULL == s_RadioRxState.queue_high_priority.pSemaphoreWrite) || (SEM_FAILED == s_RadioRxState.queue_high_priority.pSemaphoreWrite) )
    {
-      log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s, try alternative.", RUBY_SEM_RX_RADIO_HIGH_PRIORITY);
-      s_RadioRxState.queue_high_priority.pSemaphoreWrite = sem_open(RUBY_SEM_RX_RADIO_HIGH_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
+      log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s, try alternative.", Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY);
+      s_RadioRxState.queue_high_priority.pSemaphoreWrite = sem_open(Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
       if ( (NULL == s_RadioRxState.queue_high_priority.pSemaphoreWrite) || (SEM_FAILED == s_RadioRxState.queue_high_priority.pSemaphoreWrite) )
       {
-         log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s", RUBY_SEM_RX_RADIO_HIGH_PRIORITY);
+         log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s", Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY);
          return -1;
       }
    }
-   s_RadioRxState.queue_high_priority.pSemaphoreRead = sem_open(RUBY_SEM_RX_RADIO_HIGH_PRIORITY, O_RDWR);
+   s_RadioRxState.queue_high_priority.pSemaphoreRead = sem_open(Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY, O_RDWR);
    if ( (NULL == s_RadioRxState.queue_high_priority.pSemaphoreRead) || (SEM_FAILED == s_RadioRxState.queue_high_priority.pSemaphoreRead) )
    {
-      log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s, try alternative.", RUBY_SEM_RX_RADIO_HIGH_PRIORITY);
-      s_RadioRxState.queue_high_priority.pSemaphoreRead = sem_open(RUBY_SEM_RX_RADIO_HIGH_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
+      log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s, try alternative.", Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY);
+      s_RadioRxState.queue_high_priority.pSemaphoreRead = sem_open(Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
       if ( (NULL == s_RadioRxState.queue_high_priority.pSemaphoreRead) || (SEM_FAILED == s_RadioRxState.queue_high_priority.pSemaphoreRead) )
       {
-         log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s", RUBY_SEM_RX_RADIO_HIGH_PRIORITY);
+         log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s", Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY);
          return -1;
       }
    }
@@ -1263,25 +1263,25 @@ int _radio_rx_init_queues()
    else
       log_softerror_and_alarm("[RadioRx] Failed to get high priority queue sem value.");
 
-   s_RadioRxState.queue_reg_priority.pSemaphoreWrite = sem_open(RUBY_SEM_RX_RADIO_REG_PRIORITY, O_CREAT | O_RDWR, S_IWUSR | S_IRUSR, 0);
+   s_RadioRxState.queue_reg_priority.pSemaphoreWrite = sem_open(Anhydrate_SEM_RX_RADIO_REG_PRIORITY, O_CREAT | O_RDWR, S_IWUSR | S_IRUSR, 0);
    if ( (NULL == s_RadioRxState.queue_reg_priority.pSemaphoreWrite) || (SEM_FAILED == s_RadioRxState.queue_reg_priority.pSemaphoreWrite) )
    {
-      log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s, try alternative.", RUBY_SEM_RX_RADIO_REG_PRIORITY);
-      s_RadioRxState.queue_reg_priority.pSemaphoreWrite = sem_open(RUBY_SEM_RX_RADIO_REG_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
+      log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s, try alternative.", Anhydrate_SEM_RX_RADIO_REG_PRIORITY);
+      s_RadioRxState.queue_reg_priority.pSemaphoreWrite = sem_open(Anhydrate_SEM_RX_RADIO_REG_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
       if ( (NULL == s_RadioRxState.queue_reg_priority.pSemaphoreWrite) || (SEM_FAILED == s_RadioRxState.queue_reg_priority.pSemaphoreWrite) )
       {
-         log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s", RUBY_SEM_RX_RADIO_REG_PRIORITY);
+         log_error_and_alarm("[RadioRx] Failed to create write semaphore: %s", Anhydrate_SEM_RX_RADIO_REG_PRIORITY);
          return -1;
       }
    }
-   s_RadioRxState.queue_reg_priority.pSemaphoreRead = sem_open(RUBY_SEM_RX_RADIO_REG_PRIORITY, O_RDWR);
+   s_RadioRxState.queue_reg_priority.pSemaphoreRead = sem_open(Anhydrate_SEM_RX_RADIO_REG_PRIORITY, O_RDWR);
    if ( (NULL == s_RadioRxState.queue_reg_priority.pSemaphoreRead) || (SEM_FAILED == s_RadioRxState.queue_reg_priority.pSemaphoreRead) )
    {
-      log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s, try alternative", RUBY_SEM_RX_RADIO_REG_PRIORITY);
-      s_RadioRxState.queue_reg_priority.pSemaphoreRead = sem_open(RUBY_SEM_RX_RADIO_REG_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
+      log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s, try alternative", Anhydrate_SEM_RX_RADIO_REG_PRIORITY);
+      s_RadioRxState.queue_reg_priority.pSemaphoreRead = sem_open(Anhydrate_SEM_RX_RADIO_REG_PRIORITY, O_CREAT, S_IWUSR | S_IRUSR, 0); 
       if ( (NULL == s_RadioRxState.queue_reg_priority.pSemaphoreRead) || (SEM_FAILED == s_RadioRxState.queue_reg_priority.pSemaphoreRead) )
       {
-         log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s", RUBY_SEM_RX_RADIO_REG_PRIORITY);
+         log_error_and_alarm("[RadioRx] Failed to create read semaphore: %s", Anhydrate_SEM_RX_RADIO_REG_PRIORITY);
          return -1;
       }
    }
@@ -1399,8 +1399,8 @@ void radio_rx_stop_rx_thread()
    pthread_mutex_destroy(&s_RadioRxState.queue_high_priority.mutexLock);
    pthread_mutex_destroy(&s_RadioRxState.queue_reg_priority.mutexLock);
 
-   sem_unlink(RUBY_SEM_RX_RADIO_HIGH_PRIORITY);
-   sem_unlink(RUBY_SEM_RX_RADIO_REG_PRIORITY);
+   sem_unlink(Anhydrate_SEM_RX_RADIO_HIGH_PRIORITY);
+   sem_unlink(Anhydrate_SEM_RX_RADIO_REG_PRIORITY);
 
    log_line("[RadioRx] Finished stopping rx thread.");
 }
@@ -1568,7 +1568,7 @@ int radio_rx_detect_firmware_type_from_packet(u8* pPacketBuffer, int nPacketLeng
             uCRC = base_compute_crc32(pPacketBuffer+sizeof(u32), pPH->total_length-sizeof(u32));
 
          if ( (uCRC & 0x00FFFFFF) == (pPH->uCRC & 0x00FFFFFF) )
-            return MODEL_FIRMWARE_TYPE_RUBY;
+            return MODEL_FIRMWARE_TYPE_Anhydrate;
       }
    }
 
@@ -1651,3 +1651,4 @@ u32 radio_rx_get_and_reset_max_loop_time_queue()
    s_uRadioRxLastTimeQueue = 0;
    return u;
 }
+

@@ -479,3 +479,4 @@ static inline void mavlink_msg_video_stream_information_decode(const mavlink_mes
     memcpy(video_stream_information, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

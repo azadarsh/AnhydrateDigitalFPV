@@ -42,3 +42,4 @@ void hardware_camera_maj_enable_audio(bool bEnable, int iBitrate, int iVolume);
 void hardware_camera_maj_set_audio_volume(int iVolume);
 void hardware_camera_maj_set_audio_quality(int iBitrate);
 u32  hardware_camera_maj_get_last_audio_change_time();
+

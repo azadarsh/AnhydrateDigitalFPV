@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 #include <sys/socket.h> 
 
-#define RUBY_PIPES_EXTRA_FLAGS O_NONBLOCK
+#define Anhydrate_PIPES_EXTRA_FLAGS O_NONBLOCK
 
 bool bQuit = false;
 int g_iPipeFD = -1;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
    if ( argc < 2 )
    {
-      printf("\nUsage: test_udp_to_pipe [udp-port] [pipename or \"tmp/ruby/fifocam1\"]\n");
+      printf("\nUsage: test_udp_to_pipe [udp-port] [pipename or \"tmp/Anhydrate/fifocam1\"]\n");
       return 0;
    }
 
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
    log_line("\nStarted.\n");
 
    int udpport = 5600;
-   strcpy(szPipeName, "FIFO_RUBY_CAMERA1");
+   strcpy(szPipeName, "FIFO_Anhydrate_CAMERA1");
 
    udpport = atoi(argv[1]);
 
@@ -177,14 +177,14 @@ int main(int argc, char *argv[])
        
          log_line("Pipe [%s] exists. Open it to write to it.", szPipeName);
   
-        g_iPipeFD = open(szPipeName, O_WRONLY | (RUBY_PIPES_EXTRA_FLAGS & (~O_NONBLOCK)));
+        g_iPipeFD = open(szPipeName, O_WRONLY | (Anhydrate_PIPES_EXTRA_FLAGS & (~O_NONBLOCK)));
         //g_iPipeFD = open(szPipeName, O_APPEND);
         if ( g_iPipeFD < 0 )
         {
             printf("Can't open input pipe [%s]\n", szPipeName);
             continue;
         }
-        //if ( RUBY_PIPES_EXTRA_FLAGS & O_NONBLOCK )
+        //if ( Anhydrate_PIPES_EXTRA_FLAGS & O_NONBLOCK )
         //if ( 0 != fcntl(g_iPipeFD, F_SETFL, O_NONBLOCK) )
         //   log_softerror_and_alarm("[IPC] Failed to set nonblock flag on PIC channel %s pipe write endpoint.", szPipeName);
 
@@ -211,3 +211,4 @@ int main(int argc, char *argv[])
    log_line("\nEnded\n");
    exit(0);
 }
+

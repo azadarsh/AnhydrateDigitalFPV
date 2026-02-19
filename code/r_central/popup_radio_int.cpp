@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -348,4 +348,5 @@ void PopupRadioInterface::Render()
    fWidthText = g_pRenderEngine->textWidth(g_idFontMenu, L("Radio Modulations"));
    g_pRenderEngine->drawText(x + fWidthMargin + fWidthGraph * 0.48 - fWidthText * 0.5, y, g_idFontMenu, L("Radio Modulations"));
 }
+
 

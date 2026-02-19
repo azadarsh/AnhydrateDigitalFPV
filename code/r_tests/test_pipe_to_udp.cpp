@@ -15,7 +15,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define RUBY_PIPES_EXTRA_FLAGS O_NONBLOCK
+#define Anhydrate_PIPES_EXTRA_FLAGS O_NONBLOCK
 
 bool bQuit = false;
 bool bNoOutput = false;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 
    if ( argc < 2 )
    {
-      printf("\nUsage: test_pipe_to_udp [udp-port] [pipename or \"tmp/ruby/fifocam1\"] [-no-outup]\n");
+      printf("\nUsage: test_pipe_to_udp [udp-port] [pipename or \"tmp/Anhydrate/fifocam1\"] [-no-outup]\n");
       return 0;
    }
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
    int udpport = 5600;
 
-   strcpy(szPipeName, "FIFO_RUBY_CAMERA1");
+   strcpy(szPipeName, "FIFO_Anhydrate_CAMERA1");
 
    udpport = atoi(argv[1]);
 
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
          if ( ! pipe_exists() )
             continue;
          log_line("Pipe [%s] exists. Open it to read from it.", szPipeName);
-         g_iPipeFD = open( szPipeName, O_RDONLY | RUBY_PIPES_EXTRA_FLAGS);
+         g_iPipeFD = open( szPipeName, O_RDONLY | Anhydrate_PIPES_EXTRA_FLAGS);
          if ( g_iPipeFD < 0 )
          {
              printf("Can't open input pipe [%s]\n", szPipeName);
@@ -217,3 +217,4 @@ int main(int argc, char *argv[])
    log_line("\nEnded\n");
    exit(0);
 }
+

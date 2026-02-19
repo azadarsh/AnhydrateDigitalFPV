@@ -636,3 +636,4 @@ static inline void mavlink_msg_gps_input_decode(const mavlink_message_t* msg, ma
     memcpy(gps_input, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

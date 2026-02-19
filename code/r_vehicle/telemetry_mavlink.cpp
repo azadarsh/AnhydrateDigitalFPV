@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -35,7 +35,7 @@
 #include "../base/hardware_procs.h"
 #include "../base/parse_fc_telemetry.h"
 #include "../base/models.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../../mavlink/common/mavlink.h"
 #include "shared_vars.h"
 #include "timers.h"
@@ -50,7 +50,7 @@ bool s_bOnArmEventHandled = false;
 bool s_bLogNextMAVLinkMessage = true;
 static int s_iCountTelemetryMAVLinkWriteErrors = 0;
 
-extern t_packet_header_ruby_telemetry_extended_v6 sPHRTE;
+extern t_packet_header_Anhydrate_telemetry_extended_v6 sPHRTE;
 u32 s_SentTelemetryCounter = 0;
 long int s_lLastPosLat = 0;
 long int s_lLastPosLon = 0;
@@ -332,7 +332,7 @@ void telemetry_mavlink_on_second_lapse()
                s_bOnArmEventHandled = true;
 
                char szBuff[128];
-               snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_ARMED);
+               snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_ARMED);
                hw_execute_bash_command(szBuff, NULL);
 
                g_pCurrentModel->m_Stats.uTotalFlights++;
@@ -365,7 +365,7 @@ void telemetry_mavlink_on_second_lapse()
          if ( pFCTelem->arm_time != 0 )
          {
             char szBuff[128];
-            snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_ARMED);
+            snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_ARMED);
             hw_execute_bash_command(szBuff, NULL);
          }
          pFCTelem->arm_time = 0;
@@ -550,7 +550,7 @@ void telemetry_mavlink_send_to_controller()
 
    if ( g_bRouterReady && (! isRadioLinksInitInProgress()) )
    {
-      int result = ruby_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
+      int result = Anhydrate_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
       if ( result != PH.total_length )
          log_softerror_and_alarm("Failed to send data to router. Sent result: %d", result );
    }
@@ -563,3 +563,4 @@ void telemetry_mavlink_send_to_controller()
    pFCTelem->latitude = s_lLastPosLat;
    pFCTelem->longitude = s_lLastPosLon;
 }
+

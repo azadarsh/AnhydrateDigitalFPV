@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -42,7 +42,7 @@
 #include "../base/radio_utils.h"
 #include "../common/radio_stats.h"
 #include "../common/string_utils.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 #include "shared_vars.h"
 #include "timers.h"
 #include "processor_tx_video.h"
@@ -590,8 +590,8 @@ int _compute_packet_downlink_datarate(u8* pPacketData, int iVehicleRadioLink, in
       /*
       bool bUseLowerDatarateForThisPacket = false;
       if ( (! negociate_radio_link_is_in_progress()) && (! test_link_is_in_progress()) )
-      if ( (pPH->packet_type == PACKET_TYPE_RUBY_PAIRING_REQUEST) ||
-           (pPH->packet_type == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION) ||
+      if ( (pPH->packet_type == PACKET_TYPE_Anhydrate_PAIRING_REQUEST) ||
+           (pPH->packet_type == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION) ||
            (pPH->packet_type == PACKET_TYPE_COMMAND_RESPONSE) ||
            (pPH->packet_type == PACKET_TYPE_COMMAND) ||
            (pPH->packet_type == PACKET_TYPE_VIDEO_ADAPTIVE_VIDEO_PARAMS) ||
@@ -1055,7 +1055,7 @@ int send_packet_to_radio_interfaces(u8* pPacketData, int nPacketLength, int iSen
       }
    }
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK )
    {
       u8 uLocalRadioLinkId = 0;
       memcpy( &uLocalRadioLinkId, pPacketData + sizeof(t_packet_header)+sizeof(u8), sizeof(u8));
@@ -1063,13 +1063,13 @@ int send_packet_to_radio_interfaces(u8* pPacketData, int nPacketLength, int iSen
       bIsPingPacket = true;
    }
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
    {
       bIsPingReplyPacket = true;
       memcpy((u8*)&uPingReplySendOnLocalRadioLinkId, pPacketData + sizeof(t_packet_header) + 2*sizeof(u8) + sizeof(u32), sizeof(u8));
    }
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_MODEL_SETTINGS )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_MODEL_SETTINGS )
    {
       bHasZipParamsPacket = true;
 
@@ -1089,8 +1089,8 @@ int send_packet_to_radio_interfaces(u8* pPacketData, int nPacketLength, int iSen
    u32 uDestVehicleId = pPH->vehicle_id_dest;      
    u32 uStreamId = (pPH->stream_packet_idx) >> PACKET_FLAGS_MASK_SHIFT_STREAM_INDEX;
 
-   if ( pPH->packet_type != PACKET_TYPE_RUBY_PING_CLOCK )
-   if ( pPH->packet_type != PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( pPH->packet_type != PACKET_TYPE_Anhydrate_PING_CLOCK )
+   if ( pPH->packet_type != PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
       s_StreamsTxPacketIndex[uStreamId]++;
    pPH->stream_packet_idx = (((u32)uStreamId)<<PACKET_FLAGS_MASK_SHIFT_STREAM_INDEX) | (s_StreamsTxPacketIndex[uStreamId] & PACKET_FLAGS_MASK_STREAM_PACKET_IDX);
 
@@ -1293,7 +1293,7 @@ int send_packet_to_radio_interfaces(u8* pPacketData, int nPacketLength, int iSen
 void send_packet_vehicle_log(u8* pBuffer, int length)
 {
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_LOG_FILE_SEGMENT, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_LOG_FILE_SEGMENT, STREAM_ID_DATA);
    PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
    PH.vehicle_id_dest = g_uControllerId;
    PH.total_length = sizeof(t_packet_header) + sizeof(t_packet_header_file_segment) + (u16)length;
@@ -1315,7 +1315,7 @@ void send_packet_vehicle_log(u8* pBuffer, int length)
 void _send_alarm_packet_to_radio_queue(u32 uAlarmIndex, u32 uAlarm, u32 uFlags1, u32 uFlags2, u32 uRepeatCount)
 {
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_ALARM, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_ALARM, STREAM_ID_DATA);
    PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
    PH.vehicle_id_dest = 0;
    PH.total_length = sizeof(t_packet_header) + 4*sizeof(u32);
@@ -1348,7 +1348,7 @@ void send_message_to_controller(int iType, int iRepeatCount, const char* szMessa
    for( int i=0; i<=iRepeatCount; i++ )
    {
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_MESSAGE, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_MESSAGE, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = 0;
       PH.total_length = sizeof(t_packet_header) + sizeof(u16) + sizeof(u8) + iLen + 1;
@@ -1428,7 +1428,7 @@ void send_alarm_to_controller_now(u32 uAlarm, u32 uFlags1, u32 uFlags2, u32 uRep
    for( u32 u=0; u<uRepeatCount; u++ )
    {
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_ALARM, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_ALARM, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = 0;
       PH.total_length = sizeof(t_packet_header) + 4*sizeof(u32);

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -47,7 +47,7 @@
 #include "../utils/utils_controller.h"
 
 #include "packets_utils.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 
 int s_iFailedInitRadioInterface = -1;
 u32 s_uTimeLastCheckedAuxiliaryLinks = 0;
@@ -131,7 +131,7 @@ void radio_links_reinit_radio_interfaces()
    hw_execute_bash_command(szComm, NULL);
    
    // Remove radio initialize file flag
-   sprintf(szComm, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_RADIOS_CONFIGURED);
+   sprintf(szComm, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_RADIOS_CONFIGURED);
    hw_execute_bash_command(szComm, NULL);
 
    radio_links_set_monitor_mode();
@@ -155,7 +155,7 @@ void radio_links_reinit_radio_interfaces()
       }
    }
 
-   hw_execute_ruby_process_wait(NULL, "ruby_start", szCommRadioParams, NULL, 1);
+   hw_execute_Anhydrate_process_wait(NULL, "Anhydrate_start", szCommRadioParams, NULL, 1);
    
    hardware_sleep_ms(100);
    hardware_reset_radio_enumerated_flag();
@@ -456,7 +456,7 @@ void radio_links_open_rxtx_radio_interfaces()
          }
       }
 
-      if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+      if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
       if ( cardFlags & RADIO_HW_CAPABILITY_FLAG_CAN_TX )
       if ( (cardFlags & RADIO_HW_CAPABILITY_FLAG_CAN_USE_FOR_VIDEO) ||
            (cardFlags & RADIO_HW_CAPABILITY_FLAG_CAN_USE_FOR_DATA) )
@@ -486,7 +486,7 @@ void radio_links_open_rxtx_radio_interfaces()
    }
 
    if ( 0 == totalCountForWrite )
-   if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+   if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
    {
       log_error_and_alarm("Can't find any TX interfaces for sending data.");
       radio_links_close_rxtx_radio_interfaces();
@@ -505,7 +505,7 @@ void radio_links_open_rxtx_radio_interfaces()
       if ( 0 == countOpenedForReadForRadioLink[i] )
          log_error_and_alarm("Failed to find or open any RX interface for receiving data on vehicle's radio link %d.", i+1);
       if ( 0 == countOpenedForWriteForRadioLink[i] )
-      if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_RUBY )
+      if ( g_pCurrentModel->getVehicleFirmwareType() == MODEL_FIRMWARE_TYPE_Anhydrate )
          log_error_and_alarm("Failed to find or open any TX interface for sending data on vehicle's radio link %d.", i+1);
 
       //if ( 0 == countOpenedForReadForRadioLink[i] && 0 == countOpenedForWriteForRadioLink[i] )
@@ -678,3 +678,4 @@ u32 radio_links_get_last_set_monitor_time()
 {
    return s_uTimeLastSetRadioLinksMonitorMode;
 }
+

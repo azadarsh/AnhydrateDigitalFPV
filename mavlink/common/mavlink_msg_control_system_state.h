@@ -605,3 +605,4 @@ static inline void mavlink_msg_control_system_state_decode(const mavlink_message
     memcpy(control_system_state, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

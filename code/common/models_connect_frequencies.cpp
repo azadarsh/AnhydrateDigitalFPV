@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -175,3 +175,4 @@ bool is_vehicle_radio_link_used(Model* pModel, shared_mem_radio_stats* pSMRadioS
    }
    return false;
 }
+

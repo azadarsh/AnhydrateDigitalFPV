@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -81,7 +81,7 @@ int _radio_tx_create_msg_queue()
 
       char szFile[MAX_FILE_PATH_SIZE];
       strcpy(szFile, FOLDER_BINARIES);
-      strcat(szFile, "ruby_start");
+      strcat(szFile, "Anhydrate_start");
       key = ftok(szFile, 107);
 
       if ( key < 0 )
@@ -464,3 +464,4 @@ int radio_tx_send_serial_radio_packet(int iRadioInterfaceIndex, u8* pData, int i
      return 1;
    return -1;
 }
+

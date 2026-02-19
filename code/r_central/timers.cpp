@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -45,3 +45,4 @@ u32 g_TimeLastSentCurrentActiveOSDLayout = 0;
 u32 g_uTimeLastRelaySettingsChanged = 0;
 
 u32 g_uTimeLastRadioLinkOverloadAlarm = 0;
+

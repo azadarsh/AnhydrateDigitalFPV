@@ -26,7 +26,7 @@ bool handle_commands_send_single_oneway_command(u8 resendCounter, u8 commandType
 bool handle_commands_send_single_oneway_command(u8 resendCounter, u8 commandType, u32 param, u8* pBuffer, int length, int delayMs);
 bool handle_commands_send_single_oneway_command_to_vehicle(u32 uVehicleId, u8 resendCounter, u8 commandType, u32 param, u8* pBuffer, int length, int delayMs);
 
-bool handle_commands_send_ruby_message(t_packet_header* pPH, u8* pBuffer, int length);
+bool handle_commands_send_Anhydrate_message(t_packet_header* pPH, u8* pBuffer, int length);
 
 void handle_commands_abandon_command();
 bool handle_commands_is_command_in_progress();
@@ -38,3 +38,4 @@ bool handle_commands_has_received_vehicle_core_plugins_info();
 void handle_commands_initiate_file_upload(u32 uFileId, const char* szFileName);
 
 bool handle_commands_send_developer_flags(u32 uDevFlags);
+

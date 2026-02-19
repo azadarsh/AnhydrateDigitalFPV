@@ -24,3 +24,4 @@ float getDefaultHeight();
 void onNewVehicle(u32 uVehicleId);
 int requestTelemetryStreams();
 void onTelemetryStreamData(u8* pData, int nDataLength, int nTelemetryType);
+

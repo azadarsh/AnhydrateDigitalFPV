@@ -10,7 +10,7 @@
 #define OSD_QUALITY_LEVEL_WARNING 50
 #define OSD_QUALITY_LEVEL_CRITICAL 30
 
-extern u32 g_idIconRuby;
+extern u32 g_idIconAnhydrate;
 extern u32 g_idIconDrone;
 extern u32 g_idIconPlane;
 extern u32 g_idIconCar;
@@ -128,5 +128,6 @@ void osd_set_current_data_source_vehicle_index(int iIndex);
 int osd_get_current_data_source_vehicle_index();
 Model* osd_get_current_data_source_vehicle_model();
 u32 osd_get_current_data_source_vehicle_id();
+
 
 

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -660,3 +660,4 @@ int hardware_serial_wait_sik_response(int iSerialPortFD, int iTimeoutMS, int iMi
    pOutputBuffer[(*pInOutputLength)] = 0;
    return *pInOutputLength;
 }
+

@@ -361,3 +361,4 @@ static inline void mavlink_msg_data_transmission_handshake_decode(const mavlink_
     memcpy(data_transmission_handshake, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

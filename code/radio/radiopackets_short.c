@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -83,3 +83,4 @@ int radio_buffer_is_valid_short_packet(u8* pBuffer, int iLength)
    }
    return 1;
 }
+

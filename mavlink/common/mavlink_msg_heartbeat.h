@@ -333,3 +333,4 @@ static inline void mavlink_msg_heartbeat_decode(const mavlink_message_t* msg, ma
     memcpy(heartbeat, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -21,3 +21,4 @@ void notification_add_frequency_changed(int nLinkId, u32 uFreq);
 
 void notification_add_start_pairing();
 void notification_remove_start_pairing();
+

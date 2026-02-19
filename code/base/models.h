@@ -513,7 +513,7 @@ typedef struct
    // bit 0: OTA capable
    // byte 1: threshold temp (C)
    
-   u32 uRubyBaseVersion;
+   u32 uAnhydrateBaseVersion;
    u32 uDummyHW1;
    u32 uDummyHW2;
 } type_hardware_capabilities;
@@ -566,7 +566,7 @@ class Model
       u8 vehicle_type;
          // semantic changed in version 8.0
          // bit 0...4 - vehicle type: car, drone, plane, etc
-         // bit 5..7 - firmware type: Ruby, OpenIPC, etc
+         // bit 5..7 - firmware type: Anhydrate, OpenIPC, etc
       int rxtx_sync_type;
       u32 alarms;
 
@@ -709,11 +709,11 @@ class Model
       
       void getCameraFlags(char* szCameraFlags);
       u32  getVideoFlags(char* szVideoFlags, int iVideoProfile, u32 uOverwriteVideoBPS, int iOverwriteKeyframeMS);
-      void populateVehicleTelemetryData_v6(t_packet_header_ruby_telemetry_extended_v6* pPHRTE);
-      void populateFromVehicleTelemetryData_v3(t_packet_header_ruby_telemetry_extended_v3* pPHRTE);
-      void populateFromVehicleTelemetryData_v4(t_packet_header_ruby_telemetry_extended_v4* pPHRTE);
-      void populateFromVehicleTelemetryData_v5(t_packet_header_ruby_telemetry_extended_v5* pPHRTE);
-      void populateFromVehicleTelemetryData_v6(t_packet_header_ruby_telemetry_extended_v6* pPHRTE);
+      void populateVehicleTelemetryData_v6(t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE);
+      void populateFromVehicleTelemetryData_v3(t_packet_header_Anhydrate_telemetry_extended_v3* pPHRTE);
+      void populateFromVehicleTelemetryData_v4(t_packet_header_Anhydrate_telemetry_extended_v4* pPHRTE);
+      void populateFromVehicleTelemetryData_v5(t_packet_header_Anhydrate_telemetry_extended_v5* pPHRTE);
+      void populateFromVehicleTelemetryData_v6(t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE);
       void setTelemetryTypeAndPort(int iTelemetryType, int iSerialPort, int iSerialSpeed);
       void syncModelSerialPortsToHardwareSerialPorts();
 
@@ -760,3 +760,4 @@ u32 get_sw_version_minor(Model* pModel);
 u32 get_sw_version_build(Model* pModel);
 int is_sw_version_atleast(Model* pModel, int iMajor, int iMinor);
 int is_sw_version_latest(Model* pModel);
+

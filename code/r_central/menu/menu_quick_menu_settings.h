@@ -33,3 +33,4 @@ class MenuQuickMenuSettings: public Menu
 
       bool m_bMenuQuickMenuSettingsIsOnCustomOption;
 };
+

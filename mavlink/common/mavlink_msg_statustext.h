@@ -228,3 +228,4 @@ static inline void mavlink_msg_statustext_decode(const mavlink_message_t* msg, m
     memcpy(statustext, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

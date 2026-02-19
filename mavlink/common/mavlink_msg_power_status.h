@@ -261,3 +261,4 @@ static inline void mavlink_msg_power_status_decode(const mavlink_message_t* msg,
     memcpy(power_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -35,7 +35,7 @@
 #include "../base/models.h"
 #include "../base/models_list.h"
 #include "../base/utils.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../common/string_utils.h"
 #include "adaptive_video.h"
 #include "shared_vars.h"
@@ -106,13 +106,13 @@ void _negociate_radio_link_save_model(bool bSucceeded, type_radio_runtime_capabi
       (g_pCurrentModel->radioLinksParams.uGlobalRadioLinksFlags & MODEL_RADIOLINKS_FLAGS_HAS_NEGOCIATED_LINKS)?"yes":"no");
    t_packet_header PH;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_MODEL_CHANGED, STREAM_ID_DATA);
-   PH.vehicle_id_src = PACKET_COMPONENT_RUBY | (MODEL_CHANGED_GENERIC<<8);
+   PH.vehicle_id_src = PACKET_COMPONENT_Anhydrate | (MODEL_CHANGED_GENERIC<<8);
    PH.total_length = sizeof(t_packet_header);
 
-   ruby_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
-   ruby_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCRouterToTelemetry, (u8*)&PH, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCRouterToCommands, (u8*)&PH, PH.total_length);
    if ( g_pCurrentModel->rc_params.rc_enabled )
-      ruby_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
+      Anhydrate_ipc_channel_send_message(s_fIPCRouterToRC, (u8*)&PH, PH.total_length);
             
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -239,7 +239,7 @@ int negociate_radio_process_received_radio_link_messages(u8* pPacketBuffer)
       }
   
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header) + 3*sizeof(u8) + sizeof(u32) + 2*sizeof(int);
@@ -277,7 +277,7 @@ int negociate_radio_process_received_radio_link_messages(u8* pPacketBuffer)
       else
          _negociate_radio_link_save_model(true, NULL);
 
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
       PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
       PH.vehicle_id_dest = g_uControllerId;
       PH.total_length = sizeof(t_packet_header) + 3*sizeof(u8);
@@ -306,7 +306,7 @@ void negociate_radio_periodic_loop()
       {
          u8 uBuffer[1024];
          t_packet_header PH;
-         radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
+         radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_NEGOCIATE_RADIO_LINKS, STREAM_ID_DATA);
          PH.vehicle_id_src = g_pCurrentModel->uVehicleId;
          PH.vehicle_id_dest = g_uControllerId;
          PH.total_length = 1023;

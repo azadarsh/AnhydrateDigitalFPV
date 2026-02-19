@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -151,7 +151,7 @@ int MenuControllerEncryption::onBack()
 
    t_packet_header PH;
    radio_packet_init(&PH, PACKET_COMPONENT_LOCAL_CONTROL, PACKET_TYPE_LOCAL_CONTROL_PASSPHRASE_CHANGED, STREAM_ID_DATA);
-   handle_commands_send_ruby_message(&PH, NULL, 0);
+   handle_commands_send_Anhydrate_message(&PH, NULL, 0);
          
    return 1;
 }
@@ -247,4 +247,5 @@ void MenuControllerEncryption::onSelectItem()
       return;
    }
 }
+
 

@@ -1,4 +1,4 @@
-# run: make all RUBY_BUILD_ENV=openipc/radxa/[empty](pi)
+# run: make all Anhydrate_BUILD_ENV=openipc/radxa/[empty](pi)
 _CFLAGS := $(CFLAGS) -Wall -Wno-stringop-truncation -Wno-format-truncation -O2 -fdata-sections -ffunction-sections
 _CPPFLAGS := $(CPPLAGS) -Wall -Wno-stringop-truncation -Wno-format-truncation -O2 -fdata-sections -ffunction-sections
 
@@ -8,15 +8,15 @@ FOLDER_RADIO=code/radio
 FOLDER_UTILS=code/utils
 FOLDER_CENTRAL_RENDERER=code/renderer
 
-ifeq ($(RUBY_BUILD_ENV),openipc)
+ifeq ($(Anhydrate_BUILD_ENV),openipc)
 
 _LDFLAGS := $(LDFLAGS) -lrt -lpcap -lpthread -Wl,--gc-sections
-_CFLAGS := $(_CFLAGS) -DRUBY_BUILD_HW_PLATFORM_OPENIPC
-_CPPFLAGS := $(_CPPFLAGS) -DRUBY_BUILD_HW_PLATFORM_OPENIPC
+_CFLAGS := $(_CFLAGS) -DAnhydrate_BUILD_HW_PLATFORM_OPENIPC
+_CPPFLAGS := $(_CPPFLAGS) -DAnhydrate_BUILD_HW_PLATFORM_OPENIPC
 _CPPFLAGS_NOSDL := $(_CPPFLAGS)
 _LDFLAGS_NOSDL := $(_LDFLAGS)
 else
-ifeq ($(RUBY_BUILD_ENV),radxa)
+ifeq ($(Anhydrate_BUILD_ENV),radxa)
 
 LDFLAGS_CENTRAL := -L/lib/aarch64-linux-gnu -lpthread -lrt -lm
 LDFLAGS_CENTRAL2 := -lpthread -lrt -lm
@@ -25,8 +25,8 @@ LDFLAGS_RENDERER := -ldrm -lcairo
 CFLAGS_RENDERER := -I/usr/include/drm -I/usr/include/libdrm
 CFLAGS_RENDERER += `pkg-config cairo --cflags`
 _LDFLAGS := $(LDFLAGS) -lrt -lpcap -lpthread -li2c -lgpiod -Wl,--gc-sections 
-_CFLAGS := $(_CFLAGS) -DRUBY_BUILD_HW_PLATFORM_RADXA
-_CPPFLAGS := $(_CPPFLAGS) -DRUBY_BUILD_HW_PLATFORM_RADXA
+_CFLAGS := $(_CFLAGS) -DAnhydrate_BUILD_HW_PLATFORM_RADXA
+_CPPFLAGS := $(_CPPFLAGS) -DAnhydrate_BUILD_HW_PLATFORM_RADXA
 
 _CPPFLAGS_NOSDL := $(_CPPFLAGS)
 _LDFLAGS_NOSDL := $(_LDFLAGS)
@@ -44,8 +44,8 @@ LDFLAGS_RENDERER := -L../openvg -L/opt/vc/lib/ -lbrcmGLESv2 -lbrcmEGL -lfreetype
 CFLAGS_RENDERER := -I/usr/include/libdrm
 
 _LDFLAGS := $(LDFLAGS) -lrt -lpcap -lpthread -lwiringPi -Wl,--gc-sections
-_CFLAGS := $(_CFLAGS) -DRUBY_BUILD_HW_PLATFORM_PI
-_CPPFLAGS := $(_CPPFLAGS) -DRUBY_BUILD_HW_PLATFORM_PI
+_CFLAGS := $(_CFLAGS) -DAnhydrate_BUILD_HW_PLATFORM_PI
+_CPPFLAGS := $(_CPPFLAGS) -DAnhydrate_BUILD_HW_PLATFORM_PI
 _CPPFLAGS_NOSDL := $(_CPPFLAGS)
 _LDFLAGS_NOSDL := $(_LDFLAGS)
 
@@ -185,7 +185,7 @@ drmutil.o: code/r_tests/drmutil.c
 MODULE_MINIMUM_BASE := $(FOLDER_BASE)/base.o $(FOLDER_BASE)/config.o $(FOLDER_BASE)/config_radio.o $(FOLDER_BASE)/gpio.o $(FOLDER_BASE)/hardware_i2c.o $(FOLDER_BASE)/hardware_radio_sik.o $(FOLDER_BASE)/hardware_radio_serial.o $(FOLDER_BASE)/hardware_serial.o $(FOLDER_BASE)/hardware.o $(FOLDER_BASE)/hardware_radio.o $(FOLDER_BASE)/hardware_radio_txpower.o $(FOLDER_BASE)/hardware_procs.o
 MODULE_MINIMUM_RADIO := $(FOLDER_COMMON)/radio_stats.o $(FOLDER_RADIO)/radio_duplicate_det.o $(FOLDER_RADIO)/radio_rx.o $(FOLDER_RADIO)/radio_tx.o $(FOLDER_RADIO)/radiolink.o $(FOLDER_RADIO)/radiopackets_rc.o $(FOLDER_RADIO)/radiopackets_short.o $(FOLDER_RADIO)/radiopackets_wfbohd.o $(FOLDER_RADIO)/radiopackets2.o $(FOLDER_RADIO)/radiopacketsqueue.o $(FOLDER_RADIO)/radiotap.o $(FOLDER_BASE)/tx_powers.o
 MODULE_MINIMUM_COMMON := $(FOLDER_COMMON)/string_utils.o
-MODULE_BASE := $(FOLDER_BASE)/base.o $(FOLDER_BASE)/shared_mem.o $(FOLDER_BASE)/config.o $(FOLDER_BASE)/config_radio.o $(FOLDER_BASE)/hardware.o $(FOLDER_BASE)/hardware_camera.o $(FOLDER_BASE)/hardware_cam_maj.o $(FOLDER_BASE)/hardware_files.o $(FOLDER_BASE)/hardware_procs.o $(FOLDER_BASE)/utils.o $(FOLDER_BASE)/encr.o $(FOLDER_BASE)/hardware_i2c.o $(FOLDER_BASE)/hardware_radio.o $(FOLDER_BASE)/hardware_radio_serial.o $(FOLDER_BASE)/hardware_serial.o $(FOLDER_BASE)/hardware_radio_sik.o $(FOLDER_BASE)/hardware_radio_txpower.o $(FOLDER_BASE)/ruby_ipc.o $(FOLDER_BASE)/hardware_files.o
+MODULE_BASE := $(FOLDER_BASE)/base.o $(FOLDER_BASE)/shared_mem.o $(FOLDER_BASE)/config.o $(FOLDER_BASE)/config_radio.o $(FOLDER_BASE)/hardware.o $(FOLDER_BASE)/hardware_camera.o $(FOLDER_BASE)/hardware_cam_maj.o $(FOLDER_BASE)/hardware_files.o $(FOLDER_BASE)/hardware_procs.o $(FOLDER_BASE)/utils.o $(FOLDER_BASE)/encr.o $(FOLDER_BASE)/hardware_i2c.o $(FOLDER_BASE)/hardware_radio.o $(FOLDER_BASE)/hardware_radio_serial.o $(FOLDER_BASE)/hardware_serial.o $(FOLDER_BASE)/hardware_radio_sik.o $(FOLDER_BASE)/hardware_radio_txpower.o $(FOLDER_BASE)/Anhydrate_ipc.o $(FOLDER_BASE)/hardware_files.o
 MODULE_BASE2 := $(FOLDER_BASE)/gpio.o $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_UTILS)/utils_controller.o $(FOLDER_UTILS)/utils_vehicle.o $(FOLDER_BASE)/controller_rt_info.o $(FOLDER_BASE)/vehicle_rt_info.o $(FOLDER_BASE)/ctrl_preferences.o $(FOLDER_BASE)/ctrl_interfaces.o $(FOLDER_BASE)/alarms.o $(FOLDER_BASE)/commands.o
 MODULE_COMMON := $(FOLDER_COMMON)/string_utils.o $(FOLDER_COMMON)/relay_utils.o
 MODULE_MODELS := $(FOLDER_BASE)/models.o $(FOLDER_BASE)/models_list.o
@@ -210,96 +210,96 @@ CENTRAL_OLED_ALL := $(FOLDER_CENTRAL_OLED)/driver_ssd1306.o $(FOLDER_CENTRAL_OLE
 CENTRAL_ALL := $(FOLDER_CENTRAL)/notifications.o $(FOLDER_CENTRAL)/launchers_controller.o $(FOLDER_CENTRAL)/local_stats.o $(FOLDER_CENTRAL)/rx_scope.o $(FOLDER_CENTRAL)/forward_watch.o $(FOLDER_CENTRAL)/timers.o $(FOLDER_CENTRAL)/ui_alarms.o $(FOLDER_CENTRAL)/media.o $(FOLDER_CENTRAL)/pairing.o $(FOLDER_CENTRAL)/link_watch.o $(FOLDER_CENTRAL)/warnings.o $(FOLDER_CENTRAL)/handle_commands.o $(FOLDER_CENTRAL)/events.o $(FOLDER_CENTRAL)/shared_vars_ipc.o $(FOLDER_CENTRAL)/shared_vars_state.o $(FOLDER_CENTRAL)/shared_vars_osd.o $(FOLDER_CENTRAL)/fonts.o $(FOLDER_CENTRAL)/keyboard.o $(FOLDER_CENTRAL)/quickactions.o $(FOLDER_CENTRAL)/shared_vars.o $(FOLDER_BASE)/camera_utils.o $(FOLDER_CENTRAL)/parse_msp.o $(FOLDER_BASE)/hardware_files.o $(FOLDER_COMMON)/strings_table.o $(FOLDER_COMMON)/strings_loc.o $(FOLDER_BASE)/wiringPiI2C_radxa.o $(FOLDER_BASE)/msp.o
 CENTRAL_RADIO := $(FOLDER_RADIO)/radiopackets2.o $(FOLDER_RADIO)/radiopackets_short.o $(FOLDER_RADIO)/radiotap.o $(FOLDER_BASE)/tx_powers.o
 
-all: vehicle station ruby_i2c ruby_plugins ruby_central tests
+all: vehicle station Anhydrate_i2c Anhydrate_plugins Anhydrate_central tests
 
-vehicle: ruby_start ruby_utils ruby_tx_telemetry ruby_rt_vehicle
+vehicle: Anhydrate_start Anhydrate_utils Anhydrate_tx_telemetry Anhydrate_rt_vehicle
 
-ifeq ($(RUBY_BUILD_ENV),radxa)
-station: ruby_start ruby_utils ruby_controller ruby_rt_station ruby_tx_rc ruby_rx_telemetry ruby_player_radxa
+ifeq ($(Anhydrate_BUILD_ENV),radxa)
+station: Anhydrate_start Anhydrate_utils Anhydrate_controller Anhydrate_rt_station Anhydrate_tx_rc Anhydrate_rx_telemetry Anhydrate_player_radxa
 else
-station: ruby_start ruby_utils ruby_controller ruby_rt_station ruby_tx_rc ruby_rx_telemetry
+station: Anhydrate_start Anhydrate_utils Anhydrate_controller Anhydrate_rt_station Anhydrate_tx_rc Anhydrate_rx_telemetry
 endif
 
-ruby_central: $(FOLDER_CENTRAL)/ruby_central.o $(MODULE_BASE) $(MODULE_MODELS) $(MODULE_COMMON) $(MODULE_BASE2) $(CENTRAL_MENU_ITEMS_ALL) $(CENTRAL_MENU_ALL1) $(CENTRAL_RENDER_CODE) $(CENTRAL_MENU_ALL2) $(CENTRAL_MENU_ALL3) $(CENTRAL_MENU_ALL4) $(CENTRAL_MENU_ALL5) $(CENTRAL_MENU_ALL6) $(CENTRAL_MENU_RC)  $(CENTRAL_MENU_RADIO) $(CENTRAL_POPUP_ALL) $(CENTRAL_RENDER_ALL) $(CENTRAL_OSD_ALL) $(CENTRAL_OLED_ALL) $(CENTRAL_ALL) $(CENTRAL_RADIO) $(FOLDER_BASE)/shared_mem_controller_only.o $(FOLDER_BASE)/hdmi.o $(FOLDER_COMMON)/favorites.o $(FOLDER_BASE)/plugins_settings.o \
+Anhydrate_central: $(FOLDER_CENTRAL)/Anhydrate_central.o $(MODULE_BASE) $(MODULE_MODELS) $(MODULE_COMMON) $(MODULE_BASE2) $(CENTRAL_MENU_ITEMS_ALL) $(CENTRAL_MENU_ALL1) $(CENTRAL_RENDER_CODE) $(CENTRAL_MENU_ALL2) $(CENTRAL_MENU_ALL3) $(CENTRAL_MENU_ALL4) $(CENTRAL_MENU_ALL5) $(CENTRAL_MENU_ALL6) $(CENTRAL_MENU_RC)  $(CENTRAL_MENU_RADIO) $(CENTRAL_POPUP_ALL) $(CENTRAL_RENDER_ALL) $(CENTRAL_OSD_ALL) $(CENTRAL_OLED_ALL) $(CENTRAL_ALL) $(CENTRAL_RADIO) $(FOLDER_BASE)/shared_mem_controller_only.o $(FOLDER_BASE)/hdmi.o $(FOLDER_COMMON)/favorites.o $(FOLDER_BASE)/plugins_settings.o \
 	$(FOLDER_BASE)/core_plugins_settings.o $(FOLDER_BASE)/hardware_files.o $(FOLDER_COMMON)/models_connect_frequencies.o $(FOLDER_BASE)/shared_mem_i2c.o $(FOLDER_BASE)/video_capture_res.o $(FOLDER_BASE)/wiringPiI2C_radxa.o $(FOLDER_BASE)/hardware_audio.o
 	$(CXX) $(_CPPFLAGS) $(CFLAGS_RENDERER) -export-dynamic -o $@ $^ $(_LDFLAGS) -ldl $(LDFLAGS_CENTRAL) $(LDFLAGS_CENTRAL2) $(LDFLAGS_RENDERER)
 
 
-ruby_utils: ruby_logger ruby_initdhcp ruby_sik_config ruby_alive ruby_video_proc ruby_update ruby_update_worker ruby_dbg
+Anhydrate_utils: Anhydrate_logger Anhydrate_initdhcp Anhydrate_sik_config Anhydrate_alive Anhydrate_video_proc Anhydrate_update Anhydrate_update_worker Anhydrate_dbg
 
-ruby_start: $(FOLDER_START)/ruby_start.o $(FOLDER_START)/r_start_vehicle.o $(MODULE_LOC) $(FOLDER_START)/r_test.o $(FOLDER_START)/r_initradio.o $(FOLDER_START)/first_boot.o \
-	$(FOLDER_VEHICLE)/ruby_rx_commands.o $(FOLDER_BASE)/parser_h264.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/hardware_procs.o  $(FOLDER_BASE)/camera_utils.o $(FOLDER_VEHICLE)/video_sources.o $(FOLDER_VEHICLE)/video_source_csi.o $(FOLDER_VEHICLE)/video_source_majestic.o $(FOLDER_VEHICLE)/ruby_rx_rc.o $(FOLDER_VEHICLE)/process_upload.o $(FOLDER_VEHICLE)/process_calib_file.o $(FOLDER_BASE)/commands.o $(FOLDER_BASE)/vehicle_settings.o $(FOLDER_BASE)/hardware_radio_txpower.o $(FOLDER_RADIO)/radiopackets2.o $(FOLDER_BASE)/ctrl_preferences.o $(FOLDER_BASE)/ctrl_interfaces.o $(FOLDER_VEHICLE)/hw_config_check.o $(MODULE_MINIMUM_BASE) $(MODULE_MODELS) $(MODULE_MINIMUM_COMMON) $(FOLDER_BASE)/ruby_ipc.o $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_UTILS)/utils_controller.o $(FOLDER_BASE)/utils.o $(FOLDER_BASE)/shared_mem.o $(FOLDER_VEHICLE)/launchers_vehicle.o $(FOLDER_VEHICLE)/shared_vars.o $(FOLDER_VEHICLE)/timers.o $(FOLDER_BASE)/encr.o \
+Anhydrate_start: $(FOLDER_START)/Anhydrate_start.o $(FOLDER_START)/r_start_vehicle.o $(MODULE_LOC) $(FOLDER_START)/r_test.o $(FOLDER_START)/r_initradio.o $(FOLDER_START)/first_boot.o \
+	$(FOLDER_VEHICLE)/Anhydrate_rx_commands.o $(FOLDER_BASE)/parser_h264.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/hardware_procs.o  $(FOLDER_BASE)/camera_utils.o $(FOLDER_VEHICLE)/video_sources.o $(FOLDER_VEHICLE)/video_source_csi.o $(FOLDER_VEHICLE)/video_source_majestic.o $(FOLDER_VEHICLE)/Anhydrate_rx_rc.o $(FOLDER_VEHICLE)/process_upload.o $(FOLDER_VEHICLE)/process_calib_file.o $(FOLDER_BASE)/commands.o $(FOLDER_BASE)/vehicle_settings.o $(FOLDER_BASE)/hardware_radio_txpower.o $(FOLDER_RADIO)/radiopackets2.o $(FOLDER_BASE)/ctrl_preferences.o $(FOLDER_BASE)/ctrl_interfaces.o $(FOLDER_VEHICLE)/hw_config_check.o $(MODULE_MINIMUM_BASE) $(MODULE_MODELS) $(MODULE_MINIMUM_COMMON) $(FOLDER_BASE)/Anhydrate_ipc.o $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_UTILS)/utils_controller.o $(FOLDER_BASE)/utils.o $(FOLDER_BASE)/shared_mem.o $(FOLDER_VEHICLE)/launchers_vehicle.o $(FOLDER_VEHICLE)/shared_vars.o $(FOLDER_VEHICLE)/timers.o $(FOLDER_BASE)/encr.o \
 	$(FOLDER_BASE)/core_plugins_settings.o $(FOLDER_BASE)/hardware_camera.o $(FOLDER_BASE)/hardware_cam_maj.o $(FOLDER_BASE)/hardware_files.o $(FOLDER_BASE)/tx_powers.o $(FOLDER_BASE)/wiringPiI2C_radxa.o $(FOLDER_UTILS)/utils_vehicle.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS) -ldl
 
-ruby_i2c: $(FOLDER_I2C)/ruby_i2c.o $(MODULE_BASE) $(MODULE_MODELS) $(MODULE_COMMON) $(MODULE_BASE2) $(FOLDER_BASE)/shared_mem_i2c.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
+Anhydrate_i2c: $(FOLDER_I2C)/Anhydrate_i2c.o $(MODULE_BASE) $(MODULE_MODELS) $(MODULE_COMMON) $(MODULE_BASE2) $(FOLDER_BASE)/shared_mem_i2c.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_logger: $(FOLDER_RUTILS)/ruby_logger.o $(MODULE_BASE)
+Anhydrate_logger: $(FOLDER_RUTILS)/Anhydrate_logger.o $(MODULE_BASE)
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_initdhcp: $(FOLDER_RUTILS)/ruby_initdhcp.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON)
+Anhydrate_initdhcp: $(FOLDER_RUTILS)/Anhydrate_initdhcp.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON)
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_sik_config: $(FOLDER_RUTILS)/ruby_sik_config.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON) 
+Anhydrate_sik_config: $(FOLDER_RUTILS)/Anhydrate_sik_config.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON) 
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS) -ldl
 
-ruby_alive: $(FOLDER_RUTILS)/ruby_alive.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON)
+Anhydrate_alive: $(FOLDER_RUTILS)/Anhydrate_alive.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON)
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_video_proc: $(FOLDER_RUTILS)/ruby_video_proc.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON) $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
+Anhydrate_video_proc: $(FOLDER_RUTILS)/Anhydrate_video_proc.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON) $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_dbg: $(FOLDER_RUTILS)/ruby_dbg.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON) $(FOLDER_BASE)/vehicle_settings.o
+Anhydrate_dbg: $(FOLDER_RUTILS)/Anhydrate_dbg.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON) $(FOLDER_BASE)/vehicle_settings.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_update: $(FOLDER_RUTILS)/ruby_update.o $(MODULE_BASE) $(MODULE_MODELS) $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_BASE)/ctrl_preferences.o $(FOLDER_COMMON)/string_utils.o $(FOLDER_BASE)/gpio.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
+Anhydrate_update: $(FOLDER_RUTILS)/Anhydrate_update.o $(MODULE_BASE) $(MODULE_MODELS) $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_BASE)/ctrl_preferences.o $(FOLDER_COMMON)/string_utils.o $(FOLDER_BASE)/gpio.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_update_worker: $(FOLDER_RUTILS)/ruby_update_worker.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON)
+Anhydrate_update_worker: $(FOLDER_RUTILS)/Anhydrate_update_worker.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(MODULE_COMMON)
 	$(CXX) $(_CPPFLAGS_NOSDL) -o $@ $^ $(_LDFLAGS_NOSDL)
 
-ruby_tx_telemetry: $(FOLDER_VEHICLE)/ruby_tx_telemetry.o $(FOLDER_VEHICLE)/shared_vars.o $(FOLDER_VEHICLE)/telemetry.o $(FOLDER_VEHICLE)/telemetry_ltm.o $(FOLDER_VEHICLE)/telemetry_mavlink.o $(FOLDER_VEHICLE)/telemetry_msp.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(FOLDER_VEHICLE)/timers.o $(FOLDER_BASE)/parse_fc_telemetry.o $(FOLDER_BASE)/parse_fc_telemetry_ltm.o $(FOLDER_BASE)/vehicle_settings.o $(FOLDER_COMMON)/string_utils.o $(FOLDER_RADIO)/radiopackets2.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
+Anhydrate_tx_telemetry: $(FOLDER_VEHICLE)/Anhydrate_tx_telemetry.o $(FOLDER_VEHICLE)/shared_vars.o $(FOLDER_VEHICLE)/telemetry.o $(FOLDER_VEHICLE)/telemetry_ltm.o $(FOLDER_VEHICLE)/telemetry_mavlink.o $(FOLDER_VEHICLE)/telemetry_msp.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_MODELS) $(FOLDER_VEHICLE)/timers.o $(FOLDER_BASE)/parse_fc_telemetry.o $(FOLDER_BASE)/parse_fc_telemetry_ltm.o $(FOLDER_BASE)/vehicle_settings.o $(FOLDER_COMMON)/string_utils.o $(FOLDER_RADIO)/radiopackets2.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_rt_vehicle: $(FOLDER_VEHICLE)/ruby_rt_vehicle.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_VEHICLE) $(FOLDER_BASE)/vehicle_settings.o $(FOLDER_VEHICLE)/processor_relay.o $(FOLDER_VEHICLE)/processor_tx_video.o $(FOLDER_VEHICLE)/processor_tx_audio.o $(FOLDER_VEHICLE)/events.o $(FOLDER_VEHICLE)/packets_utils.o $(FOLDER_VEHICLE)/process_local_packets.o $(FOLDER_VEHICLE)/process_radio_in_packets.o $(FOLDER_VEHICLE)/process_radio_out_packets.o $(FOLDER_VEHICLE)/process_received_ruby_messages.o $(FOLDER_VEHICLE)/radio_links.o $(FOLDER_VEHICLE)/periodic_loop.o $(FOLDER_BASE)/camera_utils.o $(FOLDER_VEHICLE)/test_link_params.o $(FOLDER_VEHICLE)/video_sources.o $(FOLDER_VEHICLE)/video_source_csi.o $(FOLDER_VEHICLE)/video_source_majestic.o $(FOLDER_BASE)/radio_utils.o \
+Anhydrate_rt_vehicle: $(FOLDER_VEHICLE)/Anhydrate_rt_vehicle.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_VEHICLE) $(FOLDER_BASE)/vehicle_settings.o $(FOLDER_VEHICLE)/processor_relay.o $(FOLDER_VEHICLE)/processor_tx_video.o $(FOLDER_VEHICLE)/processor_tx_audio.o $(FOLDER_VEHICLE)/events.o $(FOLDER_VEHICLE)/packets_utils.o $(FOLDER_VEHICLE)/process_local_packets.o $(FOLDER_VEHICLE)/process_radio_in_packets.o $(FOLDER_VEHICLE)/process_radio_out_packets.o $(FOLDER_VEHICLE)/process_received_Anhydrate_messages.o $(FOLDER_VEHICLE)/radio_links.o $(FOLDER_VEHICLE)/periodic_loop.o $(FOLDER_BASE)/camera_utils.o $(FOLDER_VEHICLE)/test_link_params.o $(FOLDER_VEHICLE)/video_sources.o $(FOLDER_VEHICLE)/video_source_csi.o $(FOLDER_VEHICLE)/video_source_majestic.o $(FOLDER_BASE)/radio_utils.o \
 	$(FOLDER_BASE)/hardware_camera.o $(FOLDER_BASE)/hardware_cam_maj.o $(FOLDER_VEHICLE)/generic_tx_ecbuffers.o $(FOLDER_BASE)/parser_h264.o $(FOLDER_VEHICLE)/video_tx_buffers.o $(FOLDER_VEHICLE)/process_cam_params.o $(FOLDER_BASE)/tx_powers.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_controller: $(FOLDER_STATION)/ruby_controller.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION)
+Anhydrate_controller: $(FOLDER_STATION)/Anhydrate_controller.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION)
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_rx_telemetry: $(FOLDER_STATION)/ruby_rx_telemetry.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION) $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
+Anhydrate_rx_telemetry: $(FOLDER_STATION)/Anhydrate_rx_telemetry.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION) $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_tx_rc: $(FOLDER_STATION)/ruby_tx_rc.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION) $(FOLDER_BASE)/shared_mem_i2c.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
+Anhydrate_tx_rc: $(FOLDER_STATION)/Anhydrate_tx_rc.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION) $(FOLDER_BASE)/shared_mem_i2c.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS)
 
-ruby_rt_station: $(FOLDER_STATION)/ruby_rt_station.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION) $(FOLDER_STATION)/packets_utils.o $(FOLDER_STATION)/process_local_packets.o $(FOLDER_STATION)/process_radio_in_packets.o $(FOLDER_STATION)/process_radio_out_packets.o $(FOLDER_STATION)/periodic_loop.o $(FOLDER_STATION)/processor_rx_audio.o $(FOLDER_STATION)/processor_rx_video.o $(FOLDER_STATION)/video_rx_buffers.o $(FOLDER_STATION)/radio_links.o $(FOLDER_STATION)/relay_rx.o $(FOLDER_STATION)/test_link_params.o $(FOLDER_STATION)/process_video_packets.o $(FOLDER_STATION)/rx_video_output.o $(FOLDER_STATION)/rx_video_recording.o $(FOLDER_STATION)/rx_video_recording_data.o $(FOLDER_BASE)/shared_mem_controller_only.o $(FOLDER_COMMON)/models_connect_frequencies.o $(FOLDER_BASE)/parse_fc_telemetry.o $(FOLDER_BASE)/parse_fc_telemetry_ltm.o $(FOLDER_STATION)/radio_links_sik.o $(FOLDER_BASE)/radio_utils.o $(FOLDER_BASE)/core_plugins_settings.o $(FOLDER_BASE)/camera_utils.o \
+Anhydrate_rt_station: $(FOLDER_STATION)/Anhydrate_rt_station.o $(MODULE_BASE) $(MODULE_BASE2) $(MODULE_COMMON) $(MODULE_RADIO) $(MODULE_MODELS) $(MODULE_STATION) $(FOLDER_STATION)/packets_utils.o $(FOLDER_STATION)/process_local_packets.o $(FOLDER_STATION)/process_radio_in_packets.o $(FOLDER_STATION)/process_radio_out_packets.o $(FOLDER_STATION)/periodic_loop.o $(FOLDER_STATION)/processor_rx_audio.o $(FOLDER_STATION)/processor_rx_video.o $(FOLDER_STATION)/video_rx_buffers.o $(FOLDER_STATION)/radio_links.o $(FOLDER_STATION)/relay_rx.o $(FOLDER_STATION)/test_link_params.o $(FOLDER_STATION)/process_video_packets.o $(FOLDER_STATION)/rx_video_output.o $(FOLDER_STATION)/rx_video_recording.o $(FOLDER_STATION)/rx_video_recording_data.o $(FOLDER_BASE)/shared_mem_controller_only.o $(FOLDER_COMMON)/models_connect_frequencies.o $(FOLDER_BASE)/parse_fc_telemetry.o $(FOLDER_BASE)/parse_fc_telemetry_ltm.o $(FOLDER_STATION)/radio_links_sik.o $(FOLDER_BASE)/radio_utils.o $(FOLDER_BASE)/core_plugins_settings.o $(FOLDER_BASE)/camera_utils.o \
 	$(FOLDER_BASE)/parser_h264.o $(FOLDER_BASE)/tx_powers.o $(FOLDER_UTILS)/utils_controller.o $(FOLDER_UTILS)/utils_vehicle.o $(FOLDER_STATION)/generic_rx_ecbuffers.o $(FOLDER_BASE)/hardware_audio.o $(FOLDER_BASE)/wiringPiI2C_radxa.o $(FOLDER_BASE)/msp.o
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS) -ldl
 
-ruby_plugins: ruby_plugin_osd_ahi ruby_plugin_gauge_speed ruby_plugin_gauge_altitude ruby_plugin_gauge_ahi ruby_plugin_gauge_heading
+Anhydrate_plugins: Anhydrate_plugin_osd_ahi Anhydrate_plugin_gauge_speed Anhydrate_plugin_gauge_altitude Anhydrate_plugin_gauge_ahi Anhydrate_plugin_gauge_heading
 
-ruby_plugin_osd_ahi: $(FOLDER_PLUGINS_OSD)/ruby_plugin_osd_ahi.o osd_plugins_utils.o core_plugins_utils.o
-	gcc $(FOLDER_PLUGINS_OSD)/ruby_plugin_osd_ahi.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,ruby_plugin_osd_ahi2.so.1 -o ruby_plugin_osd_ahi2.so.1.0.1 -lc
+Anhydrate_plugin_osd_ahi: $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_osd_ahi.o osd_plugins_utils.o core_plugins_utils.o
+	gcc $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_osd_ahi.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,Anhydrate_plugin_osd_ahi2.so.1 -o Anhydrate_plugin_osd_ahi2.so.1.0.1 -lc
 
-ruby_plugin_gauge_speed: $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_speed.o osd_plugins_utils.o core_plugins_utils.o
-	gcc $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_speed.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,ruby_plugin_gauge_speed2.so.1 -o ruby_plugin_gauge_speed2.so.1.0.1 -lc
+Anhydrate_plugin_gauge_speed: $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_speed.o osd_plugins_utils.o core_plugins_utils.o
+	gcc $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_speed.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,Anhydrate_plugin_gauge_speed2.so.1 -o Anhydrate_plugin_gauge_speed2.so.1.0.1 -lc
 
-ruby_plugin_gauge_altitude: $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_altitude.o osd_plugins_utils.o core_plugins_utils.o
-	gcc $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_altitude.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,ruby_plugin_gauge_altitude2.so.1 -o ruby_plugin_gauge_altitude2.so.1.0.1 -lc
+Anhydrate_plugin_gauge_altitude: $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_altitude.o osd_plugins_utils.o core_plugins_utils.o
+	gcc $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_altitude.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,Anhydrate_plugin_gauge_altitude2.so.1 -o Anhydrate_plugin_gauge_altitude2.so.1.0.1 -lc
 
-ruby_plugin_gauge_ahi: $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_ahi.o osd_plugins_utils.o core_plugins_utils.o
-	gcc $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_ahi.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,ruby_plugin_gauge_ahi2.so.1 -o ruby_plugin_gauge_ahi2.so.1.0.1 -lc
+Anhydrate_plugin_gauge_ahi: $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_ahi.o osd_plugins_utils.o core_plugins_utils.o
+	gcc $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_ahi.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,Anhydrate_plugin_gauge_ahi2.so.1 -o Anhydrate_plugin_gauge_ahi2.so.1.0.1 -lc
 
-ruby_plugin_gauge_heading: $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_heading.o osd_plugins_utils.o core_plugins_utils.o
-	gcc $(FOLDER_PLUGINS_OSD)/ruby_plugin_gauge_heading.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,ruby_plugin_gauge_heading2.so.1 -o ruby_plugin_gauge_heading2.so.1.0.1 -lc
+Anhydrate_plugin_gauge_heading: $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_heading.o osd_plugins_utils.o core_plugins_utils.o
+	gcc $(FOLDER_PLUGINS_OSD)/Anhydrate_plugin_gauge_heading.o osd_plugins_utils.o core_plugins_utils.o -shared -Wl,-soname,Anhydrate_plugin_gauge_heading2.so.1 -o Anhydrate_plugin_gauge_heading2.so.1.0.1 -lc
 
-ruby_player_radxa:code/r_player/ruby_player_radxa.o code/r_player/mpp_core.o $(FOLDER_BASE)/hdmi.o $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_BASE)/shared_mem.o $(FOLDER_BASE)/parser_h264.o $(CENTRAL_RENDER_CODE) $(MODULE_MINIMUM_BASE) $(MODULE_MINIMUM_COMMON)
+Anhydrate_player_radxa:code/r_player/Anhydrate_player_radxa.o code/r_player/mpp_core.o $(FOLDER_BASE)/hdmi.o $(FOLDER_BASE)/ctrl_settings.o $(FOLDER_BASE)/shared_mem.o $(FOLDER_BASE)/parser_h264.o $(CENTRAL_RENDER_CODE) $(MODULE_MINIMUM_BASE) $(MODULE_MINIMUM_COMMON)
 	$(CXX) $(_CPPFLAGS) $(CFLAGS_RENDERER) -o $@ $^ $(_LDFLAGS) $(LDFLAGS_RENDERER) $(LDFLAGS_CENTRAL) $(LDFLAGS_CENTRAL2) -ldl -lc -lrockchip_mpp
 
-ifeq ($(RUBY_BUILD_ENV),radxa)
+ifeq ($(Anhydrate_BUILD_ENV),radxa)
 tests: test_port_rx test_port_tx test_link
 else
 tests: test_gpio test_port_rx test_port_tx test_link
@@ -355,25 +355,26 @@ test_joystick:$(FOLDER_TESTS)/test_joystick.o $(MODULE_BASE) $(MODULE_BASE2) $(M
 	$(CXX) $(_CPPFLAGS) -o $@ $^ $(_LDFLAGS) -ldl -lc
 
 clean:
-	rm -rf ruby_start ruby_i2c ruby_logger ruby_initdhcp ruby_sik_config ruby_alive ruby_video_proc ruby_update ruby_update_worker ruby_dbg \
-        ruby_tx_telemetry ruby_rt_vehicle \
-          test_* ruby_controller ruby_rt_station ruby_tx_rc ruby_rx_telemetry ruby_player_radxa \
-          ruby_central $(FOLDER_CENTRAL)/ruby_central test_log $(FOLDER_TESTS)/test_log ruby_plugin* \
-          $(FOLDER_VEHICLE)/ruby_tx_telemetry $(FOLDER_VEHICLE)/ruby_rt_vehicle \
-          $(FOLDER_STATION)/ruby_controller $(FOLDER_STATION)/ruby_rt_station $(FOLDER_STATION)/ruby_tx_rc $(FOLDER_STATION)/ruby_rx_telemetry \
-          $(FOLDER_START)/ruby_start $(FOLDER_I2C)/ruby_i2c $(FOLDER_RUTILS)/ruby_logger $(FOLDER_RUTILS)/ruby_initdhcp $(FOLDER_RUTILS)/ruby_sik_config $(FOLDER_RUTILS)/ruby_alive $(FOLDER_RUTILS)/ruby_dbg $(FOLDER_RUTILS)/ruby_video_proc $(FOLDER_RUTILS)/ruby_update $(FOLDER_RUTILS)/ruby_update_worker \
+	rm -rf Anhydrate_start Anhydrate_i2c Anhydrate_logger Anhydrate_initdhcp Anhydrate_sik_config Anhydrate_alive Anhydrate_video_proc Anhydrate_update Anhydrate_update_worker Anhydrate_dbg \
+        Anhydrate_tx_telemetry Anhydrate_rt_vehicle \
+          test_* Anhydrate_controller Anhydrate_rt_station Anhydrate_tx_rc Anhydrate_rx_telemetry Anhydrate_player_radxa \
+          Anhydrate_central $(FOLDER_CENTRAL)/Anhydrate_central test_log $(FOLDER_TESTS)/test_log Anhydrate_plugin* \
+          $(FOLDER_VEHICLE)/Anhydrate_tx_telemetry $(FOLDER_VEHICLE)/Anhydrate_rt_vehicle \
+          $(FOLDER_STATION)/Anhydrate_controller $(FOLDER_STATION)/Anhydrate_rt_station $(FOLDER_STATION)/Anhydrate_tx_rc $(FOLDER_STATION)/Anhydrate_rx_telemetry \
+          $(FOLDER_START)/Anhydrate_start $(FOLDER_I2C)/Anhydrate_i2c $(FOLDER_RUTILS)/Anhydrate_logger $(FOLDER_RUTILS)/Anhydrate_initdhcp $(FOLDER_RUTILS)/Anhydrate_sik_config $(FOLDER_RUTILS)/Anhydrate_alive $(FOLDER_RUTILS)/Anhydrate_dbg $(FOLDER_RUTILS)/Anhydrate_video_proc $(FOLDER_RUTILS)/Anhydrate_update $(FOLDER_RUTILS)/Anhydrate_update_worker \
           $(FOLDER_BASE)/*.o $(FOLDER_COMMON)/*.o $(FOLDER_RADIO)/*.o $(FOLDER_START)/*.o $(FOLDER_RUTILS)/*.o $(FOLDER_UTILS)/*.o $(FOLDER_VEHICLE)/*.o $(FOLDER_STATION)/*.o \
           $(FOLDER_CENTRAL)/*.o $(FOLDER_CENTRAL_MENU)/*.o $(FOLDER_CENTRAL_OSD)/*.o $(FOLDER_CENTRAL_RENDERER)/*.o $(FOLDER_CENTRAL_OLED)/*.o \
           $(FOLDER_PLUGINS_OSD)/*.o code/public/utils/*.o code/r_player/*.o $(FOLDER_TESTS)/*.o \
           code/r_i2c/*.o
 
 cleanstation:
-	rm -rf ruby_start ruby_i2c ruby_logger ruby_initdhcp ruby_sik_config ruby_alive ruby_video_proc ruby_update ruby_update_worker ruby_dbg \
-          test_* ruby_controller ruby_rt_station ruby_tx_rc ruby_rx_telemetry \
-          test_log $(FOLDER_TESTS)/test_log ruby_plugin* \
-          $(FOLDER_STATION)/ruby_controller $(FOLDER_STATION)/ruby_rt_station $(FOLDER_STATION)/ruby_tx_rc $(FOLDER_STATION)/ruby_rx_telemetry \
-          $(FOLDER_START)/ruby_start $(FOLDER_I2C)/ruby_i2c $(FOLDER_RUTILS)/ruby_logger $(FOLDER_RUTILS)/ruby_initdhcp $(FOLDER_RUTILS)/ruby_sik_config $(FOLDER_RUTILS)/ruby_alive $(FOLDER_RUTILS)/ruby_video_proc $(FOLDER_RUTILS)/ruby_update $(FOLDER_RUTILS)/ruby_update_worker \
+	rm -rf Anhydrate_start Anhydrate_i2c Anhydrate_logger Anhydrate_initdhcp Anhydrate_sik_config Anhydrate_alive Anhydrate_video_proc Anhydrate_update Anhydrate_update_worker Anhydrate_dbg \
+          test_* Anhydrate_controller Anhydrate_rt_station Anhydrate_tx_rc Anhydrate_rx_telemetry \
+          test_log $(FOLDER_TESTS)/test_log Anhydrate_plugin* \
+          $(FOLDER_STATION)/Anhydrate_controller $(FOLDER_STATION)/Anhydrate_rt_station $(FOLDER_STATION)/Anhydrate_tx_rc $(FOLDER_STATION)/Anhydrate_rx_telemetry \
+          $(FOLDER_START)/Anhydrate_start $(FOLDER_I2C)/Anhydrate_i2c $(FOLDER_RUTILS)/Anhydrate_logger $(FOLDER_RUTILS)/Anhydrate_initdhcp $(FOLDER_RUTILS)/Anhydrate_sik_config $(FOLDER_RUTILS)/Anhydrate_alive $(FOLDER_RUTILS)/Anhydrate_video_proc $(FOLDER_RUTILS)/Anhydrate_update $(FOLDER_RUTILS)/Anhydrate_update_worker \
           $(FOLDER_CENTRAL)/*.o $(FOLDER_CENTRAL_MENU)/*.o $(FOLDER_CENTRAL_OSD)/*.o $(FOLDER_CENTRAL_RENDERER)/*.o $(FOLDER_CENTRAL_OLED)/*.o \
           $(FOLDER_BASE)/*.o $(FOLDER_COMMON)/*.o $(FOLDER_RADIO)/*.o $(FOLDER_START)/*.o $(FOLDER_RUTILS)/*.o $(FOLDER_UTILS)/*.o $(FOLDER_STATION)/*.o \
           $(FOLDER_TESTS)/*.o $(FOLDER_PLUGINS_OSD)/*.o \
           code/r_i2c/*.o code/r_utils/*.o code/r_player/*.o
+

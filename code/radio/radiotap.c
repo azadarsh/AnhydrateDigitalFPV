@@ -356,3 +356,4 @@ extern int ieee80211_radiotap_iterator_next(struct ieee80211_radiotap_iterator *
    return 0;
  } 
 }
+

@@ -241,3 +241,4 @@ typedef enum MAV_COMPONENT
 }
 #endif // __cplusplus
 #endif // MAVLINK_MINIMAL_H
+

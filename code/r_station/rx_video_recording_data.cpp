@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -82,7 +82,7 @@ void rx_video_recording_data_start_srt()
    char szFile[MAX_FILE_PATH_SIZE];
    char szComm[MAX_FILE_PATH_SIZE];
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_VIDEO_FILE_SRT);
 
    snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s 2>/dev/null", szFile);
@@ -125,7 +125,7 @@ void rx_video_recording_data_start_osd()
    char szFile[MAX_FILE_PATH_SIZE];
    char szComm[MAX_FILE_PATH_SIZE];
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_VIDEO_FILE_OSD);
 
    snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s 2>/dev/null", szFile);
@@ -192,7 +192,7 @@ void rx_video_recording_data_add_srt_frame()
          bHasData = false;
 
       type_global_state_vehicle_runtime_info* pRuntimeInfo = getVehicleRuntimeInfo(g_pCurrentModel->uVehicleId);
-      if ( (NULL == pRuntimeInfo) || ((0 == pRuntimeInfo->uTimeLastRecvRubyTelemetryExtended) && (0 == pRuntimeInfo->uTimeLastRecvRubyTelemetryShort)) )
+      if ( (NULL == pRuntimeInfo) || ((0 == pRuntimeInfo->uTimeLastRecvAnhydrateTelemetryExtended) && (0 == pRuntimeInfo->uTimeLastRecvAnhydrateTelemetryShort)) )
          bHasData = false;
       if ( (NULL == pRuntimeInfo) || (0 == pRuntimeInfo->uTimeLastRecvFCTelemetryFC) )
          bHasData = false;
@@ -394,4 +394,5 @@ void rx_video_recording_periodic_data_loop()
    if ( s_bRecordingDataOSDStarted )
       rx_video_recording_data_add_osd_frame();
 }
+
 

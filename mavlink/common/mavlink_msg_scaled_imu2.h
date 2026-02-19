@@ -436,3 +436,4 @@ static inline void mavlink_msg_scaled_imu2_decode(const mavlink_message_t* msg, 
     memcpy(scaled_imu2, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

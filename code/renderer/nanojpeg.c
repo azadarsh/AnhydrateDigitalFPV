@@ -914,3 +914,4 @@ unsigned char* njGetImage(void) { return (nj.ncomp == 1) ? nj.comp[0].pixels : n
 int njGetImageSize(void)        { return nj.width * nj.height * nj.ncomp; }
 
 #endif // _NJ_INCLUDE_HEADER_ONLY
+

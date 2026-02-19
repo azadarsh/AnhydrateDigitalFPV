@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -125,7 +125,7 @@ void MenuVehicleSelector::onReturnFromChild(int iChildMenuId, int returnValue)
          render_all(get_current_timestamp_ms(), true, false);
          pairing_stop();
 
-         ruby_set_active_model_id(0);
+         Anhydrate_set_active_model_id(0);
          g_pCurrentModel = NULL;
       }
 
@@ -209,7 +209,7 @@ void MenuVehicleSelector::onSelectItem()
       setControllerCurrentModel(g_pCurrentModel->uVehicleId);
       saveControllerModel(g_pCurrentModel);
 
-      ruby_set_active_model_id(g_pCurrentModel->uVehicleId);
+      Anhydrate_set_active_model_id(g_pCurrentModel->uVehicleId);
       
       onMainVehicleChanged(true);
       log_line("[MenuVehicleSelector] Starting new pairing...");
@@ -242,3 +242,4 @@ void MenuVehicleSelector::onSelectItem()
       return;
    }
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -28,6 +28,8 @@
     ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    Code contribution by: Jessica Severin
 */
 
 #include "menu.h"
@@ -57,7 +59,7 @@ MenuQuickMenu::MenuQuickMenu(void)
 :Menu(MENU_ID_QUICK_MENU, L("Quick Action Menu"), NULL)
 
 {
-   m_Width = 0.164;
+   m_Width = 0.19;
    m_xPos = menu_get_XStartPos(m_Width);
    m_yPos = 0.30;
 }
@@ -205,7 +207,7 @@ void MenuQuickMenu::onSelectItem()
 
    if ( (!pairing_isStarted()) || (! g_bIsRouterReady) )
    {
-      warnings_add(0, "Please connect to a vehicle first, to execute Quick Actions.");
+      warnings_add(0, L("Please connect to a vehicle first, to execute Quick Actions."));
       return;
    }
 
@@ -277,4 +279,5 @@ void MenuQuickMenu::onSelectItem()
 
    menu_discard_all();
 }
+
 

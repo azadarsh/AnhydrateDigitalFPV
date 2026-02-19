@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -132,9 +132,9 @@ void MenuControllerUpdate::onReturnFromChild(int iChildMenuId, int returnValue)
       log_line("Closed message update. Will reboot now.");
       menu_discard_all();
       popups_remove_all();
-      ruby_processing_loop(true);
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
 
       onEventReboot();
       hardware_reboot();
@@ -169,7 +169,7 @@ void MenuControllerUpdate::onSelectItem()
 
       sprintf(szBuff, "Your controller has software version %s (b-%d)", szBuff2, SYSTEM_SW_BUILD_NUMBER);
 
-      MenuConfirmation* pMC = new MenuConfirmation(L("Update Controller Software"), L("Insert an USB stick containing the Ruby update archive file and then press Ok to start the update process."), 1, true);
+      MenuConfirmation* pMC = new MenuConfirmation(L("Update Controller Software"), L("Insert an USB stick containing the Anhydrate update archive file and then press Ok to start the update process."), 1, true);
       pMC->m_yPos = 0.3;
       add_menu_to_stack(pMC);
       return;
@@ -191,9 +191,9 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
       p = new Popup(L("Downloading. Please wait"), 0.36,0.4, 0.5, 90);
    popups_add_topmost(p);
 
-   ruby_processing_loop(true);
+   Anhydrate_processing_loop(true);
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    int iMountRes = 1;
    if ( (NULL == szUpdateFile) || (0 == szUpdateFile[0]) )
@@ -201,10 +201,10 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
    if ( 1 != iMountRes )
    {
       popups_remove(p);
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
 
       if ( 0 == iMountRes )
          addMessage(L("No USB memory stick detected. Please insert a USB stick."));
@@ -215,20 +215,20 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
          if ( 1 != iMountRes )
             addMessage(L("USB memory stick detected but could not be mounted. Please try again."));
       }
-      ruby_signal_alive();
-      ruby_processing_loop(true);
+      Anhydrate_signal_alive();
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       if ( 1 != iMountRes )
          return;
    }
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
 
    log_line("Starting controller update procedure.");
    g_bUpdateInProgress = true;
    popups_remove(p);
 
-   ruby_pause_watchdog("starting controller update procedure");
+   Anhydrate_pause_watchdog("starting controller update procedure");
    pairing_stop();
    
    if ( (NULL == szUpdateFile) || (0 == szUpdateFile[0]) )
@@ -237,12 +237,12 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
       p = new Popup(L("Downloading. Please wait"), 0.36,0.4, 0.5, 90);
    popups_add_topmost(p);
 
-   // Execute ruby_update_worker twice as the ruby_update_worker might have been updated itself too
+   // Execute Anhydrate_update_worker twice as the Anhydrate_update_worker might have been updated itself too
    char szComm[256];
    char szOutput[4096];
    char szFile[MAX_FILE_PATH_SIZE];
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_UPDATE_CONTROLLER_PROGRESS);
 
    FILE* fd = NULL;
@@ -258,8 +258,8 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
       szTitle[0] = 0;
       snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "rm -rf %s", szFile);
       hw_execute_bash_command(szComm, NULL);
-      hw_execute_ruby_process(NULL, "ruby_update_worker", szUpdateFile, NULL);
-      ruby_signal_alive();
+      hw_execute_Anhydrate_process(NULL, "Anhydrate_update_worker", szUpdateFile, NULL);
+      Anhydrate_signal_alive();
 
       int iLastPartialStatus = -1000;
       u32 uTimeWorkerFinished = 0;
@@ -323,9 +323,9 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
             strcat(szTitle, "...");
          log_line("Set update popup title for run %d: (%s)", iRepeatCount, szTitle);
          p->setTitle(szTitle);
-         ruby_processing_loop(true);
+         Anhydrate_processing_loop(true);
          render_all_with_menus(g_TimeNow, false);
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          hardware_sleep_ms(50);
          if ( bFoundProcess )
             log_line("Waiting for update worker to finish (%d)...", iCounter[iRepeatCount]);
@@ -335,13 +335,13 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
 
          if ( bFoundProcess )
          {
-             if ( (0 == hw_process_exists("ruby_update_worker")) && (0 == hw_process_exists("unzip")) )
+             if ( (0 == hw_process_exists("Anhydrate_update_worker")) && (0 == hw_process_exists("unzip")) )
              {
                 log_line("Update worker process finished (test 1)");
                 hardware_sleep_ms(100);
-                if ( (0 == hw_process_exists("ruby_update_worker")) && (0 == hw_process_exists("unzip")) )
+                if ( (0 == hw_process_exists("Anhydrate_update_worker")) && (0 == hw_process_exists("unzip")) )
                 {
-                   hw_execute_bash_command_raw("ps -ae | grep ruby_update_worker | grep -v grep", szOutput);
+                   hw_execute_bash_command_raw("ps -ae | grep Anhydrate_update_worker | grep -v grep", szOutput);
                    removeTrailingNewLines(szOutput);
                    char* p = removeLeadingWhiteSpace(szOutput);
                    log_line("Update worker process finished (test 2), ps list: [%s]", p);
@@ -371,7 +371,7 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
 
          if ( ! bFoundProcess )
          {
-            if ( 0 != hw_process_exists("ruby_update_worker") )
+            if ( 0 != hw_process_exists("Anhydrate_update_worker") )
             {
                log_line("Found update worker process.");
                bFoundProcess = true;
@@ -456,16 +456,16 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
    log_line("Final result: %d, (%s)", iFinalResult, szFinalResult);
 
    hardware_unmount_usb();
-   ruby_processing_loop(true);
+   Anhydrate_processing_loop(true);
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    g_bUpdateInProgress = false;
-   ruby_resume_watchdog("finished controller update procedure");
+   Anhydrate_resume_watchdog("finished controller update procedure");
 
    popups_remove(p);
-   ruby_processing_loop(true);
+   Anhydrate_processing_loop(true);
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    hw_execute_bash_command("sync", NULL);
 
    if ( iCounter[1] >= 500 )
@@ -474,9 +474,9 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
       MenuConfirmation* pMC = new MenuConfirmation(L("Update Failed"), L("Update timedout and failed."), 5, true);
       pMC->m_yPos = 0.3;
       add_menu_to_stack(pMC);
-      ruby_processing_loop(true);
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       log_line("Exit from main update procedure (1).");
       return;
    }
@@ -511,9 +511,9 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
 
       pMC->m_yPos = 0.3;
       add_menu_to_stack(pMC);
-      ruby_processing_loop(true);
+      Anhydrate_processing_loop(true);
       render_all(g_TimeNow);
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       log_line("Exit from main update procedure (2).");
       return;
    }
@@ -539,8 +539,9 @@ void MenuControllerUpdate::updateControllerSoftware(const char* szUpdateFile)
    }
 
    add_menu_to_stack(pMC);
-   ruby_processing_loop(true);
+   Anhydrate_processing_loop(true);
    render_all(g_TimeNow);
-   ruby_signal_alive();
+   Anhydrate_signal_alive();
    log_line("Exit from main update procedure (normal exit).");
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -37,11 +37,11 @@
 #include "../base/hardware_files.h"
 #include "../base/hardware_radio.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 
 #include <pthread.h>
 #include "process_calib_file.h"
-#include "ruby_rx_commands.h"
+#include "Anhydrate_rx_commands.h"
 #include "shared_vars.h"
 #include "timers.h"
 
@@ -80,7 +80,7 @@ void _send_calib_file_segment_to_router(t_packet_header_command_upload_calib_fil
    u8 buffer[MAX_PACKET_TOTAL_SIZE];
    memcpy(buffer, (u8*)&PH, sizeof(t_packet_header));
    memcpy(&buffer[sizeof(t_packet_header)], pCalibFileSegment, sizeof(t_packet_header_command_upload_calib_file));
-   ruby_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
+   Anhydrate_ipc_channel_send_message(s_fIPCToRouter, buffer, PH.total_length);
 
    if ( NULL != g_pProcessStats )
       g_pProcessStats->lastIPCOutgoingTime = g_TimeNow;
@@ -170,11 +170,11 @@ bool process_calibration_file_segment(u32 command_param, u8* pBuffer, int length
    if ( pCalibFileData->is_last_segment )
    {
       char szComm[256];
-      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "mkdir -p %s", FOLDER_RUBY_TEMP);
+      snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "mkdir -p %s", FOLDER_Anhydrate_TEMP);
       hw_execute_bash_command(szComm, NULL);
 
       char szFileName[MAX_FILE_PATH_SIZE];
-      strcpy(szFileName, FOLDER_RUBY_TEMP);
+      strcpy(szFileName, FOLDER_Anhydrate_TEMP);
       strcat(szFileName, "c_");
       strcat(szFileName, pCalibFileData->szFileName);
       if ( NULL == strstr(szFileName, ".bin") )
@@ -207,3 +207,4 @@ bool process_calibration_file_segment(u32 command_param, u8* pBuffer, int length
    sendCommandReply(COMMAND_RESPONSE_FLAGS_OK, 0, 0);
    return true;
 }
+

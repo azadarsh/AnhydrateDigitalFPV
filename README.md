@@ -1,7 +1,7 @@
-# RubyFPV: Open Source Digital FPV Radio System
-Ruby is a full open source solution (hardware and software) for robust end to end digital radio links, designed specifically for controlling and managing UAVs/drones/planes/cars and other remote vehicles
+# AnhydrateDigitalFPV: Open Source Digital FPV Radio System
+Anhydrate is a full open source solution (hardware and software) for robust end to end digital radio links, designed specifically for controlling and managing UAVs/drones/planes/cars and other remote vehicles
 
-Read more about Ruby, including how to setup, install and use your Ruby systems, here: https://rubyfpv.com/
+Read more about Anhydrate, including how to setup, install and use your Anhydrate systems, here: https://AnhydrateDigitalFPV.com/
 
 
 # Features highlights:
@@ -23,27 +23,27 @@ Note: Encryption is temporarly disabled due to...[reasons]
 
 <B>Live video, audio, telemetry, remote control, auxiliary & custom data streams:</B>
 
-By default Ruby supports all the required data capabilities for UAVs (video, telemetry, control and user defined data streams).
+By default Anhydrate supports all the required data capabilities for UAVs (video, telemetry, control and user defined data streams).
 
 <B>Rich user interface/control interface;</B>
 
 <B>SDKs for third party development of new features:</B>
 
-There are public SDKs available so that 3rd parties can add custom functionalities and capabilities to Ruby system.
+There are public SDKs available so that 3rd parties can add custom functionalities and capabilities to Anhydrate system.
 
 
-You can read more about it and get the Ruby FPV system for free here: https://rubyfpv.com/
+You can read more about it and get the Anhydrate FPV system for free here: https://AnhydrateDigitalFPV.com/
 
 # Licences
 
-RubyFPV is open source, check LICENCE files for complete details.
+AnhydrateDigitalFPV is open source, check LICENCE files for complete details.
 
 Also, check the licences folder for additional licences terms related to the hardware components.
 
 # Building the code
 
 If you need help building this code, contact Petru Soroaga on this forum:
-https://www.rcgroups.com/forums/showthread.php?3880253-Ruby-Digital-radio-RC-FPV-system-%28v-7-2-core-SDKs%29
+https://www.rcgroups.com/forums/showthread.php?3880253-Anhydrate-Digital-radio-RC-FPV-system-%28v-7-2-core-SDKs%29
 
 or by sending an email to petrusoroaga@yahoo.com, providing a short explanation of what you are trying to accomplish.
 
@@ -60,4 +60,5 @@ To login using SSH to your hardware (for debuging purposes), use these credentia
 
 # Adding support for new hardware
 
-If you are a hardware manufacturer and you want to add support in Ruby for your device (be it a SBC, camera, radio module, etc), please contact us at the address above.
+If you are a hardware manufacturer and you want to add support in Anhydrate for your device (be it a SBC, camera, radio module, etc), please contact us at the address above.
+

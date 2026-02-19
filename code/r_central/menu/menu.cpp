@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -49,7 +49,7 @@
 #include "../popup_camera_params.h"
 #include "../shared_vars.h"
 #include "../timers.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 #include "../keyboard.h"
 #include "../process_router_messages.h"
 
@@ -344,7 +344,7 @@ void _menu_check_rotary_encoders_buttons( bool* pbSelect, bool* pbCancel, bool* 
    if ( (NULL == g_pControllerSettings) || (NULL == pCI) )
       return;
 
-   if ( (ruby_get_start_sequence_step() != START_SEQ_COMPLETED) && (ruby_get_start_sequence_step() != START_SEQ_FAILED) )
+   if ( (Anhydrate_get_start_sequence_step() != START_SEQ_COMPLETED) && (Anhydrate_get_start_sequence_step() != START_SEQ_FAILED) )
       return;
 
    if ( ! hardware_i2c_has_external_extenders_rotary_encoders() )
@@ -619,7 +619,7 @@ void menu_loop_parse_input_events()
          g_pMenuStack[g_iMenuStackTopIndex-1]->onSelectItem();
    }
 
-   //Quick Menu displayed at root after pressing either plus/minus
+   // Quick Menu displayed at root after pressing either plus/minus if no menu is on screen
    if (( 0 == g_iMenuStackTopIndex ) &&
       (( keyboard_get_triggered_input_events() & INPUT_EVENT_PRESS_PLUS ) ||  ( keyboard_get_triggered_input_events() & INPUT_EVENT_PRESS_MINUS )))
    {
@@ -627,8 +627,10 @@ void menu_loop_parse_input_events()
       load_Preferences();
       Preferences* pP = get_Preferences();
       if (pP->uEnabledQuickMenu != 0)
+      {
          add_menu_to_stack(new MenuQuickMenu());
-      return;
+         return;
+      }
    }
 
    if ( keyboard_get_triggered_input_events() & INPUT_EVENT_PRESS_BACK )
@@ -1017,3 +1019,4 @@ bool menu_has_animation_in_progress()
       return false;
    return true;
 }
+

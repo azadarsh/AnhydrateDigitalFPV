@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -422,3 +422,4 @@ u8* GenericRxECBuffers::getMarkFirstPacketToOutput(int* piLength, u32* puBlockIn
 
    return m_pBlocks[m_iBottomBufferIndexToOutput].pPackets[m_iBottomPacketIndexToOutput]->uPacketData;
 }
+

@@ -10,3 +10,4 @@ void local_stats_update_loop();
 
 bool load_temp_local_stats();
 void save_temp_local_stats();
+

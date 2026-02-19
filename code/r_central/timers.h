@@ -13,3 +13,4 @@ extern u32 g_TimeLastVideoTxOverloadAlarm;
 extern u32 g_TimeLastSentCurrentActiveOSDLayout;
 extern u32 g_uTimeLastRelaySettingsChanged;
 extern u32 g_uTimeLastRadioLinkOverloadAlarm;
+

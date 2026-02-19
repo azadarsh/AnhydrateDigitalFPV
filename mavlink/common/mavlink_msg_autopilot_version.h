@@ -481,3 +481,4 @@ static inline void mavlink_msg_autopilot_version_decode(const mavlink_message_t*
     memcpy(autopilot_version, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

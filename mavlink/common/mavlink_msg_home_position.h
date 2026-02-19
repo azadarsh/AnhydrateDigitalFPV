@@ -453,3 +453,4 @@ static inline void mavlink_msg_home_position_decode(const mavlink_message_t* msg
     memcpy(home_position, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

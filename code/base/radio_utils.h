@@ -16,3 +16,4 @@
 
 void test_link_state_get_state_string(int iState, char* szBuffer);
 void update_atheros_card_datarate(Model* pModel, int iInterfaceIndex, int iDataRateBPS, shared_mem_process_stats* pProcessStats);
+

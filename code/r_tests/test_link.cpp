@@ -63,7 +63,7 @@ void _send_data()
    g_uTotalPacketsSentLastSecond++;
    g_TimeNow = get_current_timestamp_ms();
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_VIDEO_DATA, STREAM_ID_VIDEO_1);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_VIDEO_DATA, STREAM_ID_VIDEO_1);
    PH.vehicle_id_src = g_uComponentID;
    PH.vehicle_id_dest = 0;
    PH.total_length = sizeof(t_packet_header) + g_iPacketSize*sizeof(u8);
@@ -103,7 +103,7 @@ void _send_ping()
    g_uLastPingIdSent++;
 
    t_packet_header PH;
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_PING_CLOCK, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_PING_CLOCK, STREAM_ID_DATA);
    PH.vehicle_id_src = g_uComponentID;
    PH.vehicle_id_dest = 0;
    PH.total_length = sizeof(t_packet_header) + 4*sizeof(u8);
@@ -136,14 +136,14 @@ void _process_rx_packet(u8* pPacketBuffer, int nLength, int iCount)
    //log_line("Received packet from CID %u, stream %u, %d bytes, type: %s",
    //   uStreamId, pPH->vehicle_id_src, pPH->total_length, str_get_packet_type(pPH->packet_type));
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK )
    if ( pPH->total_length >= sizeof(t_packet_header) + 4*sizeof(u8) )
    {
       u8 uPingId = 0;
       memcpy( &uPingId, pPacketBuffer + sizeof(t_packet_header), sizeof(u8));
       
       t_packet_header PH;
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_RUBY_PING_CLOCK_REPLY, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY, STREAM_ID_DATA);
       PH.vehicle_id_src = g_uComponentID;
       PH.vehicle_id_dest = 0;
       PH.total_length = sizeof(t_packet_header) + 3*sizeof(u8) + sizeof(u32);
@@ -166,7 +166,7 @@ void _process_rx_packet(u8* pPacketBuffer, int nLength, int iCount)
       return;
    }
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PING_CLOCK_REPLY )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY )
    if ( pPH->total_length >= sizeof(t_packet_header) + 3*sizeof(u8) + sizeof(u32) )
    {
       u8 uPingId = 0;
@@ -420,3 +420,4 @@ int main(int argc, char *argv[])
    radio_close_interface_for_write(0);
    return (0);
 }
+

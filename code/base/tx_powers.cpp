@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -49,7 +49,7 @@ static int s_iTxBoosterGainTable4W[][2] =
    {40, 1900},
    {50, 2200},
    {100, 4000}
-}; // measured 06 feb 2025, ruby 10.4, 5800 mhz, 18mb legacy datarates
+}; // measured 06 feb 2025, Anhydrate 10.4, 5800 mhz, 18mb legacy datarates
 
 
 static int s_iRawTxRadioValues[] = {1,5,10,15,20,23,26,30,35,40,45,50,53,56,60,63,65,68,70};
@@ -83,41 +83,41 @@ static int s_iTxInfo58Generic[] =
 static int s_iTxInfoAWUS036ACH[] =
    { 1,   2,   5,   20,   50,   90,  160,  250,  300,  420,  500,    0,    0};
 static int s_iTxInfoASUSUSB56[]  =
-   { 1,   4,  13,   42,   116, 190,  280,  360,  420,  490,  540,    0,    0}; // measured 08.dec.2024, ruby 10.1
+   { 1,   4,  13,   42,   116, 190,  280,  360,  420,  490,  540,    0,    0}; // measured 08.dec.2024, Anhydrate 10.1
 static int s_iTxInfoRTLDualAnt[] =
-   { 1,   1,   2,    7,   25,   40,   78,   95,  125,  175,  220,    0,    0}; // measured 14.feb.2025, ruby 10.4, 18mb datarate, 5700mhz
+   { 1,   1,   2,    7,   25,   40,   78,   95,  125,  175,  220,    0,    0}; // measured 14.feb.2025, Anhydrate 10.4, 18mb datarate, 5700mhz
 static int s_iTxInfoAli1W[]  =
    { 1,   1,   2,    5,   10,   20,   30,   50,  100,  300,  450,    0,    0};
 static int s_iTxInfoA6100[] =
-   { 1,   1,   3,   10,   17,   19,   22,   23,   25,    0,    0,    0,    0}; // measured 08.dec.2024, ruby 10.1
+   { 1,   1,   3,   10,   17,   19,   22,   23,   25,    0,    0,    0,    0}; // measured 08.dec.2024, Anhydrate 10.1
 static int s_iTxInfoAWUS036ACS[] =
    { 1,   1,   2,    3,   10,   25,   35,   50,   60,   90,  110,    0,    0};
 static int s_iTxInfoArcherT2UP[] =
-   { 1,   2,   7,   25,   65,  100,  135,  150,  170,  190,    0,    0,    0}; // measured 05.feb.2025, ruby 10.3, 5800mhz, 18mb legacy rates
+   { 1,   2,   7,   25,   65,  100,  135,  150,  170,  190,    0,    0,    0}; // measured 05.feb.2025, Anhydrate 10.3, 5800mhz, 18mb legacy rates
 static int s_iTxInfoArcherRTL8812AU_AF1[] =
    { 1,   2,   5,   15,   40,   70,   95,  110,  130,  150,    0,    0,    0}; // measured 16.jan.2025
 
 // { 1,  10,  20,   30,   40,   45,   50,   53,   56,   60,   63,   68,   70};
 //------------------------------------------------------------------------
 static int s_iTxInfoRTL8812EU[] =
-   { 6,   7,  15,   45,  110,  160,  230,  270,  320,  380,  430,  500,  550}; // measured 08.dec.2024, ruby 10.1
+   { 6,   7,  15,   45,  110,  160,  230,  270,  320,  380,  430,  500,  550}; // measured 08.dec.2024, Anhydrate 10.1
 
 static int s_iTxInfoRTL8812EURunCamV2[] =
-   {9,    9,  12,   15,   40,   65,  100,  120,  150,  200,  230,  300,  320}; // measured 21.mar.2025, ruby 10.8, 5700mhz, 18mb legacy rates, power/freq factor: 5805/5700: 72/130
-//   {8,    8,  10,   15,   45,   50,   70,   90,  120,  150,  180,  250,  270}; // measured 21.mar.2025, ruby 10.8, 5805mhz, 18mb legacy rates, power/freq factor: 5805/5700: 72/130
+   {9,    9,  12,   15,   40,   65,  100,  120,  150,  200,  230,  300,  320}; // measured 21.mar.2025, Anhydrate 10.8, 5700mhz, 18mb legacy rates, power/freq factor: 5805/5700: 72/130
+//   {8,    8,  10,   15,   45,   50,   70,   90,  120,  150,  180,  250,  270}; // measured 21.mar.2025, Anhydrate 10.8, 5805mhz, 18mb legacy rates, power/freq factor: 5805/5700: 72/130
 
 static int s_iTxInfoRTL8733BU[] =
-   { 1,   1,   1,    4,    8,    12,  20,   22,   30,   60,    0,    0,    0}; // measured 20.jan.2025, ruby 10.3
+   { 1,   1,   1,    4,    8,    12,  20,   22,   30,   60,    0,    0,    0}; // measured 20.jan.2025, Anhydrate 10.3
    
 static int s_iTxInfoRTL8812AUBonnetLow[] =
-   { 1,   1,   2,    8,   20,   25,   35,   40,   45,    0,    0,    0,    0}; // measured 20.jan.2025, Ruby 11.2, Legacy 18Mb/MCS2 on 5700 Mhz
+   { 1,   1,   2,    8,   20,   25,   35,   40,   45,    0,    0,    0,    0}; // measured 20.jan.2025, Anhydrate 11.2, Legacy 18Mb/MCS2 on 5700 Mhz
 static int s_iTxInfoRTL8812AUBonnetHigh[] =
-   { 1,   1,   3,    8,   20,   35,   55,   70,   90,  120,   150,   0,    0}; // measured 28.aug.2025, Ruby 11.2, Legacy 18Mb/MCS2 on 5700 Mhz
+   { 1,   1,   3,    8,   20,   35,   55,   70,   90,  120,   150,   0,    0}; // measured 28.aug.2025, Anhydrate 11.2, Legacy 18Mb/MCS2 on 5700 Mhz
 
 // { 1,  10,  20,   30,   40,   45,   50,   53,   56,   60,   63,   68,   70};
 //------------------------------------------------------------------------
 static int s_iTxInfoOIPCUSight[] = 
- { 550, 600, 650,  670,  0,  0,  0,  0,  0,  0,  0,  0,  0}; // measured 23.dec.2024, ruby 10.3
+ { 550, 600, 650,  670,  0,  0,  0,  0,  0,  0,  0,  0,  0}; // measured 23.dec.2024, Anhydrate 10.3
 
 
 
@@ -382,4 +382,5 @@ int get_vehicle_radio_link_current_tx_power_mw(Model* pModel, int iRadioLinkInde
 
    return iMaxCardPowerMw;
 }
+
 

@@ -293,3 +293,4 @@ void fbg_dispmanxFree(struct _fbg *fbg) {
     }
 #endif
 }
+

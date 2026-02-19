@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1165,7 +1165,7 @@ void MenuVehicleCamera::importCalibrationFiles()
       addMessage(L("No USB memory stick detected. Please insert a USB stick."));
       return;
    }
-   ruby_pause_watchdog("import calibration files from USB stick");
+   Anhydrate_pause_watchdog("import calibration files from USB stick");
 
    DIR *d;
    struct dirent *dir;
@@ -1176,7 +1176,7 @@ void MenuVehicleCamera::importCalibrationFiles()
    if ( ! d )
    {
       hardware_unmount_usb();
-      ruby_resume_watchdog("failed import calibration files");
+      Anhydrate_resume_watchdog("failed import calibration files");
       addMessage(L("Failed to quiery the USB memory stick."));
       return;
    }
@@ -1203,7 +1203,7 @@ void MenuVehicleCamera::importCalibrationFiles()
    closedir(d);
 
    hardware_unmount_usb();
-   ruby_resume_watchdog("finished import calibration files");
+   Anhydrate_resume_watchdog("finished import calibration files");
    onShow();
    char szText[256];
    if ( 0 == iCountFound )
@@ -1282,7 +1282,7 @@ void MenuVehicleCamera::uploadCalibrationFile(int iType, const char* szCalibrati
    p->addLine("0%");
    popups_add_topmost(p);
 
-   ruby_pause_watchdog("upload calibration files");
+   Anhydrate_pause_watchdog("upload calibration files");
    g_bUpdateInProgress = true;
    send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_UPDATE_STARTED,0);
 
@@ -1314,7 +1314,7 @@ void MenuVehicleCamera::uploadCalibrationFile(int iType, const char* szCalibrati
 
       g_TimeNow = get_current_timestamp_ms();
       g_TimeNowMicros = get_current_timestamp_micros();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
 
       calib_segment_data.segment_index = iSegment;
       calib_segment_data.segment_offset = iSegmentOffset;
@@ -1341,8 +1341,8 @@ void MenuVehicleCamera::uploadCalibrationFile(int iType, const char* szCalibrati
       {
          g_TimeNow = get_current_timestamp_ms();
          g_TimeNowMicros = get_current_timestamp_micros();
-         ruby_signal_alive();
-         ruby_processing_loop(true);
+         Anhydrate_signal_alive();
+         Anhydrate_processing_loop(true);
          if ( g_TimeNow > (uTimeLastRender+100) )
          {
             p->removeAllLines();
@@ -1368,7 +1368,7 @@ void MenuVehicleCamera::uploadCalibrationFile(int iType, const char* szCalibrati
    fclose(fp);
    popups_remove(p);
    send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_UPDATE_STOPED,0);
-   ruby_resume_watchdog("finished upload calibration files");
+   Anhydrate_resume_watchdog("finished upload calibration files");
    g_bUpdateInProgress = false;
    addMessage(L("Camera calibration file was uploaded and applied."));
    valuesToUI();
@@ -1479,7 +1479,7 @@ void MenuVehicleCamera::onReturnFromChild(int iChildMenuId, int returnValue)
       {
          snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s%s.bin %s%s.bin",
              FOLDER_CALIBRATION_FILES, g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName,
-             FOLDER_RUBY_TEMP, g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName);
+             FOLDER_Anhydrate_TEMP, g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName);
          hw_execute_bash_command(szComm, NULL);
       }
 
@@ -1489,7 +1489,7 @@ void MenuVehicleCamera::onReturnFromChild(int iChildMenuId, int returnValue)
       if ( g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName[0] != 0 )
       {
          snprintf(szComm, sizeof(szComm)/sizeof(szComm[0]), "cp -rf %s%s.bin %s%s.bin",
-             FOLDER_RUBY_TEMP, g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName,
+             FOLDER_Anhydrate_TEMP, g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName,
              FOLDER_CALIBRATION_FILES, g_pCurrentModel->camera_params[g_pCurrentModel->iCurrentCamera].szCameraBinProfileName);
          hw_execute_bash_command(szComm, NULL);
       }

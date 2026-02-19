@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -78,7 +78,7 @@ static u32 s_uOSDSnapshotCount = 0;
 static u32 s_uOSDSnapshotLastDiscardedBuffers = 0;
 static u32 s_uOSDSnapshotLastDiscardedSegments = 0;
 static u32 s_uOSDSnapshotLastDiscardedPackets = 0;
-static t_packet_header_ruby_telemetry_extended_extra_info_retransmissions s_Snapshot_PHRTE_Retransmissions;
+static t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions s_Snapshot_PHRTE_Retransmissions;
 
 static u32 s_uOSDSnapshotHistoryDiscardedBuffers[SNAPSHOT_HISTORY_SIZE];
 static u32 s_uOSDSnapshotHistoryDiscardedSegments[SNAPSHOT_HISTORY_SIZE];
@@ -468,7 +468,7 @@ void osd_stats_video_decode_snapshot_update(int iDeveloperMode, shared_mem_radio
          memcpy( &s_OSDSnapshot_RadioStats, pSM_RadioStats, sizeof(shared_mem_radio_stats));
          memcpy( &s_OSDSnapshot_VideoDecodeStats, pSM_VideoStats, sizeof(shared_mem_video_stream_stats_rx_processors));
          memcpy( &s_OSDSnapshot_VideoDecodeHist, pSM_VideoHistoryStats, sizeof(shared_mem_video_stream_stats_history_rx_processors));
-         memcpy( &s_Snapshot_PHRTE_Retransmissions, &(g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfoRetransmissions), sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+         memcpy( &s_Snapshot_PHRTE_Retransmissions, &(g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfoRetransmissions), sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
       }
    }
    */
@@ -629,7 +629,7 @@ float osd_render_stats_video_decode(float xPos, float yPos, int iDeveloperMode, 
       }
    }
 
-   float fReceivedVideoMbps = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_video_bitrate_bps/1000.0/1000.0;
+   float fReceivedVideoMbps = g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_video_bitrate_bps/1000.0/1000.0;
 
    s_iPeakCountRender++;
    float height_text = g_pRenderEngine->textHeight(s_idFontStats);
@@ -1499,8 +1499,8 @@ float osd_render_stats_video_decode(float xPos, float yPos, int iDeveloperMode, 
       int percent = 0;
       if ( pCRS->totalRequestedRetransmissions > 0 )
          percent = pCRS->totalReceivedRetransmissions*100/pCRS->totalRequestedRetransmissions;
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryExtraInfoRetransmissions )
-         sprintf(szBuff, "%u / %u / %u %d%%", pCRS->totalRequestedRetransmissions, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfoRetransmissions.totalReceivedRetransmissionsRequestsUnique, pCRS->totalReceivedRetransmissions, percent);
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryExtraInfoRetransmissions )
+         sprintf(szBuff, "%u / %u / %u %d%%", pCRS->totalRequestedRetransmissions, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfoRetransmissions.totalReceivedRetransmissionsRequestsUnique, pCRS->totalReceivedRetransmissions, percent);
       else
          sprintf(szBuff, "%u / N/A / %u %d%%", pCRS->totalRequestedRetransmissions, pCRS->totalReceivedRetransmissions, percent);
 
@@ -1512,8 +1512,8 @@ float osd_render_stats_video_decode(float xPos, float yPos, int iDeveloperMode, 
       percent = 0;
       if ( pCRS->totalRequestedRetransmissionsLast500Ms > 0 )
          percent = pCRS->totalReceivedRetransmissionsLast500Ms*100/pCRS->totalRequestedRetransmissionsLast500Ms;
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryExtraInfoRetransmissions )
-         sprintf(szBuff, "%u / %u / %u %d%%", pCRS->totalRequestedRetransmissionsLast500Ms, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfoRetransmissions.totalReceivedRetransmissionsRequestsUniqueLast5Sec, pCRS->totalReceivedRetransmissionsLast500Ms, percent);
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryExtraInfoRetransmissions )
+         sprintf(szBuff, "%u / %u / %u %d%%", pCRS->totalRequestedRetransmissionsLast500Ms, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfoRetransmissions.totalReceivedRetransmissionsRequestsUniqueLast5Sec, pCRS->totalReceivedRetransmissionsLast500Ms, percent);
       else
          sprintf(szBuff, "%u / N/A / %u %d%%", pCRS->totalRequestedRetransmissionsLast500Ms, pCRS->totalReceivedRetransmissionsLast500Ms, percent);
       g_pRenderEngine->drawTextLeft(rightMargin, y, s_idFontStats, szBuff);
@@ -1525,8 +1525,8 @@ float osd_render_stats_video_decode(float xPos, float yPos, int iDeveloperMode, 
       if ( 0 != pCRS->totalRequestedVideoPackets )
          percent = pCRS->totalReceivedVideoPackets*100/pCRS->totalRequestedVideoPackets;
 
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryExtraInfoRetransmissions )
-         sprintf(szBuff, "%u / %u / %u %d%%", pCRS->totalRequestedVideoPackets, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtraInfoRetransmissions.totalReceivedRetransmissionsRequestsSegmentsUnique, pCRS->totalReceivedVideoPackets, percent );
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryExtraInfoRetransmissions )
+         sprintf(szBuff, "%u / %u / %u %d%%", pCRS->totalRequestedVideoPackets, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtraInfoRetransmissions.totalReceivedRetransmissionsRequestsSegmentsUnique, pCRS->totalReceivedVideoPackets, percent );
       else
          sprintf(szBuff, "%u / N/A / %u %d%%", pCRS->totalRequestedVideoPackets, pCRS->totalReceivedVideoPackets, percent );
       g_pRenderEngine->drawTextLeft(rightMargin, y, s_idFontStats, szBuff);
@@ -1698,12 +1698,12 @@ float osd_render_stats_telemetry(float xPos, float yPos, float scale)
    if ( NULL != g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].pModel && g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].pModel->telemetry_params.iUpdateRateHz > 10 )
       uMaxLostTime = TIMEOUT_TELEMETRY_LOST/2;
    
-   static u32 s_uTimeOSDRubyTelemetryLostShowRedUntill = 0;
-   static u32 s_uTimeOSDRubyTelemetryLostRedValue = 0;
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bRubyTelemetryLost )
+   static u32 s_uTimeOSDAnhydrateTelemetryLostShowRedUntill = 0;
+   static u32 s_uTimeOSDAnhydrateTelemetryLostRedValue = 0;
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bAnhydrateTelemetryLost )
    {
-      s_uTimeOSDRubyTelemetryLostShowRedUntill = g_TimeNow+2000;
-      s_uTimeOSDRubyTelemetryLostRedValue = g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvRubyTelemetry;
+      s_uTimeOSDAnhydrateTelemetryLostShowRedUntill = g_TimeNow+2000;
+      s_uTimeOSDAnhydrateTelemetryLostRedValue = g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnhydrateTelemetry;
    }
 
    static u32 s_uTimeOSDFCTelemetryLostShowRedUntill = 0;
@@ -1720,49 +1720,49 @@ float osd_render_stats_telemetry(float xPos, float yPos, float scale)
    y += height_text*s_OSDStatsLineSpacing;
 
    /*
-   g_pRenderEngine->drawText(xPos, y, height_text, s_idFontStats, "Last Ruby telemetry:");
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-      sprintf(szBuff, "%u ms ago", g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvRubyTelemetry);
+   g_pRenderEngine->drawText(xPos, y, height_text, s_idFontStats, "Last Anhydrate telemetry:");
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+      sprintf(szBuff, "%u ms ago", g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnhydrateTelemetry);
    else
       strcpy(szBuff, "Never");
-   if ( g_TimeNow < s_uTimeOSDRubyTelemetryLostShowRedUntill )
+   if ( g_TimeNow < s_uTimeOSDAnhydrateTelemetryLostShowRedUntill )
    {
-      sprintf(szBuff, "%u ms ago", s_uTimeOSDRubyTelemetryLostRedValue);
+      sprintf(szBuff, "%u ms ago", s_uTimeOSDAnhydrateTelemetryLostRedValue);
       g_pRenderEngine->setColors(get_Color_IconError());
    }
    g_pRenderEngine->drawTextLeft( rightMargin, y, s_idFontStats, szBuff);
-   if ( g_TimeNow < s_uTimeOSDRubyTelemetryLostShowRedUntill )
+   if ( g_TimeNow < s_uTimeOSDAnhydrateTelemetryLostShowRedUntill )
       osd_set_colors();
       
    y += height_text*s_OSDStatsLineSpacing;
    */
 
-   g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Last Ruby telem (full):");
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-      sprintf(szBuff, "%u ms ago", g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvRubyTelemetryExtended);
+   g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Last Anhydrate telem (full):");
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+      sprintf(szBuff, "%u ms ago", g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnhydrateTelemetryExtended);
    else
       strcpy(szBuff, "Never");
-   if ( g_TimeNow < s_uTimeOSDRubyTelemetryLostShowRedUntill )
+   if ( g_TimeNow < s_uTimeOSDAnhydrateTelemetryLostShowRedUntill )
    {
-      sprintf(szBuff, "%u ms ago", s_uTimeOSDRubyTelemetryLostRedValue);
+      sprintf(szBuff, "%u ms ago", s_uTimeOSDAnhydrateTelemetryLostRedValue);
       g_pRenderEngine->setColors(get_Color_IconError());
    }
    g_pRenderEngine->drawTextLeft( rightMargin, y, s_idFontStats, szBuff);
    y += height_text*s_OSDStatsLineSpacing;
 
-   g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Last Ruby telem (short):");
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfoShort )
+   g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Last Anhydrate telem (short):");
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfoShort )
    {
-      if ( g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvRubyTelemetryShort >= 1000 )
-         sprintf(szBuff, "%u sec ago", (g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvRubyTelemetryShort)/1000);
+      if ( g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnhydrateTelemetryShort >= 1000 )
+         sprintf(szBuff, "%u sec ago", (g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnhydrateTelemetryShort)/1000);
       else
-         sprintf(szBuff, "%u ms ago", g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvRubyTelemetryShort);
+         sprintf(szBuff, "%u ms ago", g_TimeNow - g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].uTimeLastRecvAnhydrateTelemetryShort);
    }
    else
       strcpy(szBuff, "Never");
-   if ( g_TimeNow < s_uTimeOSDRubyTelemetryLostShowRedUntill )
+   if ( g_TimeNow < s_uTimeOSDAnhydrateTelemetryLostShowRedUntill )
    {
-      sprintf(szBuff, "%u ms ago", s_uTimeOSDRubyTelemetryLostRedValue);
+      sprintf(szBuff, "%u ms ago", s_uTimeOSDAnhydrateTelemetryLostRedValue);
       g_pRenderEngine->setColors(get_Color_IconError());
    }
    g_pRenderEngine->drawTextLeft( rightMargin, y, s_idFontStats, szBuff);
@@ -1781,7 +1781,7 @@ float osd_render_stats_telemetry(float xPos, float yPos, float scale)
    }
    
    g_pRenderEngine->drawTextLeft( rightMargin, y, height_text, s_idFontStats, szBuff);   
-   if ( g_TimeNow < s_uTimeOSDRubyTelemetryLostShowRedUntill )
+   if ( g_TimeNow < s_uTimeOSDAnhydrateTelemetryLostShowRedUntill )
       osd_set_colors();
    
    y += height_text*s_OSDStatsLineSpacing;
@@ -1819,9 +1819,9 @@ float osd_render_stats_telemetry(float xPos, float yPos, float scale)
    g_pRenderEngine->drawTextLeft( rightMargin, y, s_idFontStats, szBuff);   
    y += height_text*s_OSDStatsLineSpacing;
 
-   g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Ruby Freq (full/short):");
-   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-      sprintf(szBuff, "%d/%d Hz", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].iFrequencyRubyTelemetryFull, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].iFrequencyRubyTelemetryShort);
+   g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Anhydrate Freq (full/short):");
+   if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+      sprintf(szBuff, "%d/%d Hz", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].iFrequencyAnhydrateTelemetryFull, g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].iFrequencyAnhydrateTelemetryShort);
    else
       strcpy(szBuff, "N/A");
    g_pRenderEngine->drawTextLeft( rightMargin, y, s_idFontStats, szBuff);   
@@ -2145,7 +2145,7 @@ float osd_render_stats_rc(float xPos, float yPos, float scale)
    float y = yPos + height_text*1.5*s_OSDStatsLineSpacing;
 
    g_pRenderEngine->drawText(xPos, y, s_idFontStats, "Active Link:");
-   strcpy(szBuff, "Ruby RC");
+   strcpy(szBuff, "Anhydrate RC");
    if ( ! osd_get_current_data_source_vehicle_model()->rc_params.rc_enabled )
       strcpy(szBuff, "External");
    if ( NULL != osd_get_current_data_source_vehicle_model() && ((osd_get_current_data_source_vehicle_model()->rc_params.flags & RC_FLAGS_OUTPUT_ENABLED) == 0 ) )
@@ -2154,7 +2154,7 @@ float osd_render_stats_rc(float xPos, float yPos, float scale)
    g_pRenderEngine->drawTextLeft( rightMargin, y, s_idFontStats, szBuff);
    y += height_text*s_OSDStatsLineSpacing + height_text*0.2;
 
-   if ( NULL == osd_get_current_data_source_vehicle_model() || (! g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo) )
+   if ( NULL == osd_get_current_data_source_vehicle_model() || (! g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo) )
    {
       g_pRenderEngine->drawText(xPos, y, s_idFontStats, "No info from vehicle"); 
       return height + 0.012;
@@ -4566,3 +4566,4 @@ void osd_render_stats_panels()
 
    g_pRenderEngine->setAlphaBlendingEnabled(bAlphaEnabled);
 }
+

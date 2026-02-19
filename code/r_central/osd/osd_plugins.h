@@ -61,3 +61,4 @@ int osd_plugin_get_setting_maxvalue(int index, int sub_index);
 int osd_plugin_get_setting_defaultvalue(int index, int sub_index);
 int osd_plugin_get_setting_options_count(int index, int sub_index);
 char* osd_plugin_get_setting_option_name(int index, int sub_index, int option_index);
+

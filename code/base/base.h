@@ -29,9 +29,9 @@ typedef u32 __le32;
 #define LOGGER_MESSAGE_QUEUE_ID 123
 #define SM_STREAMER_SIZE 512000
 #define SM_STREAMER_NAME "/SSMRVideo"
-#define RUBY_HW_CLOCK_ID CLOCK_MONOTONIC
+#define Anhydrate_HW_CLOCK_ID CLOCK_MONOTONIC
 
-#define SYSTEM_NAME "Ruby"
+#define SYSTEM_NAME "Anhydrate"
 // dword[3...0]: BB.BB.MM.mm  (BB.BB: build number (highest bytes), MM: major ver, mm: minor ver (lowest byte)) 
 #define SYSTEM_SW_VERSION_MAJOR 11
 #define SYSTEM_SW_VERSION_MINOR 7
@@ -143,3 +143,4 @@ int is_semaphore_signaled_clear_logok(sem_t* pSemaphore, const char* szSemName, 
 #ifdef __cplusplus
 }  
 #endif 
+

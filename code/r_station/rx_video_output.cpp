@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -56,7 +56,7 @@
 #include "../base/radio_utils.h"
 #include "../base/hardware.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/parser_h264.h"
 #include "../base/camera_utils.h"
 #include "../common/string_utils.h"
@@ -68,7 +68,7 @@
 #include "rx_video_recording.h"
 #include "packets_utils.h"
 #include "timers.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "adaptive_video.h"
 
 
@@ -252,7 +252,7 @@ void rx_video_output_start_video_streamer()
    #endif
 
    log_line("[VideoOutput] Executing video streamer command: %s %s %s &", szStreamerPrefixes, s_szOutputVideoStreamerFilename, szStreamerParams);
-   hw_execute_ruby_process_wait(szStreamerPrefixes, s_szOutputVideoStreamerFilename, szStreamerParams, NULL, 0);
+   hw_execute_Anhydrate_process_wait(szStreamerPrefixes, s_szOutputVideoStreamerFilename, szStreamerParams, NULL, 0);
    log_line("[VideoOutput] Executed video streamer command.");
 
    char szPIDs[128];
@@ -453,20 +453,20 @@ void _processor_rx_video_forward_open_eth_pipe()
    log_line("[VideoOutput] Creating ETH pipes for video forward...");
    char szComm[1024];
    #ifdef HW_CAPABILITY_IONICE
-   sprintf(szComm, "ionice -c 1 -n 4 nice -n -5 cat %s | nice -n -5 gst-launch-1.0 fdsrc ! h264parse ! rtph264pay pt=96 config-interval=3 ! udpsink port=%d host=127.0.0.1 > /dev/null 2>&1 &", FIFO_RUBY_STATION_VIDEO_STREAM_ETH, g_pControllerSettings->nVideoForwardETHPort);
+   sprintf(szComm, "ionice -c 1 -n 4 nice -n -5 cat %s | nice -n -5 gst-launch-1.0 fdsrc ! h264parse ! rtph264pay pt=96 config-interval=3 ! udpsink port=%d host=127.0.0.1 > /dev/null 2>&1 &", FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH, g_pControllerSettings->nVideoForwardETHPort);
    #else
-   sprintf(szComm, "nice -n -5 cat %s | nice -n -5 gst-launch-1.0 fdsrc ! h264parse ! rtph264pay pt=96 config-interval=3 ! udpsink port=%d host=127.0.0.1 > /dev/null 2>&1 &", FIFO_RUBY_STATION_VIDEO_STREAM_ETH, g_pControllerSettings->nVideoForwardETHPort);
+   sprintf(szComm, "nice -n -5 cat %s | nice -n -5 gst-launch-1.0 fdsrc ! h264parse ! rtph264pay pt=96 config-interval=3 ! udpsink port=%d host=127.0.0.1 > /dev/null 2>&1 &", FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH, g_pControllerSettings->nVideoForwardETHPort);
    #endif
    hw_execute_bash_command(szComm, NULL);
 
-   log_line("[VideoOutput] Opening video output pipe write endpoint for ETH forward RTS: %s", FIFO_RUBY_STATION_VIDEO_STREAM_ETH);
-   s_VideoETHOutputInfo.s_ForwardETHVideoPipeFile = open(FIFO_RUBY_STATION_VIDEO_STREAM_ETH, O_WRONLY);
+   log_line("[VideoOutput] Opening video output pipe write endpoint for ETH forward RTS: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH);
+   s_VideoETHOutputInfo.s_ForwardETHVideoPipeFile = open(FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH, O_WRONLY);
    if ( s_VideoETHOutputInfo.s_ForwardETHVideoPipeFile < 0 )
    {
-      log_error_and_alarm("[VideoOutput] Failed to open video output pipe write endpoint for ETH forward RTS: %s",FIFO_RUBY_STATION_VIDEO_STREAM_ETH);
+      log_error_and_alarm("[VideoOutput] Failed to open video output pipe write endpoint for ETH forward RTS: %s",FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH);
       return;
    }
-   log_line("[VideoOutput] Opened video output pipe write endpoint for ETH forward RTS: %s", FIFO_RUBY_STATION_VIDEO_STREAM_ETH);
+   log_line("[VideoOutput] Opened video output pipe write endpoint for ETH forward RTS: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH);
    log_line("[VideoOutput] Video output pipe to ETH flags: %s", str_get_pipe_flags(fcntl(s_VideoETHOutputInfo.s_ForwardETHVideoPipeFile, F_GETFL)));
    s_VideoETHOutputInfo.s_bForwardETHPipeEnabled = true;
 }
@@ -512,7 +512,7 @@ void _processor_rx_video_forward_create_eth_socket()
 
 void _rx_video_output_open_pipe_to_streamer()
 {
-   log_line("[VideoOutput] Opening video output pipe to streamer write endpoint: %s", FIFO_RUBY_STATION_VIDEO_STREAM_DISPLAY);
+   log_line("[VideoOutput] Opening video output pipe to streamer write endpoint: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY);
 
    _rx_video_output_check_start_streamer();
 
@@ -534,24 +534,24 @@ void _rx_video_output_open_pipe_to_streamer()
    while ( iRetries > 0 )
    {
       iRetries--;
-      //s_fPipeVideoOutToStreamer = open(FIFO_RUBY_STATION_VIDEO_STREAM_DISPLAY, O_CREAT | O_WRONLY | O_NONBLOCK);
-      s_fPipeVideoOutToStreamer = open(FIFO_RUBY_STATION_VIDEO_STREAM_DISPLAY, O_CREAT | O_WRONLY);
+      //s_fPipeVideoOutToStreamer = open(FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY, O_CREAT | O_WRONLY | O_NONBLOCK);
+      s_fPipeVideoOutToStreamer = open(FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY, O_CREAT | O_WRONLY);
       if ( s_fPipeVideoOutToStreamer < 0 )
       {
          log_error_and_alarm("[VideoOutput] Failed to open video output pipe to streamer write endpoint: %s, error code (%d): [%s]",
-            FIFO_RUBY_STATION_VIDEO_STREAM_DISPLAY, errno, strerror(errno));
+            FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY, errno, strerror(errno));
          if ( iRetries == 0 )
             return;
          else
             hardware_sleep_ms(10);
       }
    }
-   log_line("[VideoOutput] Opened video output pipe to streamer write endpoint: %s", FIFO_RUBY_STATION_VIDEO_STREAM_DISPLAY);
+   log_line("[VideoOutput] Opened video output pipe to streamer write endpoint: %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY);
    log_line("[VideoOutput] Video output pipe to streamer flags: %s", str_get_pipe_flags(fcntl(s_fPipeVideoOutToStreamer, F_GETFL)));
 
-   //if ( RUBY_PIPES_EXTRA_FLAGS & O_NONBLOCK )
+   //if ( Anhydrate_PIPES_EXTRA_FLAGS & O_NONBLOCK )
    //if ( 0 != fcntl(s_fPipeVideoOutToStreamer, F_SETFL, O_NONBLOCK) )
-   //   log_softerror_and_alarm("[IPC] Failed to set nonblock flag on PIC channel %s write endpoint.", FIFO_RUBY_STATION_VIDEO_STREAM_DISPLAY);
+   //   log_softerror_and_alarm("[IPC] Failed to set nonblock flag on PIC channel %s write endpoint.", FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY);
    //log_line("[VideoOutput] Video streamer FIFO write endpoint pipe new flags: %s", str_get_pipe_flags(fcntl(s_fPipeVideoOutToStreamer, F_GETFL)));
   
    log_line("[VideoOutput] Video streamer pipe FIFO default size: %d bytes", fcntl(s_fPipeVideoOutToStreamer, F_GETPIPE_SZ));
@@ -1444,7 +1444,7 @@ void rx_video_output_periodic_loop()
       if ( g_TimeNow > s_VideoUSBOutputInfo.TimeLastVideoUSBTetheringCheck + 1000 )
       {
          char szFile[128];
-         strcpy(szFile, FOLDER_RUBY_TEMP);
+         strcpy(szFile, FOLDER_Anhydrate_TEMP);
          strcat(szFile, FILE_TEMP_USB_TETHERING_DEVICE);
          s_VideoUSBOutputInfo.TimeLastVideoUSBTetheringCheck = g_TimeNow;
          if ( ! s_VideoUSBOutputInfo.bVideoUSBTethering )
@@ -1505,3 +1505,4 @@ void rx_video_output_periodic_loop()
       }
    }
 }
+

@@ -353,3 +353,4 @@ static inline void mavlink_msg_attitude_target_decode(const mavlink_message_t* m
     memcpy(attitude_target, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

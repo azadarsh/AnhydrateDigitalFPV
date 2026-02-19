@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -58,3 +58,4 @@ u16 packet_header_rc_full_get_rc_channel_value(t_packet_header_rc_full_frame_ups
    else
       return ((pphrc->ch_lowBits[ch]) | (((pphrc->ch_highBits[ch>>1]) & 0x0F)<<8));
 }
+

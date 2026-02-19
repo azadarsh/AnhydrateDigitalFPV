@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -38,7 +38,7 @@
 #include "shared_vars.h"
 #include "timers.h"
 #include "video_sources.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 
 int _try_process_live_changes(int iNewCameraIndex, type_camera_parameters* pNewCamParams, int iCurrentCameraIndex, type_camera_parameters* pCurrentCamParams)
 {

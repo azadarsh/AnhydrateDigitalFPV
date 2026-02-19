@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -75,3 +75,4 @@ u32 vehicle_utils_getControllerId()
    log_line("No current controller id stored on file.");
    return 0;
 }
+

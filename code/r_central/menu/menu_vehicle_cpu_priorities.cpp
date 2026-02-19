@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -66,7 +66,7 @@ MenuVehicleCPUPriorities::MenuVehicleCPUPriorities(void)
    if ( g_pCurrentModel->isRunningOnOpenIPCHardware() )
    if ( hardware_board_is_sigmastar(g_pCurrentModel->hwCapabilities.uBoardType) )
    {
-      m_pItemsSelect[3] = new MenuItemSelect(L("Balance CPU Cores"), L("Tries to balance the load on the CPU cores for video capture and Ruby processes."));
+      m_pItemsSelect[3] = new MenuItemSelect(L("Balance CPU Cores"), L("Tries to balance the load on the CPU cores for video capture and Anhydrate processes."));
       m_pItemsSelect[3]->addSelection(L("No"));
       m_pItemsSelect[3]->addSelection(L("Yes"));
       m_pItemsSelect[3]->setIsEditable();
@@ -91,32 +91,32 @@ MenuVehicleCPUPriorities::MenuVehicleCPUPriorities(void)
    m_pItemsSelect[2]->setIsEditable();
    m_iIndexPrioritiesAdjustment = addMenuItem(m_pItemsSelect[2]);
 
-   m_pItemsSlider[0] = new MenuItemSlider("Core Priority",  "Sets the priority for the Ruby core functionality. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[0] = new MenuItemSlider("Core Priority",  "Sets the priority for the Anhydrate core functionality. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityRouter = addMenuItem(m_pItemsSlider[0]);
 
-   m_pItemsSlider[10] = new MenuItemSlider("Core I/O Priority", "Sets the I/O priority value for the core Ruby components, 1 is highest priority, 7 is lowest priority. Zero means disabled.", 0,7,4, fSliderWidth);
+   m_pItemsSlider[10] = new MenuItemSlider("Core I/O Priority", "Sets the I/O priority value for the core Anhydrate components, 1 is highest priority, 7 is lowest priority. Zero means disabled.", 0,7,4, fSliderWidth);
    m_iIndexIONiceRouter = addMenuItem(m_pItemsSlider[10]);
 
 
-   m_pItemsSlider[1] = new MenuItemSlider("Rx Priority", "Sets the priority for the Ruby radio Rx threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[1] = new MenuItemSlider("Rx Priority", "Sets the priority for the Anhydrate radio Rx threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityRadioRx = addMenuItem(m_pItemsSlider[1]);
 
-   m_pItemsSlider[2] = new MenuItemSlider("Tx Priority", "Sets the priority for the Ruby radio Tx threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[2] = new MenuItemSlider("Tx Priority", "Sets the priority for the Anhydrate radio Tx threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityRadioTx = addMenuItem(m_pItemsSlider[2]);
 
-   m_pItemsSlider[3] = new MenuItemSlider("Video", "Sets the priority for the Ruby video threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[3] = new MenuItemSlider("Video", "Sets the priority for the Anhydrate video threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityVideo = addMenuItem(m_pItemsSlider[3]);
 
    m_pItemsSlider[11] = new MenuItemSlider("Video I/O Priority", "Sets the I/O priority value for RX video pipeline, 1 is highest priority, 7 is lowest priority. Zero means disabled.", 0,7,4, fSliderWidth);
    m_iIndexIONiceVideo = addMenuItem(m_pItemsSlider[11]);
 
-   m_pItemsSlider[4] = new MenuItemSlider("Telemetry", "Sets the priority for the Ruby telemetry threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[4] = new MenuItemSlider("Telemetry", "Sets the priority for the Anhydrate telemetry threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityTelemetry = addMenuItem(m_pItemsSlider[4]);
 
-   m_pItemsSlider[5] = new MenuItemSlider("RC", "Sets the priority for the Ruby RC threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[5] = new MenuItemSlider("RC", "Sets the priority for the Anhydrate RC threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityRC = addMenuItem(m_pItemsSlider[5]);
 
-   m_pItemsSlider[6] = new MenuItemSlider("Others", "Sets the priority for other Ruby threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
+   m_pItemsSlider[6] = new MenuItemSlider("Others", "Sets the priority for other Anhydrate threads. Lower values means higher priority. Zero means disabled.", 0,139,100, fSliderWidth);
    m_iIndexPriorityOthers = addMenuItem(m_pItemsSlider[6]);
 
    m_IndexQuery = -1;
@@ -346,3 +346,4 @@ void MenuVehicleCPUPriorities::onSelectItem()
       add_menu_to_stack(pMC);
    }
 }
+

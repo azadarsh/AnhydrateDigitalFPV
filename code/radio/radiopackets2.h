@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -97,7 +97,7 @@
 #define PACKET_COMPONENT_TELEMETRY 2
 #define PACKET_COMPONENT_COMMANDS 3
 #define PACKET_COMPONENT_RC 4
-#define PACKET_COMPONENT_RUBY 5  // Used for control messages between vehicle and controller
+#define PACKET_COMPONENT_Anhydrate 5  // Used for control messages between vehicle and controller
 #define PACKET_COMPONENT_AUDIO 6
 
 
@@ -141,7 +141,7 @@ typedef struct
 
 
 // PING packets do not increase stream packet index as they are sent on each radio link separatelly
-#define PACKET_TYPE_RUBY_PING_CLOCK 3
+#define PACKET_TYPE_Anhydrate_PING_CLOCK 3
 // params after header:
 //   u8 ping id
 //   u8 controller local radio link id
@@ -151,16 +151,16 @@ typedef struct
 //       bit 0: OSD plugins require full telemetry
 
 
-#define PACKET_TYPE_RUBY_PING_CLOCK_REPLY 4
+#define PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY 4
 // has:
 //  u8 original ping id after header
 //  u32 local time in miliseconds
 //  u8 sender original local radio link id
 //  u8 reply local radio link id (vehicle local radio link)
 
-#define PACKET_TYPE_RUBY_RADIO_REINITIALIZED 5 // Sent by vehicle when a radio interface crashed on the vehicle.
+#define PACKET_TYPE_Anhydrate_RADIO_REINITIALIZED 5 // Sent by vehicle when a radio interface crashed on the vehicle.
 
-#define PACKET_TYPE_RUBY_MODEL_SETTINGS 6 // Sent by vehicle after boot or when requested all model settings as zip from controller. Sends all model settings (compressed) to controller;
+#define PACKET_TYPE_Anhydrate_MODEL_SETTINGS 6 // Sent by vehicle after boot or when requested all model settings as zip from controller. Sends all model settings (compressed) to controller;
 // Updated in v7.7
 // Params:
 // u32 startflags 0xFFFFFFFF
@@ -178,7 +178,7 @@ typedef struct
 //        N bytes - segment data
 
 
-#define PACKET_TYPE_RUBY_PAIRING_REQUEST 7
+#define PACKET_TYPE_Anhydrate_PAIRING_REQUEST 7
 // Sent by controller when it has link with vehicle for first time. So that vehicle has controller id.
 // For 11.1 or older:
 // Has an optional u32 param after header: count of retires;
@@ -191,12 +191,12 @@ typedef struct
 // Has an optional u32 param after header: uDeveloperFlags
 // Has an optional u32 param: controller board type
 
-#define PACKET_TYPE_RUBY_PAIRING_CONFIRMATION 8
+#define PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION 8
 // Sent by vehicle to controller.
 // Has an optional u32 param after header: count of received pairing requests;
 // Has an optional software verion u16 byte-maj.byte-minor
 
-#define PACKET_TYPE_RUBY_RADIO_CONFIG_UPDATED 9 // Sent by vehicle to controller to let it know about the current radio config.
+#define PACKET_TYPE_Anhydrate_RADIO_CONFIG_UPDATED 9 // Sent by vehicle to controller to let it know about the current radio config.
                                            // Contains a type_relay_parameters, type_radio_interfaces_parameters and a type_radio_links_parameters
 
 
@@ -237,15 +237,15 @@ typedef struct
 } __attribute__((packed)) t_packet_header_command_response;
 
 
-#define PACKET_TYPE_RUBY_LOG_FILE_SEGMENT 13 // from vehicle to controller, contains a file segment header too and then file data segment
+#define PACKET_TYPE_Anhydrate_LOG_FILE_SEGMENT 13 // from vehicle to controller, contains a file segment header too and then file data segment
 
-#define PACKET_TYPE_RUBY_MESSAGE 14
+#define PACKET_TYPE_Anhydrate_MESSAGE 14
 // u16 message id, monotonically increasing
 // u8 type: 0 debug, 1 info, 2 warning, 3 error
 // 0...n: string, null terminated
 
 
-#define PACKET_TYPE_RUBY_ALARM 15
+#define PACKET_TYPE_Anhydrate_ALARM 15
 // Contains 4 u32: alarm index (u32), alarm id(s) (u32), flags1 (u32) and flags2 (u32)
 
 typedef struct
@@ -376,7 +376,7 @@ typedef struct
 #define PACKET_TYPE_RC_DOWNLOAD_INFO  26   // RC Info sent back from vehicle to ground station
 
 //---------------------------------------
-// Ruby misc packets
+// Anhydrate misc packets
 
 #define PACKET_TYPE_DEBUG_INFO 28
 // has:
@@ -385,14 +385,14 @@ typedef struct
 //---------------------------------------
 // COMPONENT TELEMETRY PACKETS
 
-#define PACKET_TYPE_RUBY_TELEMETRY_SHORT 29   // Ruby telemetry, small version, contains t_packet_header and t_packet_ruby_telemetry_short
+#define PACKET_TYPE_Anhydrate_TELEMETRY_SHORT 29   // Anhydrate telemetry, small version, contains t_packet_header and t_packet_Anhydrate_telemetry_short
 
-#define PACKET_TYPE_RUBY_TELEMETRY_EXTENDED 30   // Ruby telemetry, extended version
+#define PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED 30   // Anhydrate telemetry, extended version
 // Contains:
 // t_packet_header
-// t_packet_header_ruby_telemetry_extended_v5
-// t_packet_header_ruby_telemetry_extended_extra_info
-// t_packet_header_ruby_telemetry_extended_extra_info_retransmissions
+// t_packet_header_Anhydrate_telemetry_extended_v5
+// t_packet_header_Anhydrate_telemetry_extended_extra_info
+// t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions
 // extraData (0 or more, as part of the packet, after headers)
 
 #define PACKET_TYPE_FC_TELEMETRY 31
@@ -400,16 +400,16 @@ typedef struct
 #define PACKET_TYPE_FC_RC_CHANNELS 34
 #define PACKET_TYPE_RC_TELEMETRY 33
 
-// Deprecated in 11.1 #define PACKET_TYPE_RUBY_TELEMETRY_VIDEO_LINK_DEV_STATS 35 // has a shared_mem_video_link_stats_and_overwrites structure as data
-// Deprecated in 11.1 #define PACKET_TYPE_RUBY_TELEMETRY_VIDEO_LINK_DEV_GRAPHS 36 // has a shared_mem_video_link_graphs structure as data
+// Deprecated in 11.1 #define PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_LINK_DEV_STATS 35 // has a shared_mem_video_link_stats_and_overwrites structure as data
+// Deprecated in 11.1 #define PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_LINK_DEV_GRAPHS 36 // has a shared_mem_video_link_graphs structure as data
 
-#define PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_TX_HISTORY 37 // has a t_packet_header_vehicle_tx_gap_history structure
-#define PACKET_TYPE_RUBY_TELEMETRY_VEHICLE_RX_CARDS_STATS 38
+#define PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_TX_HISTORY 37 // has a t_packet_header_vehicle_tx_gap_history structure
+#define PACKET_TYPE_Anhydrate_TELEMETRY_VEHICLE_RX_CARDS_STATS 38
 // 1 byte: 0xFF if sending all stats at once, 0xF0 if single radio stats, 0x0F if sending single compact stats
 // 1 byte: card index if it has a single card
 //         card count if full stats
 // then (count cards * shared_mem_radio_stats_radio_interface) or single stats compact after the header
-#define PACKET_TYPE_RUBY_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY 39 // has a shared_mem_dev_video_bitrate_history structure
+#define PACKET_TYPE_Anhydrate_TELEMETRY_DEV_VIDEO_BITRATE_HISTORY 39 // has a shared_mem_dev_video_bitrate_history structure
 
 
 #define PACKET_TYPE_TELEMETRY_RAW_DOWNLOAD 41 // download telemetry data packet from vehicle to controller
@@ -419,35 +419,35 @@ typedef struct
 
 
 //----------------------------------------------
-// packet_header_ruby_telemetry
+// packet_header_Anhydrate_telemetry
 //
-#define FLAG_RUBY_TELEMETRY_RC_ALIVE    ((u32)1)
-#define FLAG_RUBY_TELEMETRY_RC_FAILSAFE ((u32)(((u32)0x01)<<1))
-// Unused anymore #define FLAG_RUBY_TELEMETRY_HAS_RC_INFO ((u32)(((u32)0x01)<<2))
-#define FLAG_RUBY_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY ((u32)(((u32)0x01)<<3))
-#define FLAG_RUBY_TELEMETRY_ENCRYPTED_DATA ((u32)(((u32)0x01)<<4))
-#define FLAG_RUBY_TELEMETRY_ENCRYPTED_VIDEO ((u32)(((u32)0x01)<<5))
-#define FLAG_RUBY_TELEMETRY_ENCRYPTED_HAS_KEY ((u32)(((u32)0x01)<<6))
-#define FLAG_RUBY_TELEMETRY_HAS_RC_RSSI ((u32)(((u32)0x01)<<7))
-#define FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RC_RSSI ((u32)(((u32)0x01)<<7))
-#define FLAG_RUBY_TELEMETRY_HAS_MAVLINK_RX_RSSI ((u32)(((u32)0x01)<<8))
-#define FLAG_RUBY_TELEMETRY_HAS_RELAY_LINK ((u32)(((u32)0x01)<<9))  // true if the link to the relayed vehicle is present and live
-#define FLAG_RUBY_TELEMETRY_IS_RELAYING ((u32)(((u32)0x01)<<10))  // true if the vehicle is currently relaying another vehicle
-#define FLAG_RUBY_TELEMETRY_HAS_EXTENDED_INFO ((u32)(((u32)0x01)<<11)) // if true, has the extended telemetry info after this telemetry header
-#define FLAG_RUBY_TELEMETRY_VEHICLE_HAS_CAMERA ((u32)(((u32)0x01)<<12)) // if true, vehicle has at least one camera
-#define FLAG_RUBY_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA ((u32)(((u32)0x01)<<13)) // if the FC sends any valid data to Ruby serial port
-#define FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER ((u32)(((u32)0x01)<<14)) // false if the fast uplink from controller is lost for more than TIMEOUT_LINK_TO_CONTROLLER_LOST
-#define FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER ((u32)(((u32)0x01)<<15)) // false if the slow uplink from controller is lost for more than TIMEOUT_LINK_TO_CONTROLLER_LOST
+#define FLAG_Anhydrate_TELEMETRY_RC_ALIVE    ((u32)1)
+#define FLAG_Anhydrate_TELEMETRY_RC_FAILSAFE ((u32)(((u32)0x01)<<1))
+// Unused anymore #define FLAG_Anhydrate_TELEMETRY_HAS_RC_INFO ((u32)(((u32)0x01)<<2))
+#define FLAG_Anhydrate_TELEMETRY_ALLOW_SPECTATOR_TELEMETRY ((u32)(((u32)0x01)<<3))
+#define FLAG_Anhydrate_TELEMETRY_ENCRYPTED_DATA ((u32)(((u32)0x01)<<4))
+#define FLAG_Anhydrate_TELEMETRY_ENCRYPTED_VIDEO ((u32)(((u32)0x01)<<5))
+#define FLAG_Anhydrate_TELEMETRY_ENCRYPTED_HAS_KEY ((u32)(((u32)0x01)<<6))
+#define FLAG_Anhydrate_TELEMETRY_HAS_RC_RSSI ((u32)(((u32)0x01)<<7))
+#define FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RC_RSSI ((u32)(((u32)0x01)<<7))
+#define FLAG_Anhydrate_TELEMETRY_HAS_MAVLINK_RX_RSSI ((u32)(((u32)0x01)<<8))
+#define FLAG_Anhydrate_TELEMETRY_HAS_RELAY_LINK ((u32)(((u32)0x01)<<9))  // true if the link to the relayed vehicle is present and live
+#define FLAG_Anhydrate_TELEMETRY_IS_RELAYING ((u32)(((u32)0x01)<<10))  // true if the vehicle is currently relaying another vehicle
+#define FLAG_Anhydrate_TELEMETRY_HAS_EXTENDED_INFO ((u32)(((u32)0x01)<<11)) // if true, has the extended telemetry info after this telemetry header
+#define FLAG_Anhydrate_TELEMETRY_VEHICLE_HAS_CAMERA ((u32)(((u32)0x01)<<12)) // if true, vehicle has at least one camera
+#define FLAG_Anhydrate_TELEMETRY_HAS_VEHICLE_TELEMETRY_DATA ((u32)(((u32)0x01)<<13)) // if the FC sends any valid data to Anhydrate serial port
+#define FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER ((u32)(((u32)0x01)<<14)) // false if the fast uplink from controller is lost for more than TIMEOUT_LINK_TO_CONTROLLER_LOST
+#define FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER ((u32)(((u32)0x01)<<15)) // false if the slow uplink from controller is lost for more than TIMEOUT_LINK_TO_CONTROLLER_LOST
 
-#define FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_VERSION ((u32)(0x07))
-#define FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE ((u32)(((u32)0x01)<<3))
-#define FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT ((u32)(((u32)0x01)<<4))
+#define FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_VERSION ((u32)(0x07))
+#define FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE ((u32)(((u32)0x01)<<3))
+#define FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT ((u32)(((u32)0x01)<<4))
 
 typedef struct
 {
-   u16 uRubyFlags;    // see above
+   u16 uAnhydrateFlags;    // see above
    u8  uFCFlags;
-   u8  rubyVersion;  // version x.y 4bits each        
+   u8  AnhydrateVersion;  // version x.y 4bits each        
    u8  radio_links_count;
    u32 uRadioFrequenciesKhz[3]; // lowest 31 bits: frequency. highest bit: 0 - regular link, 1 - relay link
    
@@ -463,18 +463,18 @@ typedef struct
    u32 vspeed; // 1/100 meters -1000 m
    u32 aspeed; // airspeed (1/100 meters - 1000 m)
    u32 hspeed; // 1/100 meters -1000 m
-} __attribute__((packed)) t_packet_header_ruby_telemetry_short;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_short;
 
 
 typedef struct // introduced in version 7.4
 {
-   u16 uRubyFlags;    // see above
-   u8  rubyVersion;  // version x.y 4bits each
+   u16 uAnhydrateFlags;    // see above
+   u8  AnhydrateVersion;  // version x.y 4bits each
    u32 uVehicleId; // to which vehicle this telemetry refers to
    u8  vehicle_type;
          // semantic changed in version 8.0
          // bit 0...4 - vehicle type: car, drone, plane, etc
-         // bit 5..7 - firmware type: Ruby, OpenIPC, etc
+         // bit 5..7 - firmware type: Anhydrate, OpenIPC, etc
    u8  vehicle_name[MAX_VEHICLE_NAME_LENGTH];
    u8  radio_links_count;
    u32 uRadioFrequenciesKhz[6]; // lowest 31 bits: frequency. highest bit: 0 - regular link, 1 - relay link
@@ -503,18 +503,18 @@ typedef struct // introduced in version 7.4
    u16 txTimePerSec; // miliseconds
    u16 extraFlags; // bits 0..3 : structure version (0 for now, first one, starting at v3)
    u8 extraSize; // Extra info as part of the packet, after headers, can be retransmission info
-} __attribute__((packed)) t_packet_header_ruby_telemetry_extended_v3;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_extended_v3;
 
 
 typedef struct // introduced in version 10.4
 {
-   u16 uRubyFlags;    // see above
-   u8  rubyVersion;  // version x.y 4bits each        
+   u16 uAnhydrateFlags;    // see above
+   u8  AnhydrateVersion;  // version x.y 4bits each        
    u32 uVehicleId; // to which vehicle this telemetry refers to
    u8  vehicle_type;
          // semantic changed in version 8.0
          // bit 0...4 - vehicle type: car, drone, plane, etc
-         // bit 5..7 - firmware type: Ruby, OpenIPC, etc
+         // bit 5..7 - firmware type: Anhydrate, OpenIPC, etc
    u8  vehicle_name[MAX_VEHICLE_NAME_LENGTH];
    u8  radio_links_count;
    u32 uRadioFrequenciesKhz[6]; // lowest 31 bits: frequency. highest bit: 0 - regular link, 1 - relay link
@@ -542,21 +542,21 @@ typedef struct // introduced in version 10.4
    u8  uplink_mavlink_rx_rssi; // 0...100, 255 - not available
 
    u16 txTimePerSec; // miliseconds
-   u16 uExtraRubyFlags; // see above
+   u16 uExtraAnhydrateFlags; // see above
       // bits 0..3 : structure version (0 for now, first one, starting at v3)
    u8 extraSize; // Extra info as part of the packet, after headers, can be retransmission info
-} __attribute__((packed)) t_packet_header_ruby_telemetry_extended_v4;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_extended_v4;
 
 
 typedef struct // introduced in version 11.2
 {
-   u16 uRubyFlags;    // see above
-   u8  rubyVersion;  // version x.y 4bits each (high bits: major, low bits: minor)
+   u16 uAnhydrateFlags;    // see above
+   u8  AnhydrateVersion;  // version x.y 4bits each (high bits: major, low bits: minor)
    u32 uVehicleId; // to which vehicle this telemetry refers to
    u8  vehicle_type;
          // semantic changed in version 8.0
          // bit 0...4 - vehicle type: car, drone, plane, etc
-         // bit 5..7 - firmware type: Ruby, OpenIPC, etc
+         // bit 5..7 - firmware type: Anhydrate, OpenIPC, etc
    u8  vehicle_name[MAX_VEHICLE_NAME_LENGTH];
    u8  radio_links_count;
    u32 uRadioFrequenciesKhz[6]; // lowest 31 bits: frequency. highest bit: 0 - regular link, 1 - relay link
@@ -585,20 +585,20 @@ typedef struct // introduced in version 11.2
    
    int iTxPowers[6]; // current Tx powers, per radio link, in mW. positive: as set, negative: adjusted down
    u16 txTimePerSec; // miliseconds
-   u16 uExtraRubyFlags; // see above
+   u16 uExtraAnhydrateFlags; // see above
       // bits 0..3 : structure version (0 for now, first one, starting at v3)
    u8 extraSize; // Extra info as part of the packet, after headers, can be retransmission info
-} __attribute__((packed)) t_packet_header_ruby_telemetry_extended_v5;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_extended_v5;
 
 
 typedef struct // introduced in version 11.5
 {
-   u16 uRubyFlags;    // see above
-   u8  rubyVersion;  // version x.y 4bits each (high bits: major, low bits: minor)
+   u16 uAnhydrateFlags;    // see above
+   u8  AnhydrateVersion;  // version x.y 4bits each (high bits: major, low bits: minor)
    u32 uVehicleId; // to which vehicle this telemetry refers to
    u8  vehicle_type;
          // bit 0...4 - vehicle type: car, drone, plane, etc
-         // bit 5..7 - firmware type: Ruby, OpenIPC, etc
+         // bit 5..7 - firmware type: Anhydrate, OpenIPC, etc
    u8  vehicle_name[MAX_VEHICLE_NAME_LENGTH];
    u8  radio_links_count;
    u32 uRadioFrequenciesKhz[MAX_RADIO_INTERFACES]; // lowest 31 bits: frequency. highest bit: 0 - regular link, 1 - relay link
@@ -627,13 +627,13 @@ typedef struct // introduced in version 11.5
    
    int iTxPowers[MAX_RADIO_INTERFACES]; // current Tx powers, per radio link, in mW. positive: as set, negative: adjusted down
    u16 uDummyT1; // deprecated in 11.5
-   u16 uExtraRubyFlags; // see above
+   u16 uExtraAnhydrateFlags; // see above
       // bits 0..3 : structure version (0 for now, first one, starting at v3)
    u8 extraSize; // Extra info as part of the packet, after headers, can be retransmission info
-} __attribute__((packed)) t_packet_header_ruby_telemetry_extended_v6;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_extended_v6;
 
-// Flags for structure t_packet_header_ruby_telemetry_extended_extra_info 
-#define FLAG_RUBY_TELEMETRY_EXTRA_INFO_IS_VALID ((u32)(((u32)0x01)<<1))
+// Flags for structure t_packet_header_Anhydrate_telemetry_extended_extra_info 
+#define FLAG_Anhydrate_TELEMETRY_EXTRA_INFO_IS_VALID ((u32)(((u32)0x01)<<1))
 
 typedef struct
 {
@@ -644,7 +644,7 @@ typedef struct
    u16 uThrottleOutput; // usually 0...100
 
    u32 uDummy[10];
-} __attribute__((packed)) t_packet_header_ruby_telemetry_extended_extra_info;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_extended_extra_info;
 
 typedef struct
 {
@@ -661,7 +661,7 @@ typedef struct
    u16 totalReceivedRetransmissionsRequestsSegmentsUniqueLast5Sec;
    u16 totalReceivedRetransmissionsRequestsSegmentsDuplicateLast5Sec;
    u16 totalReceivedRetransmissionsRequestsSegmentsRetriedLast5Sec;
-} __attribute__((packed)) t_packet_header_ruby_telemetry_extended_extra_info_retransmissions;
+} __attribute__((packed)) t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions;
 
 //----------------------------------------------
 // packet_header_fc_telemetry
@@ -769,7 +769,7 @@ typedef struct
 #define PACKET_TYPE_AUX_DATA_LINK_DOWNLOAD 46  // upload data link packet from controller to vehicle
 // payload is a data link segment index and data
 
-#define PACKET_TYPE_RUBY_TELEMETRY_VIDEO_INFO_STATS 47 // has a shared_mem_video_frames_stats structure
+#define PACKET_TYPE_Anhydrate_TELEMETRY_VIDEO_INFO_STATS 47 // has a shared_mem_video_frames_stats structure
 
 #define MAX_HISTORY_VEHICLE_TX_STATS_SLICES 40
 typedef struct
@@ -789,13 +789,13 @@ typedef struct
 } __attribute__((packed)) t_packet_header_vehicle_tx_history;
 
 
-#define PACKET_TYPE_RUBY_TELEMETRY_RADIO_RX_HISTORY 48
+#define PACKET_TYPE_Anhydrate_TELEMETRY_RADIO_RX_HISTORY 48
 // has:
 // u32 - interface index;
 // shared_mem_radio_stats_interface_rx_hist structure
 
 
-#define PACKET_TYPE_RUBY_RELAY_RADIO_INFO 49
+#define PACKET_TYPE_Anhydrate_RELAY_RADIO_INFO 49
 // has a t_packet_header_relay_radio_info structure
 typedef struct
 {
@@ -940,12 +940,13 @@ void radio_packet_init(t_packet_header* pPH, u8 component, u8 packet_type, u32 u
 void radio_packet_compute_crc(u8* pBuffer, int length);
 int radio_packet_check_crc(u8* pBuffer, int length);
 
-void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v3(t_packet_header_ruby_telemetry_extended_v6* pV6, t_packet_header_ruby_telemetry_extended_v3* pV3);
-void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v4(t_packet_header_ruby_telemetry_extended_v6* pV6, t_packet_header_ruby_telemetry_extended_v4* pV4);
-void radio_populate_ruby_telemetry_v6_from_ruby_telemetry_v5(t_packet_header_ruby_telemetry_extended_v6* pV6, t_packet_header_ruby_telemetry_extended_v5* pV5);
+void radio_populate_Anhydrate_telemetry_v6_from_Anhydrate_telemetry_v3(t_packet_header_Anhydrate_telemetry_extended_v6* pV6, t_packet_header_Anhydrate_telemetry_extended_v3* pV3);
+void radio_populate_Anhydrate_telemetry_v6_from_Anhydrate_telemetry_v4(t_packet_header_Anhydrate_telemetry_extended_v6* pV6, t_packet_header_Anhydrate_telemetry_extended_v4* pV4);
+void radio_populate_Anhydrate_telemetry_v6_from_Anhydrate_telemetry_v5(t_packet_header_Anhydrate_telemetry_extended_v6* pV6, t_packet_header_Anhydrate_telemetry_extended_v5* pV5);
 
 void radio_packets_log_sizes();
 #ifdef __cplusplus
 }
 #endif
+
 

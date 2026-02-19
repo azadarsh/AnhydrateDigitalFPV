@@ -278,3 +278,4 @@ static inline void mavlink_msg_change_operator_control_decode(const mavlink_mess
     memcpy(change_operator_control, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

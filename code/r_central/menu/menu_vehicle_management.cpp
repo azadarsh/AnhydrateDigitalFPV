@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -74,7 +74,7 @@ void MenuVehicleManagement::onShow()
    m_IndexDelete = addMenuItem(new MenuItem(L("Delete"), L("Delete this vehicle from your control list.")));
 
    bool bConnected = false;
-   if ( g_bIsRouterReady && link_has_received_main_vehicle_ruby_telemetry() )
+   if ( g_bIsRouterReady && link_has_received_main_vehicle_Anhydrate_telemetry() )
       bConnected = true;
 
    if ( g_pCurrentModel->b_mustSyncFromVehicle )
@@ -298,13 +298,13 @@ void MenuVehicleManagement::onSelectItem()
       strcpy(szModelName, g_pCurrentModel->getLongName());
       str_sanitize_filename(szModelName);
 
-      snprintf(szFile, sizeof(szFile)/sizeof(szFile[0]), "%s/ruby_model_%s_%u.txt", FOLDER_USB_MOUNT, szModelName, g_pCurrentModel->uVehicleId);
+      snprintf(szFile, sizeof(szFile)/sizeof(szFile[0]), "%s/Anhydrate_model_%s_%u.txt", FOLDER_USB_MOUNT, szModelName, g_pCurrentModel->uVehicleId);
       g_pCurrentModel->saveToFile(szFile, false);
    
       hardware_unmount_usb();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       sync();
-      ruby_signal_alive();
+      Anhydrate_signal_alive();
       Menu* pm = new Menu(MENU_ID_SIMPLE_MESSAGE+10*1000, L("Export Succeeded"), NULL);
       pm->m_xPos = 0.4; pm->m_yPos = 0.4;
       pm->m_Width = 0.36;
@@ -335,9 +335,9 @@ void MenuVehicleManagement::onSelectItem()
       if ( 0 == pM->getSettingsFilesCount() )
       {
          hardware_unmount_usb();
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          sync();
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          delete pM;
          Menu* pm = new Menu(MENU_ID_SIMPLE_MESSAGE+10*1000,"No settings files",NULL);
          pm->m_xPos = 0.4; pm->m_yPos = 0.4;
@@ -449,4 +449,5 @@ void MenuVehicleManagement::onSelectItem()
          menu_discard_all();
    }
 }
+
 

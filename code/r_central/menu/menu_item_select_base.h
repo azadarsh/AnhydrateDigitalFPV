@@ -42,3 +42,4 @@ class MenuItemSelectBase: public MenuItem
       char* m_szSelections[MAX_MENU_ITEM_SELECTIONS];
       bool m_bEnabledItems[MAX_MENU_ITEM_SELECTIONS];
 };
+

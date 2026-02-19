@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -48,7 +48,7 @@ MenuUpdateVehiclePopup::MenuUpdateVehiclePopup(int vehicleIndex)
    char szBuff3[32];
    getSystemVersionString(szBuff2, g_pCurrentModel->sw_version);
    getSystemVersionString(szBuff3, (SYSTEM_SW_VERSION_MAJOR<<8) | SYSTEM_SW_VERSION_MINOR);
-   sprintf(szBuff, "Your %s has Ruby version %s (b-%d) and your controller has Ruby version %s (b-%d). You should update your %s.", g_pCurrentModel->getLongName(), szBuff2, get_sw_version_build(g_pCurrentModel), szBuff3, SYSTEM_SW_BUILD_NUMBER, g_pCurrentModel->getVehicleTypeString());
+   sprintf(szBuff, "Your %s has Anhydrate version %s (b-%d) and your controller has Anhydrate version %s (b-%d). You should update your %s.", g_pCurrentModel->getLongName(), szBuff2, get_sw_version_build(g_pCurrentModel), szBuff3, SYSTEM_SW_BUILD_NUMBER, g_pCurrentModel->getVehicleTypeString());
 
    addTopLine(szBuff);
 
@@ -114,3 +114,4 @@ void MenuUpdateVehiclePopup::onSelectItem()
       }
    }
 }
+

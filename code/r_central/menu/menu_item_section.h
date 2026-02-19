@@ -17,3 +17,4 @@ class MenuItemSection: public MenuItem
      float m_fMarginTop;
      float m_fMarginBottom;
 };
+

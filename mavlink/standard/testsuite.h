@@ -35,3 +35,4 @@ static void mavlink_test_standard(uint8_t system_id, uint8_t component_id, mavli
 }
 #endif // __cplusplus
 #endif // STANDARD_TESTSUITE_H
+

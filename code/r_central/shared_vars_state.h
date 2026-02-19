@@ -30,29 +30,29 @@ typedef struct
    u32 uVehicleId;
    Model* pModel;
    
-   // Ruby telemetry
+   // Anhydrate telemetry
 
-   bool bGotRubyTelemetryInfo;
-   bool bGotRubyTelemetryInfoShort;
-   bool bGotRubyTelemetryExtraInfo;
-   bool bGotRubyTelemetryExtraInfoRetransmissions;
+   bool bGotAnhydrateTelemetryInfo;
+   bool bGotAnhydrateTelemetryInfoShort;
+   bool bGotAnhydrateTelemetryExtraInfo;
+   bool bGotAnhydrateTelemetryExtraInfoRetransmissions;
    bool bGotStatsVehicleRxCards;
 
-   int  iFrequencyRubyTelemetryFull;
-   int  iFrequencyRubyTelemetryShort;
-   u32  uTimeLastRecvRubyTelemetry;
-   u32  uTimeLastRecvRubyTelemetryExtended;
-   u32  uTimeLastRecvRubyTelemetryShort;
-   u32  uTimeLastRecvAnyRubyTelemetry;
+   int  iFrequencyAnhydrateTelemetryFull;
+   int  iFrequencyAnhydrateTelemetryShort;
+   u32  uTimeLastRecvAnhydrateTelemetry;
+   u32  uTimeLastRecvAnhydrateTelemetryExtended;
+   u32  uTimeLastRecvAnhydrateTelemetryShort;
+   u32  uTimeLastRecvAnyAnhydrateTelemetry;
    u32  uTimeLastRecvVehicleRxStats;
-   bool bRubyTelemetryLost;
+   bool bAnhydrateTelemetryLost;
 
    type_u32_couters vehicleDebugRouterCounters;
 
-   t_packet_header_ruby_telemetry_extended_v6 headerRubyTelemetryExtended;
-   t_packet_header_ruby_telemetry_extended_extra_info headerRubyTelemetryExtraInfo;
-   t_packet_header_ruby_telemetry_extended_extra_info_retransmissions headerRubyTelemetryExtraInfoRetransmissions;
-   t_packet_header_ruby_telemetry_short headerRubyTelemetryShort;
+   t_packet_header_Anhydrate_telemetry_extended_v6 headerAnhydrateTelemetryExtended;
+   t_packet_header_Anhydrate_telemetry_extended_extra_info headerAnhydrateTelemetryExtraInfo;
+   t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions headerAnhydrateTelemetryExtraInfoRetransmissions;
+   t_packet_header_Anhydrate_telemetry_short headerAnhydrateTelemetryShort;
    type_msp_parse_state mspState;
    t_packet_header_relay_radio_info headerRelayRadioLinksInfo;
    shared_mem_radio_stats_radio_interface SMVehicleRxStats[MAX_RADIO_INTERFACES];
@@ -104,8 +104,8 @@ typedef struct
    u32 uTimeLastReceivedModelSettings;
    u8  uTmpLastThrottledFlags;
    
-   int tmp_iCountRubyTelemetryPacketsFull;
-   int tmp_iCountRubyTelemetryPacketsShort;
+   int tmp_iCountAnhydrateTelemetryPacketsFull;
+   int tmp_iCountAnhydrateTelemetryPacketsShort;
    int tmp_iCountFCTelemetryPacketsFull;
    int tmp_iCountFCTelemetryPacketsShort;
    u32 tmp_uTimeLastTelemetryFrequencyComputeTime;
@@ -167,8 +167,9 @@ void reset_vehicle_telemetry_runtime_info(t_structure_vehicle_info* pInfo);
 void shared_vars_state_reset_all_vehicles_runtime_info();
 void reset_model_settings_download_buffers(u32 uVehicleId);
 t_structure_vehicle_info* get_vehicle_runtime_info_for_vehicle_id(u32 uVehicleId);
-t_packet_header_ruby_telemetry_extended_v6* get_received_relayed_vehicle_telemetry_info();
+t_packet_header_Anhydrate_telemetry_extended_v6* get_received_relayed_vehicle_telemetry_info();
 void log_current_runtime_vehicles_info();
 bool vehicle_runtime_has_received_fc_telemetry(u32 uVehicleId);
-u32  vehicle_runtime_get_time_last_received_ruby_telemetry(u32 uVehicleId);
+u32  vehicle_runtime_get_time_last_received_Anhydrate_telemetry(u32 uVehicleId);
 void vehicle_runtime_reset_has_received_fc_telemetry_info(u32 uVehicleId);
+

@@ -338,3 +338,4 @@ class Menu
      float m_fAnimationStartXPos;
      int m_iLoopCounter;
 };
+

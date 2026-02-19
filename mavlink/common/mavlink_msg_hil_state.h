@@ -586,3 +586,4 @@ static inline void mavlink_msg_hil_state_decode(const mavlink_message_t* msg, ma
     memcpy(hil_state, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

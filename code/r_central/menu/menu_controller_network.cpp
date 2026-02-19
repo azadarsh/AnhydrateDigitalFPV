@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -199,13 +199,14 @@ void MenuControllerNetwork::onSelectItem()
 
       for( int i=0; i<5; i++ )
       {
-         ruby_processing_loop(true);
+         Anhydrate_processing_loop(true);
          g_TimeNow = get_current_timestamp_ms();
          render_all(g_TimeNow);
-         ruby_signal_alive();
+         Anhydrate_signal_alive();
          hardware_sleep_ms(200);
       }
       onEventReboot();
       hardware_reboot();
    }
 }
+

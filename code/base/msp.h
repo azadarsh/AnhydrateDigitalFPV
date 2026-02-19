@@ -76,3 +76,4 @@ typedef struct
 
 void parse_msp_reset_state(type_msp_parse_state* pMSPState);
 void parse_msp_incoming_data(type_msp_parse_state* pMSPState, u8* pData, int iDataLength, bool bAllowScreenUpdate);
+

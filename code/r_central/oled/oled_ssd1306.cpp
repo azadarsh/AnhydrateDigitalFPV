@@ -808,3 +808,4 @@ int ssd1306_oled_vertical_right_horizontal_scroll(uint8_t start_page_addr, uint8
 
     return 0;
 }
+

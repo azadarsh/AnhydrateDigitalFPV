@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -31,7 +31,7 @@
 */
 
 #include "process_radio_out_packets.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/tx_powers.h"
 #include "../radio/radiolink.h"
 #include "packets_utils.h"
@@ -50,12 +50,12 @@ void preprocess_radio_out_packet(u8* pPacketBuffer, int iPacketLength, bool bIsE
 
    t_packet_header* pPH = (t_packet_header*)pPacketBuffer;
 
-   if ( pPH->packet_type == PACKET_TYPE_RUBY_PAIRING_CONFIRMATION )
+   if ( pPH->packet_type == PACKET_TYPE_Anhydrate_PAIRING_CONFIRMATION )
       log_line("Sending pairing request confirmation to controller (from VID %u to CID %u)", pPH->vehicle_id_src, pPH->vehicle_id_dest);
 
    if ( (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE) == PACKET_COMPONENT_TELEMETRY )
    {
-      // Update Ruby telemetry info if we are sending Ruby telemetry to controller
+      // Update Anhydrate telemetry info if we are sending Anhydrate telemetry to controller
       // Update also the telemetry extended extra info: retransmissions info
 
       if ( pPH->packet_type == PACKET_TYPE_DEBUG_INFO )
@@ -64,23 +64,23 @@ void preprocess_radio_out_packet(u8* pPacketBuffer, int iPacketLength, bool bIsE
          memcpy(pCounters, &g_CoutersMainLoop, sizeof(type_u32_couters));
       }
 
-      if ( pPH->packet_type == PACKET_TYPE_RUBY_TELEMETRY_SHORT )
+      if ( pPH->packet_type == PACKET_TYPE_Anhydrate_TELEMETRY_SHORT )
       {
-         t_packet_header_ruby_telemetry_short* pPHRTShort = (t_packet_header_ruby_telemetry_short*) (pPacketBuffer + sizeof(t_packet_header));
+         t_packet_header_Anhydrate_telemetry_short* pPHRTShort = (t_packet_header_Anhydrate_telemetry_short*) (pPacketBuffer + sizeof(t_packet_header));
          if ( g_bHasFastUplinkFromController )
-            pPHRTShort->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
+            pPHRTShort->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
          else
-            pPHRTShort->uRubyFlags &= ~FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
+            pPHRTShort->uAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
 
          if ( g_bHasSlowUplinkFromController )
-            pPHRTShort->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
+            pPHRTShort->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
          else
-            pPHRTShort->uRubyFlags &= ~FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
+            pPHRTShort->uAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
       }
 
-      if ( pPH->packet_type == PACKET_TYPE_RUBY_TELEMETRY_EXTENDED )
+      if ( pPH->packet_type == PACKET_TYPE_Anhydrate_TELEMETRY_EXTENDED )
       {
-         t_packet_header_ruby_telemetry_extended_v6* pPHRTE = (t_packet_header_ruby_telemetry_extended_v6*) (pPacketBuffer + sizeof(t_packet_header));
+         t_packet_header_Anhydrate_telemetry_extended_v6* pPHRTE = (t_packet_header_Anhydrate_telemetry_extended_v6*) (pPacketBuffer + sizeof(t_packet_header));
          
          g_iVehicleSOCTemperatureC = pPHRTE->temperatureC;
          pPHRTE->downlink_tx_video_bitrate_bps = g_pProcessorTxVideo->getCurrentVideoBitrateAverageLastMs(500);
@@ -143,24 +143,24 @@ void preprocess_radio_out_packet(u8* pPacketBuffer, int iPacketLength, bool bIsE
          }
 
          if ( g_bHasFastUplinkFromController )
-            pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
+            pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
          else
-            pPHRTE->uRubyFlags &= ~FLAG_RUBY_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
+            pPHRTE->uAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_HAS_FAST_UPLINK_FROM_CONTROLLER;
 
          if ( g_bHasSlowUplinkFromController )
-            pPHRTE->uRubyFlags |= FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
+            pPHRTE->uAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
          else
-            pPHRTE->uRubyFlags &= ~FLAG_RUBY_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
+            pPHRTE->uAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_HAS_SLOW_UPLINK_FROM_CONTROLLER;
 
          if ( g_pCurrentModel->uModelRuntimeStatusFlags & MODEL_RUNTIME_STATUS_FLAG_IN_PIT_MODE )
-            pPHRTE->uExtraRubyFlags |= FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE;
+            pPHRTE->uExtraAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE;
          else
-            pPHRTE->uExtraRubyFlags &= ~FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE;
+            pPHRTE->uExtraAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE;
 
          if ( g_pCurrentModel->uModelRuntimeStatusFlags & MODEL_RUNTIME_STATUS_FLAG_IN_PIT_MODE_TEMPERATURE )
-            pPHRTE->uExtraRubyFlags |= FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT;
+            pPHRTE->uExtraAnhydrateFlags |= FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT;
          else
-            pPHRTE->uExtraRubyFlags &= ~FLAG_RUBY_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT;
+            pPHRTE->uExtraAnhydrateFlags &= ~FLAG_Anhydrate_TELEMETRY_EXTRA_FLAGS_IS_IN_TX_PIT_MODE_HOT;
          
          // Update tx powers info
          for( int iLink=0; iLink<g_pCurrentModel->radioLinksParams.links_count; iLink++ )
@@ -197,10 +197,10 @@ void preprocess_radio_out_packet(u8* pPacketBuffer, int iPacketLength, bool bIsE
          // Update extra info: retransmissions
          
          if ( pPHRTE->extraSize > 0 )
-         if ( pPHRTE->extraSize == sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions) )
-         if ( pPH->total_length == (sizeof(t_packet_header) + sizeof(t_packet_header_ruby_telemetry_extended_v6) + sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions)) )
+         if ( pPHRTE->extraSize == sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions) )
+         if ( pPH->total_length == (sizeof(t_packet_header) + sizeof(t_packet_header_Anhydrate_telemetry_extended_v6) + sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions)) )
          {
-            memcpy( pPacketBuffer + sizeof(t_packet_header) + sizeof(t_packet_header_ruby_telemetry_extended_v6), (u8*)&g_PHTE_Retransmissions, sizeof(g_PHTE_Retransmissions));
+            memcpy( pPacketBuffer + sizeof(t_packet_header) + sizeof(t_packet_header_Anhydrate_telemetry_extended_v6), (u8*)&g_PHTE_Retransmissions, sizeof(g_PHTE_Retransmissions));
          }
       }
    }

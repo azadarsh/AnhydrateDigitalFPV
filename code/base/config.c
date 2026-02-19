@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -255,7 +255,7 @@ FILE* try_open_base_version_file(char* szOutputFile)
       return fd;
    }
 
-   fd = fopen("ruby_ver.txt", "r");
+   fd = fopen("Anhydrate_ver.txt", "r");
    if ( NULL != fd )
    {
       if ( NULL != szOutputFile )
@@ -266,21 +266,21 @@ FILE* try_open_base_version_file(char* szOutputFile)
    return fd;
 }
 
-u32 s_uBaseRubyVersion = 0;
+u32 s_uBaseAnhydrateVersion = 0;
 
-void get_Ruby_BaseVersion(int* pMajor, int* pMinor)
+void get_Anhydrate_BaseVersion(int* pMajor, int* pMinor)
 {
    if ( NULL != pMajor )
       *pMajor = 0;
    if ( NULL != pMinor )
       *pMinor = 0;
 
-   if ( 0 != s_uBaseRubyVersion )
+   if ( 0 != s_uBaseAnhydrateVersion )
    {
       if ( NULL != pMajor )
-         *pMajor = (s_uBaseRubyVersion >> 8) & 0xFF;
+         *pMajor = (s_uBaseAnhydrateVersion >> 8) & 0xFF;
       if ( NULL != pMinor )
-         *pMinor = s_uBaseRubyVersion & 0xFF;
+         *pMinor = s_uBaseAnhydrateVersion & 0xFF;
       return;
    }
 
@@ -290,18 +290,18 @@ void get_Ruby_BaseVersion(int* pMajor, int* pMinor)
    FILE* fd = try_open_base_version_file(szFile);
    if ( NULL == fd )
    {
-      log_softerror_and_alarm("[Config] Failed to open base Ruby version file (%s).", szFile);
+      log_softerror_and_alarm("[Config] Failed to open base Anhydrate version file (%s).", szFile);
       return;
    }
    char szBuff[64];
    if ( 1 != fscanf(fd, "%s", szBuff) )
    {
       fclose(fd);
-      log_softerror_and_alarm("[Config] Failed to read base Ruby version file (%s).", szFile);
+      log_softerror_and_alarm("[Config] Failed to read base Anhydrate version file (%s).", szFile);
       return;
    }
    fclose(fd);
-   log_line("[Config] Read raw base Ruby version: [%s] from file (%s)", szBuff, szFile);
+   log_line("[Config] Read raw base Anhydrate version: [%s] from file (%s)", szBuff, szFile);
 
    for( int i=0; i<(int)strlen(szBuff); i++ )
    {
@@ -312,21 +312,21 @@ void get_Ruby_BaseVersion(int* pMajor, int* pMinor)
          int iMinor = 0;
          sscanf(szBuff, "%d", &iMajor);
          sscanf(&szBuff[i+1], "%d", &iMinor);
-         s_uBaseRubyVersion = (((u32)iMajor) << 8) | ((u32)iMinor);
-         log_line("[Config] Parsed base Ruby version: %u.%u", (s_uBaseRubyVersion>>8) & 0xFF, s_uBaseRubyVersion & 0xFF);
+         s_uBaseAnhydrateVersion = (((u32)iMajor) << 8) | ((u32)iMinor);
+         log_line("[Config] Parsed base Anhydrate version: %u.%u", (s_uBaseAnhydrateVersion>>8) & 0xFF, s_uBaseAnhydrateVersion & 0xFF);
 
          if ( NULL != pMajor )
-            *pMajor = (s_uBaseRubyVersion >> 8) & 0xFF;
+            *pMajor = (s_uBaseAnhydrateVersion >> 8) & 0xFF;
          if ( NULL != pMinor )
-            *pMinor = s_uBaseRubyVersion & 0xFF;
+            *pMinor = s_uBaseAnhydrateVersion & 0xFF;
 
          return;
       }
    }
-   log_softerror_and_alarm("[Config] Failed to parse base Ruby version from file (%s).", szFile);
+   log_softerror_and_alarm("[Config] Failed to parse base Anhydrate version from file (%s).", szFile);
 }
 
-void get_Ruby_UpdatedVersion(int* pMajor, int* pMinor)
+void get_Anhydrate_UpdatedVersion(int* pMajor, int* pMinor)
 {
    if ( NULL != pMajor )
       *pMajor = 0;
@@ -351,7 +351,7 @@ void get_Ruby_UpdatedVersion(int* pMajor, int* pMinor)
    }
    fclose(fd);
 
-   log_line("[Config] Read update Ruby version: [%s] from file (%s)", szBuff, szFile);
+   log_line("[Config] Read update Anhydrate version: [%s] from file (%s)", szBuff, szFile);
 
    for( int i=0; i<(int)strlen(szBuff); i++ )
    {
@@ -362,7 +362,7 @@ void get_Ruby_UpdatedVersion(int* pMajor, int* pMinor)
          int iMinor = 0;
          sscanf(szBuff, "%d", &iMajor);
          sscanf(&szBuff[i+1], "%d", &iMinor);
-         log_line("[Config] Parsed updated Ruby version: %u.%u", iMajor, iMinor);
+         log_line("[Config] Parsed updated Anhydrate version: %u.%u", iMajor, iMinor);
 
          if ( NULL != pMajor )
             *pMajor = iMajor;
@@ -373,3 +373,4 @@ void get_Ruby_UpdatedVersion(int* pMajor, int* pMinor)
       }
    }
 }
+

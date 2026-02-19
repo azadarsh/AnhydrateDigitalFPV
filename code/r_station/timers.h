@@ -21,3 +21,4 @@ extern u32 g_uTimeLastNegociateRadioPacket;
 
 bool isNegociatingRadioLink();
 
+

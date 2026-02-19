@@ -13,3 +13,4 @@ void hardware_radio_set_txpower_raw_atheros(int iCardIndex, int iTxPower);
 #ifdef __cplusplus
 }  
 #endif
+

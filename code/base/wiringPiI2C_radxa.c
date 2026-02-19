@@ -140,3 +140,4 @@ int wiringPiI2CWriteBlockData(int fd, uint8_t reg, uint8_t length, uint8_t *valu
 int wiringPiI2CWriteBlockDataIoctl(int fd,int addr, uint8_t reg, uint8_t length, uint8_t *values) { return 0; }
 #endif
 #endif
+

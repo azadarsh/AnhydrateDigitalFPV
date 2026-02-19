@@ -40,3 +40,4 @@ u32 radio_stats_get_time_last_received_packet_on_stream(shared_mem_radio_stats* 
 #ifdef __cplusplus
 }  
 #endif
+

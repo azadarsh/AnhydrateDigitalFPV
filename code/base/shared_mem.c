@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -338,4 +338,5 @@ void update_shared_mem_video_frames_stats_on_new_frame(shared_mem_video_frames_s
    pSMVFStats->uDetectedFPS = (u32)iDetectedFPS;
    pSMVFStats->uDetectedSlices = (u32)iDetectedSlices;
 }
+
 

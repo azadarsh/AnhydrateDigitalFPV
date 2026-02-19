@@ -3,9 +3,9 @@
 //-------------------------------------------------------------
 // The platform to build for can be forced by the makefile using the define below:
 
-#if defined(RUBY_BUILD_HW_PLATFORM_OPENIPC)
+#if defined(Anhydrate_BUILD_HW_PLATFORM_OPENIPC)
 #define HW_PLATFORM_OPENIPC_CAMERA
-#elif defined(RUBY_BUILD_HW_PLATFORM_RADXA)
+#elif defined(Anhydrate_BUILD_HW_PLATFORM_RADXA)
 #define HW_PLATFORM_RADXA
 #else
 #define HW_PLATFORM_RASPBERRY
@@ -44,3 +44,4 @@
 #define HW_CAPABILITY_GPIO
 #define HW_CAPABILITY_I2C
 #endif
+

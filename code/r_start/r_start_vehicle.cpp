@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -59,7 +59,7 @@
 #include "../base/hardware_files.h"
 #include "../base/hardware_procs.h"
 #include "../base/utils.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/tx_powers.h"
 #include "../common/string_utils.h"
 #include "../r_vehicle/launchers_vehicle.h"
@@ -414,19 +414,19 @@ void _restart_procs(bool bStopRouterToo)
       hardware_sleep_ms(200);
       iCounter--;
       bHasProcesses = false;
-      if ( hw_process_exists("ruby_rt_vehicle") )
+      if ( hw_process_exists("Anhydrate_rt_vehicle") )
          bHasProcesses = true;
-      if ( hw_process_exists("ruby_tx_telemetry") )
-         bHasProcesses = true;
-
-      szOutput[0] = 0;
-      hw_execute_bash_command("ps -aef | grep ruby | grep rx_com", szOutput);
-      if ( NULL != strstr(szOutput, "ruby_start -rx_com") )
+      if ( hw_process_exists("Anhydrate_tx_telemetry") )
          bHasProcesses = true;
 
       szOutput[0] = 0;
-      hw_execute_bash_command("ps -aef | grep ruby | grep rc", szOutput);
-      if ( NULL != strstr(szOutput, "ruby_start -rc") )
+      hw_execute_bash_command("ps -aef | grep Anhydrate | grep rx_com", szOutput);
+      if ( NULL != strstr(szOutput, "Anhydrate_start -rx_com") )
+         bHasProcesses = true;
+
+      szOutput[0] = 0;
+      hw_execute_bash_command("ps -aef | grep Anhydrate | grep rc", szOutput);
+      if ( NULL != strstr(szOutput, "Anhydrate_start -rc") )
          bHasProcesses = true;
 
       if ( video_sources_is_caputure_process_running() )
@@ -434,8 +434,8 @@ void _restart_procs(bool bStopRouterToo)
    }
 
 
-   hw_execute_bash_command_raw("ps -aef | grep ruby", szOutput);
-   log_line("Processes ps ruby output: [%s]", szOutput);
+   hw_execute_bash_command_raw("ps -aef | grep Anhydrate", szOutput);
+   log_line("Processes ps Anhydrate output: [%s]", szOutput);
 
    hw_execute_bash_command_raw("ps -aef | grep majestic", szOutput);
    log_line("Processes ps maj output: [%s]", szOutput);
@@ -449,7 +449,7 @@ void _restart_procs(bool bStopRouterToo)
 
    if ( hw_process_exists("sysupgrade") )
    {
-      log_softerror_and_alarm("Sysupgrade is in progress. Do not restart Ruby processes.");
+      log_softerror_and_alarm("Sysupgrade is in progress. Do not restart Anhydrate processes.");
       s_bQuit = true;
       return;
    }
@@ -541,7 +541,7 @@ void handle_sigint_veh(int sig)
 
 int r_start_vehicle(int argc, char *argv[])
 {
-   log_init("RubyVehicle");
+   log_init("AnhydrateVehicle");
    log_arguments(argc, argv);
 
    bool noWatchDog = false;
@@ -573,11 +573,11 @@ int r_start_vehicle(int argc, char *argv[])
       return -1;
    }
    
-   ruby_clear_all_ipc_channels();
+   Anhydrate_clear_all_ipc_channels();
 
    u32 uBoardType = 0;
    char szBoardId[256];
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_CONFIG_BOARD_TYPE);
    FILE* fd = fopen(szFile, "r");
    if ( NULL != fd )
@@ -588,7 +588,7 @@ int r_start_vehicle(int argc, char *argv[])
    log_line("Start sequence: Board type: %u -> %s", uBoardType, str_get_hardware_board_name(uBoardType));
 
 
-   sprintf(szBuff, "rm -rf %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_ALARM_ON);
+   sprintf(szBuff, "rm -rf %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_ALARM_ON);
    hw_execute_bash_command_silent(szBuff, NULL);
  
    bool bMustSave = false;
@@ -863,7 +863,7 @@ int r_start_vehicle(int argc, char *argv[])
    }
 
    #ifdef HW_PLATFORM_RASPBERRY
-   hw_execute_ruby_process(NULL, "ruby_alive", NULL, NULL);
+   hw_execute_Anhydrate_process(NULL, "Anhydrate_alive", NULL, NULL);
    #endif
    
    log_line("Launching processes...");
@@ -899,14 +899,14 @@ int r_start_vehicle(int argc, char *argv[])
    int iRestartCount = 0;
    u32 uTimeLoopLog = g_TimeStart;
 
-   strcpy(szFileUpdate, FOLDER_RUBY_TEMP);
+   strcpy(szFileUpdate, FOLDER_Anhydrate_TEMP);
    strcat(szFileUpdate, FILE_TEMP_UPDATE_IN_PROGRESS);
 
-   strcpy(szFileReinitRadio, FOLDER_RUBY_TEMP);
+   strcpy(szFileReinitRadio, FOLDER_Anhydrate_TEMP);
    strcat(szFileReinitRadio, FILE_TEMP_REINIT_RADIO_IN_PROGRESS);
 
    char szFileArmed[MAX_FILE_PATH_SIZE];
-   strcpy(szFileArmed, FOLDER_RUBY_TEMP);
+   strcpy(szFileArmed, FOLDER_Anhydrate_TEMP);
    strcat(szFileArmed, FILE_TEMP_ARMED);
 
    g_pSemaphoreRestart = sem_open(SEMAPHORE_RESTART_VEHICLE_PROCS, O_CREAT, S_IWUSR | S_IRUSR, 0);
@@ -988,7 +988,7 @@ int r_start_vehicle(int argc, char *argv[])
          if ( (s_pProcessStatsRouter->lastRadioRxTime+10000 < g_TimeNow) )
          {
             char szComm[128];
-            sprintf(szComm, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_ALARM_ON);
+            sprintf(szComm, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_ALARM_ON);
             hw_execute_bash_command_silent(szComm, NULL);
 
             log_line("Radio silence failsafe is enabled and radio timeout has triggered. Signal router to reinit radio interfaces.");
@@ -997,7 +997,7 @@ int r_start_vehicle(int argc, char *argv[])
                if ( 0 == s_iRadioSilenceFailsafeTimeoutCounts )
                {
                   char szComm5[MAX_FILE_PATH_SIZE];
-                  sprintf(szComm5, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_REINIT_RADIO_REQUEST);
+                  sprintf(szComm5, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_REINIT_RADIO_REQUEST);
                   hw_execute_bash_command_silent(szComm5, NULL);
                   s_iRadioSilenceFailsafeTimeoutCounts++;
                }
@@ -1030,7 +1030,7 @@ int r_start_vehicle(int argc, char *argv[])
             log_format_time(s_pProcessStatsRouter->lastActiveTime, szTime);
             log_format_time(s_pProcessStatsRouter->lastIPCIncomingTime, szTime2);
             log_format_time(s_pProcessStatsRouter->lastRadioTxTime, szTime3);
-            char* szPIDs = hw_process_get_pids_inline("ruby_rt_vehicle");
+            char* szPIDs = hw_process_get_pids_inline("Anhydrate_rt_vehicle");
             if ( strlen(szPIDs) > 2 )
             {
                log_line_watchdog("Router pipeline watchdog check failed: router process (PID [%s]) has blocked! Last active time: %s, last IPC incoming time: %s, last radio TX time: %s", szPIDs, szTime, szTime2, szTime3);
@@ -1064,7 +1064,7 @@ int r_start_vehicle(int argc, char *argv[])
          {
             log_format_time(s_pProcessStatsTelemetry->lastActiveTime, szTime);
             log_format_time(s_pProcessStatsTelemetry->lastIPCOutgoingTime, szTime2);
-            char* szPIDs = hw_process_get_pids_inline("ruby_tx_telemetry");
+            char* szPIDs = hw_process_get_pids_inline("Anhydrate_tx_telemetry");
             if ( strlen(szPIDs) > 2 )
             {
                log_line_watchdog("Telemetry TX pipeline watchdog check failed: telemetry tx process (PID [%s]) has blocked! Last active time: %s, last IPC outgoing time: %s", szPIDs, szTime, szTime2);
@@ -1089,7 +1089,7 @@ int r_start_vehicle(int argc, char *argv[])
          {
             log_format_time(s_pProcessStatsCommands->lastActiveTime, szTime);
             log_format_time(s_pProcessStatsCommands->lastIPCIncomingTime, szTime2);
-            char* szPIDs = hw_process_get_pids_inline("ruby_start");
+            char* szPIDs = hw_process_get_pids_inline("Anhydrate_start");
             if ( strlen(szPIDs) > 2 )
             {
                log_line_watchdog("Commands RX process watchdog check failed: commands rx process (PID [%s]) has blocked! Last active time: %s", szPIDs, szTime);
@@ -1116,7 +1116,7 @@ int r_start_vehicle(int argc, char *argv[])
          {
             log_format_time(s_pProcessStatsRC->lastActiveTime, szTime);
             log_format_time(s_pProcessStatsRC->lastIPCIncomingTime, szTime2);
-            char* szPIDs = hw_process_get_pids_inline("ruby_start");
+            char* szPIDs = hw_process_get_pids_inline("Anhydrate_start");
             if ( strlen(szPIDs) > 2 )
             {
                log_line_watchdog("RC RX process watchdog check failed: RC rx process (PID [%s]) has blocked! Last active time: %s, last IPC incoming time: %s", szPIDs, szTime, szTime2);
@@ -1154,3 +1154,4 @@ int r_start_vehicle(int argc, char *argv[])
      
    return 0;
 }
+

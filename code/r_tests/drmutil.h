@@ -18,3 +18,4 @@ const char *conn_str(uint32_t conn_type);
 int refresh_rate(drmModeModeInfo *mode);
 
 #endif
+

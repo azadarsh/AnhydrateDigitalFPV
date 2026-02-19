@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -34,7 +34,7 @@
 #include "../base/config.h"
 #include "../base/shared_mem.h"
 #include "../base/hardware_procs.h"
-#include "../base/ruby_ipc.h"
+#include "../base/Anhydrate_ipc.h"
 #include "../base/camera_utils.h"
 #include "../base/utils.h"
 #include "../common/string_utils.h"
@@ -55,7 +55,7 @@
 #include "timers.h"
 #include "shared_vars.h"
 #include "adaptive_video.h"
-#include "ruby_rt_vehicle.h"
+#include "Anhydrate_rt_vehicle.h"
 
 #ifdef HW_PLATFORM_RASPBERRY
 
@@ -208,7 +208,7 @@ u32 _vehicle_launch_video_capture_csi(Model* pModel, u32 uOverwriteInitialBitrat
          snprintf(szBuff, sizeof(szBuff)/sizeof(szBuff[0]), "%s ./%s %s %s%s -t 0 -o - &", szPrefixPriority, VIDEO_RECORDER_COMMAND, szVideoFlags, szCameraFlags, szProcessParams );
    }
 
-   strcpy(szFile, FOLDER_RUBY_TEMP);
+   strcpy(szFile, FOLDER_Anhydrate_TEMP);
    strcat(szFile, FILE_TEMP_CURRENT_VIDEO_PARAMS);
 
    FILE* fd = fopen(szFile, "w");
@@ -295,12 +295,12 @@ static void * _thread_watchdog_video_capture(void *ignored_argument)
          {
             log_line("[VideoCaptureCSITh] Can't find the running video capture program. Search for it.");
             char szOutput[2048];
-            hw_process_get_pids("ruby_capture_raspi", szOutput);
+            hw_process_get_pids("Anhydrate_capture_raspi", szOutput);
             removeTrailingNewLines(szOutput);
-            log_line("[VideoCaptureCSITh] PID of ruby capture: [%s]", szOutput);
-            hw_execute_bash_command_raw("ps -ef | grep ruby 2>&1", szOutput);
-            log_line("[VideoCaptureCSITh] Current running Ruby processes: [%s]", szOutput);
-            if ( NULL != strstr(szOutput, "ruby_capture_") )
+            log_line("[VideoCaptureCSITh] PID of Anhydrate capture: [%s]", szOutput);
+            hw_execute_bash_command_raw("ps -ef | grep Anhydrate 2>&1", szOutput);
+            log_line("[VideoCaptureCSITh] Current running Anhydrate processes: [%s]", szOutput);
+            if ( NULL != strstr(szOutput, "Anhydrate_capture_") )
             {
                log_line("[VideoCaptureCSITh] Video capture is still running. Do not restart it.");
             }
@@ -380,7 +380,7 @@ int _video_source_csi_open(const char* szPipeName)
    }
    */
 
-   s_fInputVideoStreamCSIPipe = open( FIFO_RUBY_CAMERA1, O_RDONLY | RUBY_PIPES_EXTRA_FLAGS);
+   s_fInputVideoStreamCSIPipe = open( FIFO_Anhydrate_CAMERA1, O_RDONLY | Anhydrate_PIPES_EXTRA_FLAGS);
    if ( s_fInputVideoStreamCSIPipe < 0 )
    {
       log_error_and_alarm("[VideoSourceCSI] Failed to open video input stream: %s", s_szInputVideoStreamCSIPipeName);
@@ -547,7 +547,7 @@ u32 video_source_csi_start_program(u32 uOverwriteInitialBitrate, int iOverwriteI
    _video_source_csi_open_commands_msg_queue();
 
    if ( -1 == s_fInputVideoStreamCSIPipe )
-       _video_source_csi_open(FIFO_RUBY_CAMERA1);
+       _video_source_csi_open(FIFO_Anhydrate_CAMERA1);
 
    s_bVideoCSICaptureProgramStarted = true;
    s_uLastSetCSIVideoBitrateBPS = 0;

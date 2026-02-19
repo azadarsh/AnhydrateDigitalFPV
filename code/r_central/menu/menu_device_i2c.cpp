@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -85,7 +85,7 @@ void MenuDeviceI2C::createItems()
    m_pItemsSelect[0]->addSelection(I2C_DEVICE_NAME_INA219);
    m_pItemsSelect[0]->addSelection(I2C_DEVICE_NAME_RC_IN);
    m_pItemsSelect[0]->addSelection(I2C_DEVICE_NAME_PICO_EXTENDER);
-   m_pItemsSelect[0]->addSelection(I2C_DEVICE_NAME_RUBY_ADDON);
+   m_pItemsSelect[0]->addSelection(I2C_DEVICE_NAME_Anhydrate_ADDON);
    m_pItemsSelect[0]->addSelection(I2C_DEVICE_NAME_OLED_SCREEN);
    m_pItemsSelect[0]->setIsEditable();
    m_IndexDevType = addMenuItem(m_pItemsSelect[0]);
@@ -163,7 +163,7 @@ void MenuDeviceI2C::createItems()
       m_bDeviceHasCustomSettings = true;
    }
 
-   if ( NULL != pInfo && pInfo->nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON )
+   if ( NULL != pInfo && pInfo->nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON )
    {
       if ( pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_RC_INPUT )
       {
@@ -238,7 +238,7 @@ void MenuDeviceI2C::valuesToUI()
       m_pItemsSelect[0]->setSelection(2);
    if ( pInfo->nDeviceType == I2C_DEVICE_TYPE_PICO_EXTENDER )
       m_pItemsSelect[0]->setSelection(3);
-   if ( pInfo->nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON )
+   if ( pInfo->nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON )
       m_pItemsSelect[0]->setSelection(4);
    if ( pInfo->nDeviceType == I2C_DEVICE_TYPE_OLED_SCREEN )
       m_pItemsSelect[0]->setSelection(5);
@@ -255,7 +255,7 @@ void MenuDeviceI2C::valuesToUI()
    }
 
    if ( (pInfo->nDeviceType == I2C_DEVICE_TYPE_PICO_RC_IN) || (pInfo->nDeviceType == I2C_DEVICE_TYPE_PICO_EXTENDER) ||
-        ((pInfo->nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_RC_INPUT)) )
+        ((pInfo->nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_RC_INPUT)) )
    {
       m_pItemsSelect[2]->setEnabled(true);
       m_pItemsSelect[3]->setEnabled(true);
@@ -268,7 +268,7 @@ void MenuDeviceI2C::valuesToUI()
    }
 
    if ( (pInfo->nDeviceType == I2C_DEVICE_TYPE_PICO_EXTENDER) ||
-        ((pInfo->nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY)) )
+        ((pInfo->nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY)) )
    {
       m_pItemsSelect[4]->setEnabled(true);
       m_pItemsSelect[4]->setSelection( pCS->nRotaryEncoderFunction );
@@ -331,7 +331,7 @@ void MenuDeviceI2C::onSelectItem()
       if ( 3 == index )
          pInfo->nDeviceType = I2C_DEVICE_TYPE_PICO_EXTENDER;
       if ( 4 == index )
-         pInfo->nDeviceType = I2C_DEVICE_TYPE_RUBY_ADDON;
+         pInfo->nDeviceType = I2C_DEVICE_TYPE_Anhydrate_ADDON;
       if ( 5 == index )
          pInfo->nDeviceType = I2C_DEVICE_TYPE_OLED_SCREEN;
       hardware_i2c_save_device_settings();
@@ -371,7 +371,7 @@ void MenuDeviceI2C::onSelectItem()
       int index = m_pItemsSelect[4]->getSelectedIndex();
       pInfo->uParams[2] = index;
       if ( (pInfo->nDeviceType == I2C_DEVICE_TYPE_PICO_EXTENDER) ||
-           ((pInfo->nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY)) )
+           ((pInfo->nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY)) )
       {
          pCS->nRotaryEncoderFunction = index;
          save_ControllerSettings();
@@ -385,7 +385,7 @@ void MenuDeviceI2C::onSelectItem()
       int index = m_pItemsSelect[5]->getSelectedIndex();
       pInfo->uParams[3] = index;
       if ( (pInfo->nDeviceType == I2C_DEVICE_TYPE_PICO_EXTENDER) ||
-           ((pInfo->nDeviceType == I2C_DEVICE_TYPE_RUBY_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY)) )
+           ((pInfo->nDeviceType == I2C_DEVICE_TYPE_Anhydrate_ADDON) && (pInfo->uCapabilitiesFlags & I2C_CAPABILITY_FLAG_ROTARY)) )
       {
          pCS->nRotaryEncoderSpeed = index;
          save_ControllerSettings();
@@ -396,10 +396,11 @@ void MenuDeviceI2C::onSelectItem()
 
    if ( bUpdated )
    {
-      send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_I2C_DEVICE_CHANGED, PACKET_COMPONENT_RUBY);
+      send_control_message_to_router(PACKET_TYPE_LOCAL_CONTROL_I2C_DEVICE_CHANGED, PACKET_COMPONENT_Anhydrate);
       char szBuff[128];
-      sprintf(szBuff, "touch %s%s", FOLDER_RUBY_TEMP, FILE_TEMP_I2C_UPDATED);
+      sprintf(szBuff, "touch %s%s", FOLDER_Anhydrate_TEMP, FILE_TEMP_I2C_UPDATED);
       hw_execute_bash_command_silent(szBuff, NULL);
       valuesToUI();
    }   
 }
+

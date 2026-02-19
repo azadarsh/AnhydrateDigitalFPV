@@ -403,3 +403,4 @@ static inline void mavlink_msg_set_attitude_target_decode(const mavlink_message_
     memcpy(set_attitude_target, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

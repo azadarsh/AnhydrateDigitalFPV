@@ -31,3 +31,4 @@ int hdmi_get_best_resolution_index_for(int iWidth, int iHeight, int iRefresh);
 #ifdef __cplusplus
 }  
 #endif
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -230,3 +230,4 @@ const char* L(const char* szString)
    return _check_add_dynamic_loc_string(szString);
    //return szString;
 }
+

@@ -107,3 +107,4 @@ void shared_mem_radio_rx_queue_info_close(shared_mem_radio_rx_queue_info* pAddre
 shared_mem_ctrl_ping_stats* shared_mem_ctrl_ping_stats_info_open_for_read();
 shared_mem_ctrl_ping_stats* shared_mem_rctrl_ping_stats_info_open_for_write();
 void shared_mem_ctrl_ping_stats_info_close(shared_mem_ctrl_ping_stats* pAddress);
+

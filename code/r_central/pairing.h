@@ -11,3 +11,4 @@ bool pairing_isStarted();
 u32  pairing_getStartTime();
 bool pairing_isRouterReady();
 void pairing_loop();
+

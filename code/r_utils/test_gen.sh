@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./ruby_test_gen_stream >> /tmp/ruby/fifo1&
-./ruby_tx_video /tmp/ruby/fifo1
+./Anhydrate_test_gen_stream >> /tmp/Anhydrate/fifo1&
+./Anhydrate_tx_video /tmp/Anhydrate/fifo1

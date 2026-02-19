@@ -528,3 +528,4 @@ static inline void mavlink_msg_landing_target_decode(const mavlink_message_t* ms
     memcpy(landing_target, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

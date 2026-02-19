@@ -1599,3 +1599,4 @@ typedef enum PRECISION_LAND_MODE
 }
 #endif // __cplusplus
 #endif // MAVLINK_COMMON_H
+

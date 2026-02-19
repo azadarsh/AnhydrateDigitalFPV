@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -38,7 +38,7 @@
 
 #include "menu.h"
 #include "menu_confirmation_video_rate.h"
-#include "../ruby_central.h"
+#include "../Anhydrate_central.h"
 #include "../events.h"
 
 MenuConfirmationVideoRate::MenuConfirmationVideoRate(int iNewDataRate)

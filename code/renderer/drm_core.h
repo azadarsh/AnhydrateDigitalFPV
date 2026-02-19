@@ -1,6 +1,6 @@
 #pragma once
-#ifndef RUBY_DRM_CORE
-#define RUBY_DRM_CORE
+#ifndef Anhydrate_DRM_CORE
+#define Anhydrate_DRM_CORE
 
 #include <unistd.h>
 #include <xf86drm.h>
@@ -71,29 +71,29 @@ typedef struct
    int iVideoSourceHeight;
 } type_drm_runtime_state;
 
-int ruby_drm_core_is_display_connected();
-int ruby_drm_core_wait_for_display_connected();
+int Anhydrate_drm_core_is_display_connected();
+int Anhydrate_drm_core_wait_for_display_connected();
 
-int ruby_drm_core_init(int iPlaneIndex, uint32_t uFormat, int iWidth, int iHeight, int iRefreshRate);
-int ruby_drm_core_uninit();
-int ruby_drm_core_get_fd();
+int Anhydrate_drm_core_init(int iPlaneIndex, uint32_t uFormat, int iWidth, int iHeight, int iRefreshRate);
+int Anhydrate_drm_core_uninit();
+int Anhydrate_drm_core_get_fd();
 
-type_drm_display_attributes* ruby_drm_get_main_display_info();
+type_drm_display_attributes* Anhydrate_drm_get_main_display_info();
 
-type_drm_buffer* ruby_drm_core_get_main_draw_buffer();
-type_drm_buffer* ruby_drm_core_get_back_draw_buffer();
-uint32_t ruby_drm_core_get_main_draw_buffer_id();
-uint32_t ruby_drm_core_get_back_draw_buffer_id();
-int ruby_drm_swap_mainback_buffers();
+type_drm_buffer* Anhydrate_drm_core_get_main_draw_buffer();
+type_drm_buffer* Anhydrate_drm_core_get_back_draw_buffer();
+uint32_t Anhydrate_drm_core_get_main_draw_buffer_id();
+uint32_t Anhydrate_drm_core_get_back_draw_buffer_id();
+int Anhydrate_drm_swap_mainback_buffers();
 
-int ruby_drm_core_set_plane_properties_and_buffer(uint32_t uBufferId);
-int ruby_drm_core_set_plane_buffer(uint32_t uBufferId);
+int Anhydrate_drm_core_set_plane_properties_and_buffer(uint32_t uBufferId);
+int Anhydrate_drm_core_set_plane_buffer(uint32_t uBufferId);
 
-type_drm_object_info* ruby_drm_get_plane_info();
-int ruby_drm_set_object_property(type_drm_object_info* pObject, const char *szName, uint64_t uValue);
+type_drm_object_info* Anhydrate_drm_get_plane_info();
+int Anhydrate_drm_set_object_property(type_drm_object_info* pObject, const char *szName, uint64_t uValue);
 
-void ruby_drm_set_video_source_size(int iWidth, int iHeight);
-void ruby_drm_enable_vsync(int iEnableVSync);
+void Anhydrate_drm_set_video_source_size(int iWidth, int iHeight);
+void Anhydrate_drm_enable_vsync(int iEnableVSync);
 
 #ifdef __cplusplus
 }  

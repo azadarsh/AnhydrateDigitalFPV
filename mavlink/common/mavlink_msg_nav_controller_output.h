@@ -386,3 +386,4 @@ static inline void mavlink_msg_nav_controller_output_decode(const mavlink_messag
     memcpy(nav_controller_output, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

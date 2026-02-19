@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -148,3 +148,4 @@ void MenuItemCheckbox::RenderCondensed(float xPos, float yPos, bool bSelected, f
       g_pRenderEngine->drawLine(xPos+cornerH, yPos+m_RenderTitleHeight-corner, xPos+width-cornerH, yPos+corner);
    }
 }
+

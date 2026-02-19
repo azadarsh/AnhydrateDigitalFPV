@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -396,3 +396,4 @@ int getRadioMinimDBMForDataRate(int iDatarate)
    }
    return 0;
 }
+

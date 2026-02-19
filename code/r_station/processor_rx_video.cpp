@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -71,7 +71,7 @@
 #include "packets_utils.h"
 #include "video_rx_buffers.h"
 #include "timers.h"
-#include "ruby_rt_station.h"
+#include "Anhydrate_rt_station.h"
 #include "test_link_params.h"
 #include "adaptive_video.h"
 
@@ -634,7 +634,7 @@ void ProcessorRxVideo::handleReceivedVideoPacket(int interfaceNb, u8* pBuffer, i
       adaptive_video_reset_time_for_vehicle(m_uVehicleId);
    }
 
-   #if defined(RUBY_BUILD_HW_PLATFORM_PI)
+   #if defined(Anhydrate_BUILD_HW_PLATFORM_PI)
    if (((pPHVS->uVideoStreamIndexAndType >> 4) & 0x0F) == VIDEO_TYPE_H265 )
    {
       static u32 s_uTimeLastSendVideoUnsuportedAlarmToCentral = 0;

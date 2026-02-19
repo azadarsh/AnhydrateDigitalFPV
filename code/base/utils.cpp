@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga
     All rights reserved.
 
@@ -41,7 +41,7 @@
 const double PIx = 3.141592653589793;
 const double RADIUS_EARTH = 6371.0; // Mean radius of Earth in Km
 
-bool ruby_is_first_pairing_done()
+bool Anhydrate_is_first_pairing_done()
 {
    char szFile[MAX_FILE_PATH_SIZE];
    strcpy(szFile, FOLDER_CONFIG);
@@ -51,7 +51,7 @@ bool ruby_is_first_pairing_done()
    return true;
 }
 
-void ruby_set_is_first_pairing_done()
+void Anhydrate_set_is_first_pairing_done()
 {
    char szFile[MAX_FILE_PATH_SIZE];
    strcpy(szFile, FOLDER_CONFIG);
@@ -1056,20 +1056,21 @@ void utils_log_radio_packets_sizes()
    log_always(szBuff);
    sprintf(szBuff, "[Utils] Size of radio t_packet_header_video_segment_important: %d bytes", (int)sizeof(t_packet_header_video_segment_important));
    log_always(szBuff);
-   sprintf(szBuff, "[Utils] Size of radio t_packet_header_ruby_telemetry_short: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_short));
+   sprintf(szBuff, "[Utils] Size of radio t_packet_header_Anhydrate_telemetry_short: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_short));
    log_always(szBuff);
-   sprintf(szBuff, "[Utils] Size of radio t_packet_header_ruby_telemetry_extended_v4: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_v4));
+   sprintf(szBuff, "[Utils] Size of radio t_packet_header_Anhydrate_telemetry_extended_v4: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_v4));
    log_always(szBuff);
-   sprintf(szBuff, "[Utils] Size of radio t_packet_header_ruby_telemetry_extended_v5: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_v5));
+   sprintf(szBuff, "[Utils] Size of radio t_packet_header_Anhydrate_telemetry_extended_v5: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_v5));
    log_always(szBuff);
-   sprintf(szBuff, "[Utils] Size of radio t_packet_header_ruby_telemetry_extended_v6: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_v6));
+   sprintf(szBuff, "[Utils] Size of radio t_packet_header_Anhydrate_telemetry_extended_v6: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_v6));
    log_always(szBuff);
-   sprintf(szBuff, "[Utils] Size of radio t_packet_header_ruby_telemetry_extended_extra_info: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_extra_info));
+   sprintf(szBuff, "[Utils] Size of radio t_packet_header_Anhydrate_telemetry_extended_extra_info: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info));
    log_always(szBuff);
-   sprintf(szBuff, "[Utils] Size of radio t_packet_header_ruby_telemetry_extended_extra_info_retransmissions: %d bytes", (int)sizeof(t_packet_header_ruby_telemetry_extended_extra_info_retransmissions));
+   sprintf(szBuff, "[Utils] Size of radio t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions: %d bytes", (int)sizeof(t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions));
    log_always(szBuff);
    sprintf(szBuff, "[Utils] Size of radio t_packet_header_fc_telemetry: %d bytes", (int)sizeof(t_packet_header_fc_telemetry));
    log_always(szBuff);
    sprintf(szBuff, "[Utils] Size of radio t_packet_header_fc_extra: %d bytes", (int)sizeof(t_packet_header_fc_extra));
    log_always(szBuff);
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -56,7 +56,7 @@ MenuDiagnoseRadioLink::MenuDiagnoseRadioLink(int iVehicleRadioLinkIndex)
    u8 uLinkId = (u8)m_iVehicleRadioLinkIndex;
    u8 uCommandId = 1;
    
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header)+2*sizeof(u8);
@@ -68,7 +68,7 @@ MenuDiagnoseRadioLink::MenuDiagnoseRadioLink(int iVehicleRadioLinkIndex)
    for( int i=0; i<5; i++ )
       send_packet_to_router(buffer, PH.total_length);
 
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header)+2*sizeof(u8);
@@ -118,7 +118,7 @@ void MenuDiagnoseRadioLink::onReceivedVehicleData(u8* pData, int iDataLength)
       u8 uLinkId = (u8)m_iVehicleRadioLinkIndex;
       u8 uCommandId = 2;
       
-      radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
+      radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
       PH.vehicle_id_src = g_uControllerId;
       PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
       PH.total_length = sizeof(t_packet_header)+2*sizeof(u8);
@@ -176,7 +176,7 @@ void MenuDiagnoseRadioLink::onReceivedControllerData(u8* pData, int iDataLength)
    u8 uLinkId = (u8)m_iVehicleRadioLinkIndex;
    u8 uCommandId = 2;
    
-   radio_packet_init(&PH, PACKET_COMPONENT_RUBY, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
+   radio_packet_init(&PH, PACKET_COMPONENT_Anhydrate, PACKET_TYPE_SIK_CONFIG, STREAM_ID_DATA);
    PH.vehicle_id_src = g_uControllerId;
    PH.vehicle_id_dest = g_pCurrentModel->uVehicleId;
    PH.total_length = sizeof(t_packet_header)+2*sizeof(u8);

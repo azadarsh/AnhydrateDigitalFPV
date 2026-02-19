@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -297,7 +297,7 @@ int radio_dup_detection_is_duplicate_on_stream(int iRadioInterfaceIndex, u8* pPa
    if ( uStreamPacketIndex == pDupInfo->streamsPacketsHistory[uStreamIndex].packetsHashIndexes[iHashIndex] )
       bIsDuplicatePacket = 1;
 
-   if ( (uPacketType == PACKET_TYPE_RUBY_PING_CLOCK) || (uPacketType == PACKET_TYPE_RUBY_PING_CLOCK_REPLY) )
+   if ( (uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK) || (uPacketType == PACKET_TYPE_Anhydrate_PING_CLOCK_REPLY) )
       bIsDuplicatePacket = 0;
 
    if ( bIsDuplicatePacket )

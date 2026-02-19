@@ -54,3 +54,4 @@ int main(int argc, char *argv[])
       log_line("Hardware: No camera detected.");
    exit(0);
 }
+

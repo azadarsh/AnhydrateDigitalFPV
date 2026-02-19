@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -422,3 +422,4 @@ void RenderEngineUI::drawArc(float x, float y, float r, float a1, float a2)
       return;
    s_pRenderEngineUI->drawArc(x,y,r,a1,a2);
 }
+

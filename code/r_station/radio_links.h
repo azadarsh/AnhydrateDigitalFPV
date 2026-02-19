@@ -16,3 +16,4 @@ bool radio_links_apply_settings(Model* pModel, int iRadioLink, type_radio_links_
 
 void radio_links_set_monitor_mode();
 u32 radio_links_get_last_set_monitor_time();
+

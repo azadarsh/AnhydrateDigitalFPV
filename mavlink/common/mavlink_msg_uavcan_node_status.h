@@ -336,3 +336,4 @@ static inline void mavlink_msg_uavcan_node_status_decode(const mavlink_message_t
     memcpy(uavcan_node_status, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

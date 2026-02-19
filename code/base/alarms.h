@@ -90,3 +90,4 @@ void alarms_to_string(u32 uAlarms, u32 uFlags1, u32 uFlags2, char* szOutput);
 #ifdef __cplusplus
 }  
 #endif
+

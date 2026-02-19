@@ -478,3 +478,4 @@ static inline void mavlink_msg_local_position_ned_cov_decode(const mavlink_messa
     memcpy(local_position_ned_cov, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

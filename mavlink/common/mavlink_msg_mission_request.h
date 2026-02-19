@@ -286,3 +286,4 @@ static inline void mavlink_msg_mission_request_decode(const mavlink_message_t* m
     memcpy(mission_request, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

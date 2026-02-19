@@ -1,0 +1,837 @@
+/*
+    Anhydrate Licence
+    Copyright (c) 2020-2025 Petru Soroaga
+    All rights reserved.
+
+    Redistribution and/or use in source and/or binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+        * Redistributions and/or use of the source code (partially or complete) must retain
+        the above copyright notice, this list of conditions and the following disclaimer
+        in the documentation and/or other materials provided with the distribution.
+        * Redistributions in binary form (partially or complete) must reproduce
+        the above copyright notice, this list of conditions and the following disclaimer
+        in the documentation and/or other materials provided with the distribution.
+        * Copyright info and developer info must be preserved as is in the user
+        interface, additions could be made to that info.
+        * Neither the name of the organization nor the
+        names of its contributors may be used to endorse or promote products
+        derived from this software without specific prior written permission.
+        * Military use is not permitted.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE AUTHOR (PETRU SOROAGA) BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+#include "base.h"
+#include "config.h"
+#include "Anhydrate_ipc.h"
+#include "hardware.h"
+#include "hardware_procs.h"
+#include "../common/string_utils.h"
+#include "../radio/radiopackets2.h"
+
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <errno.h>
+
+//#define Anhydrate_USE_FIFO_PIPES 1
+#define Anhydrate_USES_MSGQUEUES 1
+
+#define FIFO_Anhydrate_ROUTER_TO_CENTRAL "/tmp/Anhydrate/fiforoutercentral"
+#define FIFO_Anhydrate_CENTRAL_TO_ROUTER "/tmp/Anhydrate/fifocentralrouter"
+#define FIFO_Anhydrate_ROUTER_TO_COMMANDS "/tmp/Anhydrate/fiforoutercommands"
+#define FIFO_Anhydrate_COMMANDS_TO_ROUTER "/tmp/Anhydrate/fifocommandsrouter"
+#define FIFO_Anhydrate_ROUTER_TO_TELEMETRY "/tmp/Anhydrate/fiforoutertelemetry"
+#define FIFO_Anhydrate_TELEMETRY_TO_ROUTER "/tmp/Anhydrate/fifotelemetryrouter"
+#define FIFO_Anhydrate_ROUTER_TO_RC "/tmp/Anhydrate/fiforouterrc"
+#define FIFO_Anhydrate_RC_TO_ROUTER "/tmp/Anhydrate/fiforcrouter"
+
+
+//#define PROFILE_IPC 1
+#define PROFILE_IPC_MAX_TIME 20
+
+#define MAX_CHANNELS 16
+
+int s_iAnhydrateIPCChannelsUniqueIds[MAX_CHANNELS];
+int s_iAnhydrateIPCChannelsFd[MAX_CHANNELS];
+int s_iAnhydrateIPCChannelsType[MAX_CHANNELS];
+u8  s_uAnhydrateIPCChannelsMsgId[MAX_CHANNELS];
+key_t s_uAnhydrateIPCChannelsKeys[MAX_CHANNELS];
+
+static int s_iAnhydrateIPCChannelsUniqueIdCounter = 1;
+
+int s_iAnhydrateIPCChannelsCount = 0;
+
+static int s_iAnhydrateIPCCountReadErrors = 0;
+
+typedef struct
+{
+    long type;
+    char data[IPC_CHANNEL_MAX_MSG_SIZE];
+    // byte 0...3: CRC
+    // byte 4: message type
+    // byte 5..6: message data length
+    // byte 7...: data
+} type_ipc_message_buffer;
+
+
+char* _Anhydrate_ipc_get_channel_name(int nChannelType)
+{
+   static char s_szAnhydrateIPCChannelType[128];
+   s_szAnhydrateIPCChannelType[0] = 0;
+   sprintf(s_szAnhydrateIPCChannelType, "[Unknown Channel Type %d]", nChannelType);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_CENTRAL )
+      strcpy(s_szAnhydrateIPCChannelType, "[ROUTER-TO-CENTRAL]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_CENTRAL_TO_ROUTER )
+      strcpy(s_szAnhydrateIPCChannelType, "[CENTRAL-TO-ROUTER]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_TELEMETRY )
+      strcpy(s_szAnhydrateIPCChannelType, "[ROUTER-TO-TELEMETRY]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_TELEMETRY_TO_ROUTER )
+      strcpy(s_szAnhydrateIPCChannelType, "[TELEMETRY-TO-ROUTER]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_RC )
+      strcpy(s_szAnhydrateIPCChannelType, "[ROUTER-TO-RC]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_RC_TO_ROUTER )
+      strcpy(s_szAnhydrateIPCChannelType, "[RC-TO-ROUTER]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_COMMANDS )
+      strcpy(s_szAnhydrateIPCChannelType, "[ROUTER-TO-COMMANDS]");
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_COMMANDS_TO_ROUTER )
+      strcpy(s_szAnhydrateIPCChannelType, "[COMMANDS-TO-ROUTER]");
+
+   return s_szAnhydrateIPCChannelType;
+}
+
+char* _Anhydrate_ipc_get_pipe_name(int nChannelType )
+{
+   static char s_szAnhydratePipeName[256];
+   s_szAnhydratePipeName[0] = 0;
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_CENTRAL )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_ROUTER_TO_CENTRAL);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_CENTRAL_TO_ROUTER )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_CENTRAL_TO_ROUTER);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_TELEMETRY )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_ROUTER_TO_TELEMETRY);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_TELEMETRY_TO_ROUTER )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_TELEMETRY_TO_ROUTER);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_RC )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_ROUTER_TO_RC);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_RC_TO_ROUTER )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_RC_TO_ROUTER);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_ROUTER_TO_COMMANDS )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_ROUTER_TO_COMMANDS);
+
+   if ( nChannelType == IPC_CHANNEL_TYPE_COMMANDS_TO_ROUTER )
+      strcpy(s_szAnhydratePipeName, FIFO_Anhydrate_COMMANDS_TO_ROUTER);
+
+   return s_szAnhydratePipeName;
+}
+
+
+void _Anhydrate_ipc_log_channels()
+{
+   log_line("[IPC] Currently opened channels: %d:", s_iAnhydrateIPCChannelsCount);
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+   {
+      log_line("[IPC] Channel %d: unique id: %d, fd: %d, type: %s, key: 0x%x",
+         i+1, s_iAnhydrateIPCChannelsUniqueIds[i], s_iAnhydrateIPCChannelsFd[i],
+         _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[i]), (u32)s_uAnhydrateIPCChannelsKeys[i]);
+   }
+}
+
+void _Anhydrate_ipc_log_channel_info(int iChannelType, int iChannelId, int iChannelFd)
+{
+   if ( iChannelFd < 0 )
+      return;
+   struct msqid_ds msg_stats;
+   if ( 0 != msgctl(iChannelFd, IPC_STAT, &msg_stats) )
+      log_softerror_and_alarm("[IPC] Failed to get statistics on ICP message queue %s, id %d, fd %d",
+        _Anhydrate_ipc_get_channel_name(iChannelType), iChannelId, iChannelFd );
+   else
+      log_line("[IPC] Channel %s (id: %d, fd: %d) info: %u pending messages, %u used bytes, max bytes in the IPC channel: %u bytes",
+         _Anhydrate_ipc_get_channel_name(iChannelType), iChannelId,
+         iChannelFd, (u32)msg_stats.msg_qnum, (u32)msg_stats.msg_cbytes, (u32)msg_stats.msg_qbytes);
+}
+
+void _check_Anhydrate_ipc_consistency()
+{
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount-1; i++ )
+   {
+      for ( int k=i+1; k<s_iAnhydrateIPCChannelsCount; k++ )
+      {
+         #ifdef Anhydrate_USES_MSGQUEUES
+         if ( s_uAnhydrateIPCChannelsKeys[i] == s_uAnhydrateIPCChannelsKeys[k] )
+            log_error_and_alarm("[IPC] Duplicate key for IPC channels %d and %d, %s and %s.", i, k, _Anhydrate_ipc_get_pipe_name(s_iAnhydrateIPCChannelsType[i]), _Anhydrate_ipc_get_pipe_name(s_iAnhydrateIPCChannelsType[k]));
+         #endif
+         if ( s_iAnhydrateIPCChannelsFd[i] == s_iAnhydrateIPCChannelsFd[k] )
+            log_error_and_alarm("[IPC] Duplicate fd for IPC channels %d and %d, %s and %s.", i, k, _Anhydrate_ipc_get_pipe_name(s_iAnhydrateIPCChannelsType[i]), _Anhydrate_ipc_get_pipe_name(s_iAnhydrateIPCChannelsType[k]));
+         if ( s_iAnhydrateIPCChannelsType[i] == s_iAnhydrateIPCChannelsType[k] )
+            log_error_and_alarm("[IPC] Duplicate channel type for IPC channels %d and %d, %s and %s.", i, k, _Anhydrate_ipc_get_pipe_name(s_iAnhydrateIPCChannelsType[i]), _Anhydrate_ipc_get_pipe_name(s_iAnhydrateIPCChannelsType[k]));
+      }
+   }
+}
+
+
+int Anhydrate_init_ipc_channels()
+{
+   #if defined(HW_PLATFORM_RASPBERRY) || defined(HW_PLATFORM_RADXA)
+   char szBuff[256];
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_CAMERA1);
+   hw_execute_bash_command(szBuff, NULL);
+      
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_AUDIO1);
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_AUDIO_BUFF);
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_AUDIO_QUEUE);
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_DISPLAY);
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_RECORDING);
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_STATION_VIDEO_STREAM_ETH);
+   hw_execute_bash_command(szBuff, NULL);
+   #endif
+
+   #ifdef Anhydrate_USE_FIFO_PIPES
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_ROUTER_TO_CENTRAL );
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_CENTRAL_TO_ROUTER );
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_ROUTER_TO_COMMANDS );
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_COMMANDS_TO_ROUTER);
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_ROUTER_TO_TELEMETRY );
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_TELEMETRY_TO_ROUTER );
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_ROUTER_TO_RC );
+   hw_execute_bash_command(szBuff, NULL);
+
+   sprintf(szBuff, "mkfifo %s", FIFO_Anhydrate_RC_TO_ROUTER );
+   hw_execute_bash_command(szBuff, NULL);
+
+   #endif
+
+   return 1;
+}
+
+void Anhydrate_clear_all_ipc_channels()
+{
+   log_line("[IPC] Clearing all IPC channels...");
+   
+   #ifdef Anhydrate_USES_MSGQUEUES
+
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+   {
+      int iRes = msgctl(s_iAnhydrateIPCChannelsFd[i],IPC_RMID,NULL);
+      if ( iRes < 0 )
+         log_softerror_and_alarm("[IPC] Failed to remove msgque [%s], error code: %d, error: %s",
+          _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[i]), errno, strerror(errno));
+   }
+   s_iAnhydrateIPCChannelsCount = 0;
+
+   #endif
+
+   log_line("[IPC] Done clearing all IPC channels.");
+}
+
+int Anhydrate_open_ipc_channel_write_endpoint(int nChannelType)
+{
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+      if ( s_iAnhydrateIPCChannelsType[i] == nChannelType )
+      if ( s_iAnhydrateIPCChannelsFd[i] > 0 )
+      if ( s_iAnhydrateIPCChannelsUniqueIds[i] > 0 )
+         return s_iAnhydrateIPCChannelsUniqueIds[i];
+
+   if ( s_iAnhydrateIPCChannelsCount >= MAX_CHANNELS )
+   {
+      log_error_and_alarm("[IPC] Can't open %s channel. No more IPC channels. List full.", _Anhydrate_ipc_get_channel_name(nChannelType));
+      return 0;
+   }
+
+   s_iAnhydrateIPCChannelsType[s_iAnhydrateIPCChannelsCount] = nChannelType;
+   s_uAnhydrateIPCChannelsMsgId[s_iAnhydrateIPCChannelsCount] = 0;
+
+   #ifdef Anhydrate_USE_FIFO_PIPES
+
+   char* szPipeName = _Anhydrate_ipc_get_pipe_name(nChannelType);
+   if ( NULL == szPipeName || 0 == szPipeName[0] )
+   {
+      log_error_and_alarm("[IPC] Can't open IPC FIFO Pipe with invalid name (requested type: %d).", nChannelType);
+      return 0;
+   }
+
+   s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] = open(szPipeName, O_WRONLY | (Anhydrate_PIPES_EXTRA_FLAGS & (~O_NONBLOCK)));
+   if ( s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] < 0 )
+   {
+      log_error_and_alarm("[IPC] Failed to open IPC channel %s pipe write endpoint.", _Anhydrate_ipc_get_channel_name(nChannelType));
+      return 0;
+   }
+
+   if ( Anhydrate_PIPES_EXTRA_FLAGS & O_NONBLOCK )
+   if ( 0 != fcntl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], F_SETFL, O_NONBLOCK) )
+      log_softerror_and_alarm("[IPC] Failed to set nonblock flag on PIC channel %s pipe write endpoint.", _Anhydrate_ipc_get_channel_name(nChannelType));
+
+   log_line("[IPC] FIFO write endpoint pipe flags: %s", str_get_pipe_flags(fcntl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], F_GETFL)));
+   
+   #endif
+
+   #ifdef Anhydrate_USES_MSGQUEUES
+
+   key_t key = generate_msgqueue_key(nChannelType);
+
+   if ( key < 0 )
+   {
+      log_softerror_and_alarm("[IPC] Failed to generate message queue key for channel %s. Error: %d, %s",
+         _Anhydrate_ipc_get_channel_name(nChannelType),
+         errno, strerror(errno));
+      return 0;
+   }
+   s_uAnhydrateIPCChannelsKeys[s_iAnhydrateIPCChannelsCount] = key;
+   s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] = msgget(key, IPC_CREAT | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
+   if ( s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] < 0 )
+   {
+      log_softerror_and_alarm("[IPC] Failed to create IPC message queue write endpoint for channel %s, error %d, %s",
+         _Anhydrate_ipc_get_channel_name(nChannelType), errno, strerror(errno));
+      log_line("%d %d %d", ENOENT, EACCES, ENOTDIR);
+      return -1;
+   }
+
+   //struct msqid_ds msg_stats;
+   //if ( 0 != msgctl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], IPC_STAT, &msg_stats) )
+   //   log_softerror_and_alarm("[IPC] Failed to get statistics on ICP message queue %s", _Anhydrate_ipc_get_channel_name(nChannelType) );
+   //else
+   //   log_line("[IPC] FD: %d, id: %u, Max bytes in the IPC channel %s: %u bytes", s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], key, _Anhydrate_ipc_get_channel_name(nChannelType), (u32)msg_stats.msg_qbytes);
+
+   //struct msginfo msg_info;
+   //if ( 0 != msgctl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], IPC_INFO, (struct msqid_ds*)&msg_info) )
+   //   log_softerror_and_alarm("[IPC] Failed to get statistics on system message queues." );
+   //else
+   //   log_line("[IPC] IPC channels pools max: %u bytes, max msg size: %u bytes, max msg queue total size: %u bytes", (u32)msg_info.msgpool, (u32)msg_info.msgmax, (u32)msg_info.msgmnb);
+
+   #endif
+
+   s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount] = s_iAnhydrateIPCChannelsUniqueIdCounter;
+   s_iAnhydrateIPCChannelsUniqueIdCounter++;
+
+   s_iAnhydrateIPCChannelsCount++;
+   
+   log_line("[IPC] Opened IPC channel %s write endpoint: success, fd: %d, id: %d. (%d channels currently opened).",
+      _Anhydrate_ipc_get_channel_name(nChannelType), s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount-1], s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount-1], s_iAnhydrateIPCChannelsCount);
+   _Anhydrate_ipc_log_channel_info(nChannelType, s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount-1], s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount-1]);
+   _check_Anhydrate_ipc_consistency();
+   _Anhydrate_ipc_log_channels();
+   return s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount-1];
+}
+
+int Anhydrate_open_ipc_channel_read_endpoint(int nChannelType)
+{
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+      if ( s_iAnhydrateIPCChannelsType[i] == nChannelType )
+      if ( s_iAnhydrateIPCChannelsFd[i] > 0 )
+      if ( s_iAnhydrateIPCChannelsUniqueIds[i] > 0 )
+         return s_iAnhydrateIPCChannelsUniqueIds[i];
+
+   if ( s_iAnhydrateIPCChannelsCount >= MAX_CHANNELS )
+   {
+      log_error_and_alarm("[IPC] Can't open %s channel. No more IPC channels. List full.", _Anhydrate_ipc_get_channel_name(nChannelType));
+      return 0;
+   }
+
+   s_iAnhydrateIPCChannelsType[s_iAnhydrateIPCChannelsCount] = nChannelType;
+   s_uAnhydrateIPCChannelsMsgId[s_iAnhydrateIPCChannelsCount] = 0;
+
+   #ifdef Anhydrate_USE_FIFO_PIPES
+
+   char* szPipeName = _Anhydrate_ipc_get_pipe_name(nChannelType);
+   if ( NULL == szPipeName || 0 == szPipeName[0] )
+   {
+      log_error_and_alarm("[IPC] Can't open IPC FIFO Pipe with invalid name (requested type: %d).", nChannelType);
+      return 0;
+   }
+
+   s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] = open(szPipeName, O_RDONLY | Anhydrate_PIPES_EXTRA_FLAGS);
+
+   if ( s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] < 0 )
+   {
+      log_error_and_alarm("[IPC] Failed to open IPC channel %s read endpoint.", _Anhydrate_ipc_get_channel_name(nChannelType));
+      return 0;
+   }
+
+   log_line("[IPC] FIFO read endpoint pipe flags: %s", str_get_pipe_flags(fcntl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], F_GETFL)));
+
+   #endif
+
+   #ifdef Anhydrate_USES_MSGQUEUES
+
+   key_t key = generate_msgqueue_key(nChannelType);
+
+   if ( key < 0 )
+   {
+      log_softerror_and_alarm("[IPC] Failed to generate message queue key for channel %s. Error: %d, %s",
+         _Anhydrate_ipc_get_channel_name(nChannelType),
+         errno, strerror(errno));
+      log_line("%d %d %d", ENOENT, EACCES, ENOTDIR);
+      return 0;
+   }
+
+   s_uAnhydrateIPCChannelsKeys[s_iAnhydrateIPCChannelsCount] = key;
+   s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] = msgget(key, IPC_CREAT | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+   if ( s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount] < 0 )
+   {
+      log_softerror_and_alarm("[IPC] Failed to create IPC message queue read endpoint for channel %s, error %d, %s",
+         _Anhydrate_ipc_get_channel_name(nChannelType), errno, strerror(errno));
+      return -1;
+   }
+
+   //struct msqid_ds msg_stats;
+   //if ( 0 != msgctl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], IPC_STAT, &msg_stats) )
+   //   log_softerror_and_alarm("[IPC] Failed to get statistics on ICP message queue %s", _Anhydrate_ipc_get_channel_name(nChannelType) );
+   //else
+   //   log_line("[IPC] FD: %d, key: %u, Max bytes in the IPC channel %s: %u bytes", s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], key, _Anhydrate_ipc_get_channel_name(nChannelType), (u32)msg_stats.msg_qbytes);
+
+   //struct msginfo msg_info;
+   //if ( 0 != msgctl(s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount], IPC_INFO, (struct msqid_ds*)&msg_info) )
+   //   log_softerror_and_alarm("[IPC] Failed to get statistics on system message queues." );
+   //else
+   //   log_line("[IPC] IPC channels pools max: %u bytes, max msg size: %u bytes, max msg queue total size: %u bytes", (u32)msg_info.msgpool, (u32)msg_info.msgmax, (u32)msg_info.msgmnb);
+   #endif
+
+   s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount] = s_iAnhydrateIPCChannelsUniqueIdCounter;
+   s_iAnhydrateIPCChannelsUniqueIdCounter++;
+
+   s_iAnhydrateIPCChannelsCount++;
+   
+   log_line("[IPC] Opened IPC channel %s read endpoint: success, fd: %d, id: %d. (%d channels currently opened).",
+      _Anhydrate_ipc_get_channel_name(nChannelType), s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount-1], s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount-1], s_iAnhydrateIPCChannelsCount);
+   _Anhydrate_ipc_log_channel_info(nChannelType, s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount-1], s_iAnhydrateIPCChannelsFd[s_iAnhydrateIPCChannelsCount-1]);
+   _check_Anhydrate_ipc_consistency();
+   _Anhydrate_ipc_log_channels();
+   return s_iAnhydrateIPCChannelsUniqueIds[s_iAnhydrateIPCChannelsCount-1];
+}
+
+int Anhydrate_close_ipc_channel(int iChannelUniqueId)
+{
+   int fdToClose = 0;
+   int iChannelIndex = -1;
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+   {
+      if ( s_iAnhydrateIPCChannelsUniqueIds[i] == iChannelUniqueId )
+      {
+         fdToClose = s_iAnhydrateIPCChannelsFd[i];
+         iChannelIndex = i;
+         break;
+      }
+   }
+
+   if ( (iChannelUniqueId < 0) || (fdToClose < 0) || (-1 == iChannelIndex) )
+   {
+      log_softerror_and_alarm("[IPC] Tried to close invalid IPC channel.");
+      return 0;
+   }
+
+   if ( fdToClose == 0 )
+      log_softerror_and_alarm("[IPC] Warning: closing invalid fd 0 for unique channel %d, channel index %d, (%s)",
+       iChannelUniqueId, iChannelIndex, _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iChannelIndex]));
+
+   #ifdef Anhydrate_USE_FIFO_PIPES
+   close(fdToClose);
+   #endif
+
+   #ifdef Anhydrate_USES_MSGQUEUES
+   msgctl(fdToClose,IPC_RMID,NULL);
+   #endif
+
+
+   log_line("[IPC] Closed IPC channel %s, channel index %d, unique id %d, fd %d",
+       _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iChannelIndex]),
+       iChannelIndex, iChannelUniqueId, fdToClose);
+   for( int k=iChannelIndex; k<s_iAnhydrateIPCChannelsCount-1; k++ )
+   {
+      s_iAnhydrateIPCChannelsFd[k] = s_iAnhydrateIPCChannelsFd[k+1];
+      s_uAnhydrateIPCChannelsKeys[k] = s_uAnhydrateIPCChannelsKeys[k+1];
+      s_iAnhydrateIPCChannelsType[k] = s_iAnhydrateIPCChannelsType[k+1];
+      s_iAnhydrateIPCChannelsUniqueIds[k] = s_iAnhydrateIPCChannelsUniqueIds[k+1];
+      s_uAnhydrateIPCChannelsMsgId[k] = s_uAnhydrateIPCChannelsMsgId[k+1];
+
+   }
+   s_iAnhydrateIPCChannelsCount--;
+  
+   _Anhydrate_ipc_log_channels();
+   return 1;
+}
+
+int Anhydrate_ipc_channel_send_message(int iChannelUniqueId, u8* pMessage, int iLength)
+{
+   if ( iChannelUniqueId < 0 || s_iAnhydrateIPCChannelsCount == 0 )
+   {
+      log_softerror_and_alarm("[IPC] Tried to write a message to an invalid channel (unique id %d)", iChannelUniqueId );
+      return 0;
+   }
+
+   int iFoundIndex = -1;
+   int iChannelFd = 0;
+   //int iChannelType = 0;
+   //u8 uChannelMsgId = 0;
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+   {
+      if ( s_iAnhydrateIPCChannelsUniqueIds[i] == iChannelUniqueId )
+      {
+         iChannelFd = s_iAnhydrateIPCChannelsFd[i];
+         //iChannelType = s_iAnhydrateIPCChannelsType[i];
+         //uChannelMsgId = s_uAnhydrateIPCChannelsMsgId[i];
+         iFoundIndex = i;
+         break;
+      }
+   }
+
+   if ( iFoundIndex == -1 )
+   {
+      log_softerror_and_alarm("[IPC] Tried to write a message to an invalid channel (unique id %d) not in the list (%d channels active now).", iChannelUniqueId, s_iAnhydrateIPCChannelsCount);
+      return 0;
+   }
+
+   if ( iChannelFd < 0 )
+   {
+      log_softerror_and_alarm("[IPC] Tried to write a message to an invalid channel fd %d (unique id %d)", iChannelFd, iChannelUniqueId);
+      return 0;
+   }
+
+   if ( NULL == pMessage || 0 == iLength )
+   {
+      log_softerror_and_alarm("[IPC] Tried to write an invalid message (null or 0) on channel %s, channel unique id %d", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), iChannelUniqueId );
+      return 0;
+   }
+
+   if ( iLength >= IPC_CHANNEL_MAX_MSG_SIZE-6 )
+   {
+      log_softerror_and_alarm("[IPC] Tried to write a message too big (%d bytes) on channel %s, channel unique id %d", iLength, _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), iChannelUniqueId );
+      return 0;
+   }
+
+   u32 crc = base_compute_crc32(pMessage + sizeof(u32), iLength-sizeof(u32)); 
+   u32* pTmp = (u32*)pMessage;
+   *pTmp = crc;
+
+   int res = 0;
+   
+   #ifdef PROFILE_IPC
+   u32 uTimeStart = get_current_timestamp_ms();
+   #endif
+
+   s_uAnhydrateIPCChannelsMsgId[iFoundIndex]++;
+
+   #ifdef Anhydrate_USE_FIFO_PIPES
+   res = write(iChannelFd, pMessage, iLength);
+   #endif
+
+   #ifdef Anhydrate_USES_MSGQUEUES
+   
+   type_ipc_message_buffer msg;
+
+   msg.type = 1;
+   msg.data[4] = s_uAnhydrateIPCChannelsMsgId[iFoundIndex];
+   msg.data[5] = ((u32)iLength) & 0xFF; 
+   msg.data[6] = (((u32)iLength)>>8) & 0xFF;
+   memcpy((u8*)&(msg.data[7]), pMessage, iLength); 
+   u32 uCRC = base_compute_crc32((u8*)&(msg.data[4]), iLength+3);
+   memcpy((u8*)&(msg.data[0]), (u8*)&uCRC, sizeof(u32));
+
+   int iRetryWriteOnly = 0;
+   int iRetryCounter = 2;
+   int iRetriedToRecreate = 0;
+
+   do
+   {
+      if ( 0 == msgsnd(iChannelFd, &msg, iLength + 7, IPC_NOWAIT) )
+      {
+         if ( iRetryWriteOnly )
+            log_line("[IPC] Succeded to send message after write retry.");
+         if ( iRetriedToRecreate )
+            log_line("[IPC] Succeded to send message after recreation of the channel.");
+         //log_line("[IPC] Sent message ok to %s, id: %d, %d bytes, CRC: %u", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), msg.data[4], iLength, uCRC);
+         res = iLength;
+         iRetryCounter = 0;
+         break;
+         //log_line("[IPC] Send IPC message on channel %s: %d bytes, crc: %u", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), iLength, uCRC);
+      }
+   
+      res = 0;
+
+      iRetryWriteOnly = 0;
+      if ( errno == EAGAIN )
+      {
+         log_softerror_and_alarm("[IPC] Failed to write to IPC %s, error code: EAGAIN", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]) );
+         iRetryWriteOnly = 1;
+      }
+      if ( errno == EACCES )
+         log_softerror_and_alarm("[IPC] Failed to write to IPC %s, error code: EACCESS", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]) );
+      if ( errno == EIDRM )
+         log_softerror_and_alarm("[IPC] Failed to write to IPC %s, error code: EIDRM", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]) );
+      if ( errno == EINVAL )
+         log_softerror_and_alarm("[IPC] Failed to write to IPC %s, error code: EINVAL", _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]) );
+
+
+      struct msqid_ds msg_stats;
+      if ( 0 != msgctl(iChannelFd, IPC_STAT, &msg_stats) )
+         log_softerror_and_alarm("[IPC] Failed to get statistics on ICP message queue %s, fd %d, unique id %d",
+           _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), iChannelFd, iChannelUniqueId );
+      else
+      {
+         log_line("[IPC] Channel %s (fd %d, unique id %d) info: %u pending messages, %u used bytes, max bytes in the IPC channel: %u bytes",
+            _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]),
+            iChannelFd, iChannelUniqueId,
+            (u32)msg_stats.msg_qnum, (u32)msg_stats.msg_cbytes, (u32)msg_stats.msg_qbytes);
+
+         if ( msg_stats.msg_cbytes > (msg_stats.msg_qbytes * 80)/100 )
+            iRetryWriteOnly = 1;
+      }
+
+      if ( iRetryWriteOnly )
+         log_line("[IPC] Retry write operation only (%d)...", iRetryCounter);
+      else
+         break;
+      /*else if ( 0 == iRetriedToRecreate )
+      {
+         t_packet_header* pPH = (t_packet_header*)pMessage;
+         log_softerror_and_alarm("[IPC] Failed to write a message (id: %d, %d bytes) on channel %s, ch unique id %d. Only %d bytes written (Message component: %d, msg type: %d, msg length:%d).",
+            msg.data[4], iLength, _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), iChannelUniqueId, res, (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE), pPH->packet_type, pPH->total_length);
+         log_line("[IPC] Try to recreate channel, unique id: %d, fd %d", iChannelUniqueId, iChannelFd);
+         Anhydrate_close_ipc_channel(iChannelUniqueId);
+         Anhydrate_open_ipc_channel_write_endpoint(iChannelType);
+         iFoundIndex = s_iAnhydrateIPCChannelsCount-1;
+         s_iAnhydrateIPCChannelsUniqueIds[iFoundIndex] = iChannelUniqueId;
+         s_uAnhydrateIPCChannelsMsgId[iFoundIndex] = uChannelMsgId-1;
+         iChannelFd = s_iAnhydrateIPCChannelsFd[iFoundIndex];
+         log_line("[IPC] Recreated channel, unique id: %d, fd %d, type: %s",
+             s_iAnhydrateIPCChannelsUniqueIds[iFoundIndex],
+             s_iAnhydrateIPCChannelsFd[iFoundIndex],
+             _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]));
+
+         iRetriedToRecreate = 1;
+      }
+      else
+         log_line("[IPC] Retry write operation (%d)...", iRetryCounter);
+      */
+      iRetryCounter--;
+      hardware_sleep_ms(10);
+
+   } while (iRetryCounter > 0);
+   #endif
+
+   #ifdef PROFILE_IPC
+   u32 uTimeTotal = get_current_timestamp_ms() - uTimeStart;
+   if ( uTimeTotal > PROFILE_IPC_MAX_TIME )
+   {
+      t_packet_header* pPH = (t_packet_header*)pMessage;
+      log_softerror_and_alarm("[IPC] Write message (id: %d, %d bytes) on channel %s took too long (%u ms) (Message component: %d, msg type: %d, msg length:%d).", msg.data[4], iLength, _Anhydrate_ipc_get_channel_name(s_iAnhydrateIPCChannelsType[iFoundIndex]), uTimeTotal, (pPH->packet_flags & PACKET_FLAGS_MASK_MODULE), pPH->packet_type, pPH->total_length);
+   }
+   #endif
+
+   return res;
+}
+
+
+u8* Anhydrate_ipc_try_read_message(int iChannelUniqueId, u8* pTempBuffer, int* pTempBufferPos, u8* pOutputBuffer)
+{
+   if ( iChannelUniqueId < 0 || s_iAnhydrateIPCChannelsCount == 0 )
+   {
+      log_softerror_and_alarm("[IPC] Tried to read a message from an invalid channel (unique id %d)", iChannelUniqueId );
+      return NULL;
+   }
+
+   int iFoundIndex = -1;
+   int iChannelFd = 0;
+   int iChannelType = 0;
+   for( int i=0; i<s_iAnhydrateIPCChannelsCount; i++ )
+   {
+      if ( s_iAnhydrateIPCChannelsUniqueIds[i] == iChannelUniqueId )
+      {
+         iChannelFd = s_iAnhydrateIPCChannelsFd[i];
+         iChannelType = s_iAnhydrateIPCChannelsType[i];
+         iFoundIndex = i;
+         break;
+      }
+   }
+
+   if ( iFoundIndex == -1 )
+   {
+      log_softerror_and_alarm("[IPC] Tried to read a message from an invalid channel (unique id %d) not in the list (%d channels active now).", iChannelUniqueId, s_iAnhydrateIPCChannelsCount);
+      return NULL;
+   }
+
+   if ( NULL == pTempBuffer || NULL == pTempBufferPos || NULL == pOutputBuffer )
+   {
+      log_softerror_and_alarm("[IPC] Tried to read a message into a NULL buffer on channel %s", _Anhydrate_ipc_get_channel_name(iChannelType) );
+      return NULL;
+   }
+
+   u8* pReturn = NULL;
+   int lenReadIPCMsgQueue = 0;
+
+   #ifdef PROFILE_IPC
+   u32 uTimeStart = get_current_timestamp_ms();
+   #endif
+
+   #ifdef Anhydrate_USE_FIFO_PIPES
+
+   t_packet_header* pPH = (t_packet_header*)pTempBuffer;
+
+   if ( (*pTempBufferPos) >= (int)sizeof(t_packet_header) )
+   {
+      if ( pPH->total_length > MAX_PACKET_TOTAL_SIZE )
+         *pTempBufferPos = 0;
+   }
+
+   if ( ((*pTempBufferPos) >= (int)sizeof(t_packet_header)) && (*pTempBufferPos) >= pPH->total_length )
+   {
+      if ( ! base_check_crc32( pTempBuffer, pPH->total_length ) )
+      {
+         log_softerror_and_alarm("[IPC] Invalid read buffers for channel [%s]. Reseting read buffer to 0.", _Anhydrate_ipc_get_channel_name(iChannelType));
+         // invalid data. just reset buffers.
+         *pTempBufferPos = 0;
+      }
+      else
+      {
+         //log_line("Has data in pipe already");
+         //log_buffer(pTempBuffer, 40);
+         //log_line(" <<< Read existing packet from pipe: type: %d, component: %d, length: %d", pPH->packet_type, pPH->packet_flags & PACKET_FLAGS_MASK_MODULE, pPH->total_length);
+         int len = pPH->total_length;
+         memcpy(pOutputBuffer, pTempBuffer, len);
+         *pTempBufferPos -= len;
+         for( int i=len; i<MAX_PACKET_TOTAL_SIZE; i++ )
+            pTempBuffer[i-len] = pTempBuffer[i];
+         pReturn = pOutputBuffer;
+      }
+   }
+   else
+   {
+      fd_set readset; 
+      struct timeval timePipeInput;
+      
+      FD_ZERO(&readset);
+      FD_SET(iChannelFd, &readset);
+
+      timePipeInput.tv_sec = 0;
+      timePipeInput.tv_usec = 0;
+
+      int selectResult = select(iChannelFd+1, &readset, NULL, NULL, &timePipeInput);
+      if ( selectResult > 0 && (FD_ISSET(iChannelFd, &readset)) )
+      {
+         int count = read(iChannelFd, pTempBuffer+(*pTempBufferPos), MAX_PACKET_TOTAL_SIZE-(*pTempBufferPos));
+         if ( count < 0 )
+         {
+             log_error_and_alarm("[IPC] Failed to read FIFO pipe %s. Broken pipe.", _Anhydrate_ipc_get_channel_name(iChannelType) );
+         }
+         else
+         {
+            *pTempBufferPos += count;
+
+            if ( ((*pTempBufferPos) >= (int)sizeof(t_packet_header)) && (*pTempBufferPos) >= pPH->total_length )
+            {
+               if ( ! base_check_crc32( pTempBuffer, pPH->total_length ) )
+               {
+                  log_softerror_and_alarm("[IPC] Invalid read buffers for channel [%s]. Reseting read buffer to 0.", _Anhydrate_ipc_get_channel_name(iChannelType));
+                  // invalid data. just reset buffers.
+                  *pTempBufferPos = 0;
+               }
+               else
+               {
+                  int len = pPH->total_length;
+                  memcpy(pOutputBuffer, pTempBuffer, len);
+                  *pTempBufferPos -= len;
+                  for( int i=len; i<MAX_PACKET_TOTAL_SIZE; i++ )
+                     pTempBuffer[i-len] = pTempBuffer[i];
+                  pReturn = pOutputBuffer;
+               }
+            }
+         }
+      }
+   }
+   #endif
+
+   #ifdef Anhydrate_USES_MSGQUEUES
+
+   type_ipc_message_buffer ipcMessage;
+
+   lenReadIPCMsgQueue = msgrcv(iChannelFd, &ipcMessage, IPC_CHANNEL_MAX_MSG_SIZE, 0, MSG_NOERROR | IPC_NOWAIT);
+   if ( lenReadIPCMsgQueue > 6 )
+   {
+      int iMsgLen = ipcMessage.data[5] + 256*(int)ipcMessage.data[6];
+      if ( iMsgLen <= 0 || iMsgLen >= IPC_CHANNEL_MAX_MSG_SIZE - 6 )
+         log_softerror_and_alarm("[IPC] Received invalid message on channel %s, id: %d, length: %d", _Anhydrate_ipc_get_channel_name(iChannelType), ipcMessage.data[4], iMsgLen );
+      else
+      {
+         u32 uCRC = base_compute_crc32((u8*)&(ipcMessage.data[4]), iMsgLen+3);
+         u32 uTmp = 0;
+         memcpy((u8*)&uTmp, (u8*)&(ipcMessage.data[0]), sizeof(u32));
+         if ( uCRC != uTmp )
+            log_softerror_and_alarm("[IPC] Received invalid CRC on channel %s on message id: %d, CRC computed/received: %u / %u, msg length: %d", _Anhydrate_ipc_get_channel_name(iChannelType), ipcMessage.data[4], uCRC, uTmp, iMsgLen );
+         else
+         {
+            memcpy(pOutputBuffer, (u8*)&(ipcMessage.data[7]), iMsgLen);
+            pReturn = pOutputBuffer;
+            //log_line("[IPC] Received message ok on channel %s, id: %d, length: %d", _Anhydrate_ipc_get_channel_name(iChannelType), ipcMessage.data[4], iMsgLen );
+         }
+      }
+   }
+
+   #endif
+
+   #ifdef PROFILE_IPC
+   u32 uTimeTotal = get_current_timestamp_ms() - uTimeStart;
+   if ( (uTimeTotal > PROFILE_IPC_MAX_TIME + timeoutMicrosec/1000) || uTimeTotal >= 50 )
+   {
+      s_iAnhydrateIPCCountReadErrors++;
+      if ( lenReadIPCMsgQueue >= 0 )
+         log_softerror_and_alarm("[IPC] Read message (%d bytes) from channel %s took too long (%u ms). Error count: %d", lenReadIPCMsgQueue, _Anhydrate_ipc_get_channel_name(iChannelType), uTimeTotal, s_iAnhydrateIPCCountReadErrors );
+      else
+         log_softerror_and_alarm("[IPC] Try read message from channel %s took too long (%u ms). No message read. Error count: %d", _Anhydrate_ipc_get_channel_name(iChannelType), uTimeTotal, s_iAnhydrateIPCCountReadErrors );
+   }
+   else
+      s_iAnhydrateIPCCountReadErrors = 0;
+   #endif
+
+   return pReturn;
+}
+
+int Anhydrate_ipc_get_read_continous_error_count()
+{
+   return s_iAnhydrateIPCCountReadErrors;
+}

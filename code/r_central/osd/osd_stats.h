@@ -33,3 +33,4 @@ float osd_render_stats_efficiency(float xPos, float yPos, float scale);
 float osd_render_stats_dev(float xPos, float yPos, float scale);
 
 void osd_render_stats_panels();
+

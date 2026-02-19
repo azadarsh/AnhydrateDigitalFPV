@@ -428,3 +428,4 @@ static inline void mavlink_msg_global_position_int_cov_decode(const mavlink_mess
     memcpy(global_position_int_cov, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

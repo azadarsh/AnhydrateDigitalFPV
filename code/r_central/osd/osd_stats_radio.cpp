@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -189,8 +189,8 @@ void osd_render_stats_full_rx_port()
          //sprintf(szBuff, "%d ms", g_SM_RadioStats.radio_links[iRadioLinkId].downlink_tx_time_per_sec);
          
          // To fix 11.5
-         //if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-         //   sprintf(szBuff, "%d ms/sec", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.txTimePerSec);
+         //if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+         //   sprintf(szBuff, "%d ms/sec", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.txTimePerSec);
          //else
             strcpy(szBuff, "N/A ms/sec");
          g_pRenderEngine->drawTextLeft(xPos + widthCol - 2.0*padding, y, fontId, szBuff);
@@ -1677,23 +1677,23 @@ float osd_render_stats_local_radio_links( float xPos, float yPos, const char* sz
       memcpy(pColorDev, get_Color_Dev(), 4*sizeof(double));
 
       g_pRenderEngine->setColors(pColorDev);
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-         sprintf(szBuff, "%d/sec", (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_video_packets_per_sec+g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_data_packets_per_sec));
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+         sprintf(szBuff, "%d/sec", (g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_video_packets_per_sec+g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_data_packets_per_sec));
       else
          strcpy(szBuff, "N/A");
       _osd_stats_draw_line(xPos, rightMargin, y, s_idFontStats, "Downlinks Total Packets:", szBuff);
       y += height_text*s_OSDStatsLineSpacing;
 
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-         sprintf(szBuff, "%d/sec", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_data_packets_per_sec);
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+         sprintf(szBuff, "%d/sec", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_data_packets_per_sec);
       else
          strcpy(szBuff, "N/A");
       _osd_stats_draw_line(xPos, rightMargin, y, s_idFontStats, "Downlinks Data Packets:", szBuff);
       y += height_text*s_OSDStatsLineSpacing;
 
 
-      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotRubyTelemetryInfo )
-         sprintf(szBuff, "%d/sec", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerRubyTelemetryExtended.downlink_tx_compacted_packets_per_sec);
+      if ( g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].bGotAnhydrateTelemetryInfo )
+         sprintf(szBuff, "%d/sec", g_VehiclesRuntimeInfo[osd_get_current_data_source_vehicle_index()].headerAnhydrateTelemetryExtended.downlink_tx_compacted_packets_per_sec);
       else
          strcpy(szBuff, "N/A");
       _osd_stats_draw_line(xPos, rightMargin, y, s_idFontStats, "Downlinks Data Packets-C:", szBuff);
@@ -1958,3 +1958,4 @@ float osd_render_stats_local_radio_links_get_width(shared_mem_radio_stats* pStat
    width += 2.0*s_fOSDStatsMargin/g_pRenderEngine->getAspectRatio();
    return width;
 }
+

@@ -261,3 +261,4 @@ static inline void mavlink_msg_change_operator_control_ack_decode(const mavlink_
     memcpy(change_operator_control_ack, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

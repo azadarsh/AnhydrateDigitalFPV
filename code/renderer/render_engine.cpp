@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -1302,3 +1302,4 @@ bool RenderEngine::rectIntersect(float x1, float y1, float w1, float h1, float x
 
    return true;
 }
+

@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -157,7 +157,7 @@ void MenuRoot::RenderVehicleInfo()
    szRunType[0] = 0;
 
    bool bConnected = false;
-   if ( link_has_received_main_vehicle_ruby_telemetry() )
+   if ( link_has_received_main_vehicle_Anhydrate_telemetry() )
       bConnected = true;
    if ( g_bFirstModelPairingDone && (0 == getControllerModelsCount()) && (0 == getControllerModelsSpectatorCount()) )
       bConnected = false;
@@ -396,3 +396,4 @@ void MenuRoot::onSelectItem()
    if ( m_iIndexSystem == m_SelectedIndex )
       add_menu_to_stack(new MenuSystem());
 }
+

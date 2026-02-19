@@ -48,8 +48,8 @@ typedef struct
    int iMinimSNRThreshold;
 } ALIGN_STRUCT_SPEC_INFO type_adaptive_metrics;
 
-bool ruby_is_first_pairing_done();
-void ruby_set_is_first_pairing_done();
+bool Anhydrate_is_first_pairing_done();
+void Anhydrate_set_is_first_pairing_done();
 
 void reset_sik_state_info(t_sik_radio_state* pState);
 
@@ -73,3 +73,4 @@ void compute_adaptive_metrics(type_adaptive_metrics* pAdaptiveMetrics, int iAdap
 void log_adaptive_metrics(Model* pModel, type_adaptive_metrics* pAdaptiveMetrics, int iAdaptiveStrength, u32 uAdaptiveWeights);
 
 void utils_log_radio_packets_sizes();
+

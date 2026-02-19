@@ -503,3 +503,4 @@ static inline void mavlink_msg_adsb_vehicle_decode(const mavlink_message_t* msg,
     memcpy(adsb_vehicle, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

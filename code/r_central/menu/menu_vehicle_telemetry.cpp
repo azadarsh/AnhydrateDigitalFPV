@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -123,14 +123,14 @@ void MenuVehicleTelemetry::addItems()
    }
    addSeparator();
 
-   m_pItemsSelect[1] = new MenuItemSelect(L("Vehicle Serial Port"), L("The Ruby vehicle port at which the flight controller connects to."));
+   m_pItemsSelect[1] = new MenuItemSelect(L("Vehicle Serial Port"), L("The Anhydrate vehicle port at which the flight controller connects to."));
    m_pItemsSelect[1]->addSelection(L("None"));
    for( int i=0; i<g_pCurrentModel->hardwareInterfacesInfo.serial_port_count; i++ )
       m_pItemsSelect[1]->addSelection(g_pCurrentModel->hardwareInterfacesInfo.serial_port_names[i]);
    m_pItemsSelect[1]->setIsEditable();
    m_IndexVSerialPort = addMenuItem(m_pItemsSelect[1]);
 
-   m_pItemsSelect[2] = new MenuItemSelect(L("Vehicle Serial Baudrate"), L("Sets the baud rate between flight controller and Ruby on the vehicle side. Should match the serial speed that the flight controller generates. Higher is better."));
+   m_pItemsSelect[2] = new MenuItemSelect(L("Vehicle Serial Baudrate"), L("Sets the baud rate between flight controller and Anhydrate on the vehicle side. Should match the serial speed that the flight controller generates. Higher is better."));
    for( int i=0; i<hardware_serial_get_baud_rates_count(); i++ )
    {
       sprintf(szBuff, "%d bps", hardware_serial_get_baud_rates()[i]);
@@ -142,7 +142,7 @@ void MenuVehicleTelemetry::addItems()
    m_IndexGPS = -1;
    if ( g_pCurrentModel->telemetry_params.fc_telemetry_type == TELEMETRY_TYPE_MAVLINK )
    {
-      m_pItemsSelect[8] = new MenuItemSelect(L("Has GPS"), L("Sets how many GPS units are configured on the vehicle. Ruby uses GPS data for OSD display."));  
+      m_pItemsSelect[8] = new MenuItemSelect(L("Has GPS"), L("Sets how many GPS units are configured on the vehicle. Anhydrate uses GPS data for OSD display."));  
       m_pItemsSelect[8]->addSelection(L("No GPS"));
       m_pItemsSelect[8]->addSelection("1 GPS unit");
       m_pItemsSelect[8]->addSelection("2 GPS units");
@@ -186,7 +186,7 @@ void MenuVehicleTelemetry::addItems()
    m_IndexTelemetryControllerSysId = -1;
    if ( g_pCurrentModel->telemetry_params.fc_telemetry_type == TELEMETRY_TYPE_MAVLINK )
    {
-      m_pItemsRange[0] = new MenuItemRange(L("Controller MAVLink SysId"), L("Sets the MAVLink SysId for Ruby controller as it will be seen by the vehicle flight controller."), 1, 255, g_pCurrentModel->telemetry_params.controller_mavlink_id, 1 );  
+      m_pItemsRange[0] = new MenuItemRange(L("Controller MAVLink SysId"), L("Sets the MAVLink SysId for Anhydrate controller as it will be seen by the vehicle flight controller."), 1, 255, g_pCurrentModel->telemetry_params.controller_mavlink_id, 1 );  
       m_pItemsRange[0]->setSufix("");
       m_IndexTelemetryControllerSysId = addMenuItem(m_pItemsRange[0]);
    }
@@ -747,3 +747,4 @@ void MenuVehicleTelemetry::onSelectItem()
          valuesToUI();
    }
 }
+

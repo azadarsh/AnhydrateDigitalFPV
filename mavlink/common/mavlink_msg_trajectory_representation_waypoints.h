@@ -513,3 +513,4 @@ static inline void mavlink_msg_trajectory_representation_waypoints_decode(const 
     memcpy(trajectory_representation_waypoints, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

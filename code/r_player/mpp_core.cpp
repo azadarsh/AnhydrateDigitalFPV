@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -93,7 +93,7 @@ int mpp_feed_data_to_decoder(void* pData, int iLength)
     mpp_packet_set_length(g_MPPInputPacket, iLength);
 
     struct timespec spec;
-    clock_gettime(RUBY_HW_CLOCK_ID, &spec);
+    clock_gettime(Anhydrate_HW_CLOCK_ID, &spec);
     uint64_t tTime = spec.tv_sec * 1000 + spec.tv_nsec / 1e6;
     mpp_packet_set_pts(g_MPPInputPacket,(RK_S64) tTime);
 
@@ -103,7 +103,7 @@ int mpp_feed_data_to_decoder(void* pData, int iLength)
     while ( (!g_bQuit) && (MPP_OK != g_pMPPApi->decode_put_packet(g_MPPCtx, g_MPPInputPacket)) )
     {
         iStallCount++;
-        clock_gettime(RUBY_HW_CLOCK_ID, &spec);
+        clock_gettime(Anhydrate_HW_CLOCK_ID, &spec);
         uint64_t tTimeNow = spec.tv_sec * 1000 + spec.tv_nsec / 1e6;
         iElapsedMs = (int)(tTimeNow - tTimeStart);
         if ( iElapsedMs > 100 )
@@ -152,7 +152,7 @@ int _mpp_init_frames(MppFrame pFrame)
       creq.width = stride_h;
       creq.height = 2*stride_v;
       creq.bpp = ((fmt==MPP_FMT_YUV420SP)?8:10);
-      iRet = drmIoctl(ruby_drm_core_get_fd(), DRM_IOCTL_MODE_CREATE_DUMB, &creq);
+      iRet = drmIoctl(Anhydrate_drm_core_get_fd(), DRM_IOCTL_MODE_CREATE_DUMB, &creq);
       if ( iRet < 0 )
       {
          log_softerror_and_alarm("[MPP] Cannot create buffer (%d)", errno);
@@ -170,7 +170,7 @@ int _mpp_init_frames(MppFrame pFrame)
       dph.fd = -1;
       do
       {
-         iRet = ioctl(ruby_drm_core_get_fd(), DRM_IOCTL_PRIME_HANDLE_TO_FD, &dph);
+         iRet = ioctl(Anhydrate_drm_core_get_fd(), DRM_IOCTL_PRIME_HANDLE_TO_FD, &dph);
       } while (iRet == -1 && (errno == EINTR || errno == EAGAIN));
   
       g_Frames[i].drmBufferInfo.uBufferId = dph.fd;
@@ -199,7 +199,7 @@ int _mpp_init_frames(MppFrame pFrame)
      handles[1] = g_Frames[i].drmBufferInfo.uHandle;
      offsets[1] = pitches[0] * stride_v;
      pitches[1] = pitches[0];
-     drmModeAddFB2(ruby_drm_core_get_fd(), w, h, DRM_FORMAT_NV12, handles, pitches, offsets, &(g_Frames[i].drmBufferInfo.uBufferId), 0);
+     drmModeAddFB2(Anhydrate_drm_core_get_fd(), w, h, DRM_FORMAT_NV12, handles, pitches, offsets, &(g_Frames[i].drmBufferInfo.uBufferId), 0);
      
      log_line("[MPP] Allocated new (%d) DRM FB buffer: handle: %u, fb_id: %u",
          i, g_Frames[i].drmBufferInfo.uHandle, g_Frames[i].drmBufferInfo.uBufferId);
@@ -209,8 +209,8 @@ int _mpp_init_frames(MppFrame pFrame)
    g_pMPPApi->control(g_MPPCtx, MPP_DEC_SET_EXT_BUF_GROUP, g_MPPBufferGroup);
    g_pMPPApi->control(g_MPPCtx, MPP_DEC_SET_INFO_CHANGE_READY, NULL);
    
-   ruby_drm_set_video_source_size(w, h);
-   ruby_drm_core_set_plane_properties_and_buffer(g_Frames[0].drmBufferInfo.uBufferId);
+   Anhydrate_drm_set_video_source_size(w, h);
+   Anhydrate_drm_core_set_plane_properties_and_buffer(g_Frames[0].drmBufferInfo.uBufferId);
    g_bMPPFramesBuffersInitialised = true;
 
    u32 uTimeDiff = get_current_timestamp_ms() - uTimeStart;
@@ -224,8 +224,8 @@ void _mpp_core_periodic_checks()
    //log_line("[MPPThread periodic checks");
    //static uint64_t uCrtX = 0;
    //uCrtX += 20;
-   //type_drm_object_info* pPlaneInfo = ruby_drm_get_plane_info();
-   //ruby_drm_set_object_property(pPlaneInfo, "CRTC_X", uCrtX);
+   //type_drm_object_info* pPlaneInfo = Anhydrate_drm_get_plane_info();
+   //Anhydrate_drm_set_object_property(pPlaneInfo, "CRTC_X", uCrtX);
 }
 
 void* _mpp_thread_update_display(void *param)
@@ -271,7 +271,7 @@ void* _mpp_thread_update_display(void *param)
 
       g_pSMProcessStats->uLoopCounter4++;
       g_pSMProcessStats->lastIPCOutgoingTime = get_current_timestamp_ms();
-      ruby_drm_core_set_plane_buffer(uNewDRMBufferIdToDisplay);
+      Anhydrate_drm_core_set_plane_buffer(uNewDRMBufferIdToDisplay);
       uLastDRMBufferIdDisplayed = uNewDRMBufferIdToDisplay;
    }
    if ( g_bQuit )
@@ -355,7 +355,7 @@ void* _mpp_thread_frame_decode(void *param)
          
          if ( (-1 != iPrimeIndex) && (! g_bQuit) )
          {
-            //ruby_drm_core_set_plane_buffer(g_Frames[iPrimeIndex].drmBufferInfo.uBufferId);
+            //Anhydrate_drm_core_set_plane_buffer(g_Frames[iPrimeIndex].drmBufferInfo.uBufferId);
             g_iMPPFrameBufferIndexToDisplay = iPrimeIndex;
             g_uMPPDRMBufferIdToDisplay = g_Frames[iPrimeIndex].drmBufferInfo.uBufferId;
             if ( (NULL == g_pSemaphoreMPPDisplayFrameReadyWrite) || (0 != sem_post(g_pSemaphoreMPPDisplayFrameReadyWrite)) )
@@ -607,7 +607,7 @@ int mpp_uninit()
 void mpp_enable_vsync(bool bEnableVSync)
 {
    g_bMPPEnableVSync = bEnableVSync;
-   ruby_drm_enable_vsync(g_bMPPEnableVSync?1:0);
+   Anhydrate_drm_enable_vsync(g_bMPPEnableVSync?1:0);
 }
 
 

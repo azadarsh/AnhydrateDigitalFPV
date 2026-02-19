@@ -56,7 +56,7 @@ bool g_bOSDPluginsNeedTelemetryStreams = false;
 
 u32  g_uControllerId = 0;
 
-t_packet_header_ruby_telemetry_extended_extra_info_retransmissions g_PHTE_Retransmissions;
+t_packet_header_Anhydrate_telemetry_extended_extra_info_retransmissions g_PHTE_Retransmissions;
 t_packet_header_vehicle_tx_history g_PHVehicleTxStats;
 shared_mem_dev_video_bitrate_history g_SM_DevVideoBitrateHistory;
 
@@ -72,3 +72,4 @@ int g_iGetSiKConfigAsyncRadioInterfaceIndex = -1;
 u8 g_uGetSiKConfigAsyncVehicleLinkIndex = 0;
 
 bool g_bLongTaskStarted = false;
+

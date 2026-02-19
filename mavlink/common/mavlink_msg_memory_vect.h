@@ -278,3 +278,4 @@ static inline void mavlink_msg_memory_vect_decode(const mavlink_message_t* msg, 
     memcpy(memory_vect, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

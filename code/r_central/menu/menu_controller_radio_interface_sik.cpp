@@ -1,5 +1,5 @@
 /*
-    Ruby Licence
+    Anhydrate Licence
     Copyright (c) 2020-2025 Petru Soroaga petrusoroaga@yahoo.com
     All rights reserved.
 
@@ -131,7 +131,7 @@ void MenuControllerRadioInterfaceSiK::Render()
 
 void MenuControllerRadioInterfaceSiK::showProgressInfo()
 {
-   ruby_pause_watchdog("controller update sik radio interface progress");
+   Anhydrate_pause_watchdog("controller update sik radio interface progress");
    m_pPopupProgress = new Popup("Updating SiK Radio Configuration. Please wait...",0.3,0.4, 0.5, 15);
    popups_add_topmost(m_pPopupProgress);
 
@@ -283,3 +283,4 @@ void MenuControllerRadioInterfaceSiK::onSelectItem()
       return;
    }
 }
+

@@ -329,3 +329,4 @@ static inline void mavlink_msg_attitude_quaternion_cov_decode(const mavlink_mess
     memcpy(attitude_quaternion_cov, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

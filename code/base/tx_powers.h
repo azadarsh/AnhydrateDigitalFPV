@@ -21,3 +21,4 @@ void tx_power_get_current_mw_powers_for_model(Model* pModel, int* piOutputArray)
 int tx_power_compute_uplink_power_for_model_link(Model* pModel, int iVehicleRadioLink, int iLocalRadioInterfaceIndex, int iCardModel);
 
 int get_vehicle_radio_link_current_tx_power_mw(Model* pModel, int iRadioLinkIndex);
+

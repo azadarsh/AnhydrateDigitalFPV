@@ -6,3 +6,4 @@
 #include "../base/models.h"
 
 u32 vehicle_utils_getControllerId();
+

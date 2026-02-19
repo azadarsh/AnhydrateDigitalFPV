@@ -51,3 +51,4 @@ class GenericTxECBuffers
       u8* m_p_ec_data_packets[MAX_DATA_PACKETS_IN_BLOCK];
       u8* m_p_ec_ec_packets[MAX_FECS_PACKETS_IN_BLOCK];
 };
+

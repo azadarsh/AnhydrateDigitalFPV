@@ -15,3 +15,4 @@ bool loadAllFonts(bool bReloadMenuFonts);
 void free_all_fonts();
 
 void applyFontScaleChanges();
+

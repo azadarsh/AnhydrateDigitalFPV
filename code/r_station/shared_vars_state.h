@@ -33,11 +33,11 @@ typedef struct
 
    // Telemetry info
    t_packet_header_fc_telemetry headerFCTelemetry;
-   t_packet_header_ruby_telemetry_short headerRubyTelemetryShort;
-   t_packet_header_ruby_telemetry_extended_v6 headerRubyTelemetryExtended;
+   t_packet_header_Anhydrate_telemetry_short headerAnhydrateTelemetryShort;
+   t_packet_header_Anhydrate_telemetry_extended_v6 headerAnhydrateTelemetryExtended;
    u32  uTimeLastRecvFCTelemetryFC;
-   u32  uTimeLastRecvRubyTelemetryExtended;
-   u32  uTimeLastRecvRubyTelemetryShort;
+   u32  uTimeLastRecvAnhydrateTelemetryExtended;
+   u32  uTimeLastRecvAnhydrateTelemetryShort;
    type_msp_parse_state mspState;
 
    // Commands roundtrip info
@@ -97,3 +97,4 @@ void logCurrentVehiclesRuntimeInfo();
 
 void addCommandRTTimeToRuntimeInfo(type_global_state_vehicle_runtime_info* pRuntimeInfo, u32 uRoundtripTimeMs);
 void adjustLinkClockDeltasForVehicleRuntimeIndex(int iRuntimeInfoIndex, u32 uRoundtripTimeMs, u32 uLocalTimeVehicleMs);
+

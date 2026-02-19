@@ -378,3 +378,4 @@ static inline void mavlink_msg_vision_position_estimate_decode(const mavlink_mes
     memcpy(vision_position_estimate, _MAV_PAYLOAD(msg), len);
 #endif
 }
+

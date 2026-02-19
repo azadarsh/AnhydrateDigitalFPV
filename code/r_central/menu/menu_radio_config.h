@@ -86,3 +86,4 @@ class MenuRadioConfig: public Menu
       bool m_bTmpHasVideoStreamsEnabled;
       bool m_bTmpHasDataStreamsEnabled;
 };
+
